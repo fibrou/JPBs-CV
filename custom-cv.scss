@@ -1,0 +1,1004 @@
+/*-- scss:defaults --*/
+
+// Subdued professional colors
+$primary: #2c5f7c;        // Professional blue
+$primary-light: #3a7ca5;  // Lighter blue
+$primary-dark: #1e4158;   // Darker blue
+$dark: #333333;
+$gray: #5D5D5D;
+$light-gray: #f8f9fa;
+$accent: #5a7d8a;         // Muted teal
+
+// Status colors
+$status-rnr: #28a745;
+$status-review: #856404;
+$status-progress: #17a2b8;
+$status-draft: #6c757d;
+
+// Bootstrap overrides
+$body-color: $dark;
+$headings-color: $primary;
+$link-color: $primary;
+$link-hover-color: $primary-light;
+
+/*-- scss:rules --*/
+
+/* ==========================================================================
+   Hero Section with Photo
+   ========================================================================== */
+
+.hero-section {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  color: #333333;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  border: 1px solid #dee2e6;
+  position: relative;
+}
+
+.profile-photo {
+  float: left;
+  width: 180px;
+  height: 180px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 3px solid #2c5f7c;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  margin-right: 2rem;
+  margin-bottom: 1rem;
+}
+
+.profile-summary {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  color: #333333;
+  
+  strong {
+    color: #2c5f7c;
+    font-weight: 600;
+  }
+}
+
+.quick-links {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 2rem 0;
+  clear: both;
+}
+
+.nav-btn {
+  background: white;
+  color: #2c5f7c;
+  padding: 1rem;
+  text-align: center;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s;
+  border: 2px solid #2c5f7c;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-btn:hover {
+  background: #2c5f7c;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.nav-btn i {
+  display: block;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.5rem;
+  margin-top: 1rem;
+  clear: both;
+  
+  a {
+    color: #2c5f7c;
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+      color: #3a7ca5;
+    }
+  }
+  
+  i {
+    margin-right: 0.5rem;
+    width: 20px;
+    color: #2c5f7c;
+  }
+}
+
+/* ==========================================================================
+   Section Headings
+   ========================================================================== */
+
+h1, h2, h3, h4 {
+  color: #2c5f7c;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+h1 {
+  border-bottom: 3px solid #2c5f7c;
+  padding-bottom: 0.5rem;
+  font-size: 2.2rem;
+}
+
+h2 {
+  border-bottom: 2px solid #a3c9db;
+  padding-bottom: 0.4rem;
+  font-size: 1.8rem;
+}
+
+h3 {
+  font-size: 1.4rem;
+  color: #1e4158;
+}
+
+/* ==========================================================================
+   Metric Cards & Dashboard
+   ========================================================================== */
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.metric-card {
+  background: white;
+  border-left: 4px solid #2c5f7c;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  border: 1px solid #e9ecef;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  }
+  
+  .metric-icon {
+    font-size: 2rem;
+    color: #2c5f7c;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  
+  .metric-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c5f7c;
+    display: block;
+    line-height: 1;
+    margin: 0.5rem 0;
+  }
+  
+  .metric-label {
+    font-size: 1rem;
+    color: #333333;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    display: block;
+  }
+  
+  .metric-context {
+    font-size: 0.85rem;
+    color: #5D5D5D;
+    margin-top: 0.25rem;
+    display: block;
+    font-style: italic;
+  }
+}
+
+/* ==========================================================================
+   Administrative Roles
+   ========================================================================== */
+
+.admin-role {
+  background: #f8f9fa;
+  border-left: 4px solid #2c5f7c;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  transition: all 0.3s;
+  border: 1px solid #e9ecef;
+  
+  &:hover {
+    background: #f0f1f2;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  
+  .role-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .role-title {
+    color: #2c5f7c;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  
+  .institution {
+    color: #5D5D5D;
+    font-weight: 500;
+  }
+  
+  .role-detail {
+    margin: 0.75rem 0;
+    line-height: 1.6;
+  }
+  
+  .role-impact {
+    background: #d4e6f1;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    
+    i {
+      color: #ffc107;
+      margin-right: 0.5rem;
+    }
+    
+    strong {
+      color: #1e4158;
+    }
+  }
+}
+
+.section-highlight {
+  background: #e8f0f2;
+  border-left: 4px solid #5a7d8a;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  border-radius: 8px;
+  font-style: italic;
+  border: 1px solid #c5dce0;
+  
+  strong {
+    color: #5a7d8a;
+    font-style: normal;
+  }
+}
+
+/* ==========================================================================
+   Education & Certifications
+   ========================================================================== */
+
+.education-entry {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #d0d0d0;
+  
+  .degree-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .degree-name {
+    font-weight: 600;
+    color: #333333;
+    font-size: 1.1rem;
+  }
+  
+  .years {
+    color: #2c5f7c;
+    font-weight: 500;
+  }
+  
+  .institution-name {
+    color: #5D5D5D;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .distinction {
+    color: #5D5D5D;
+    font-size: 0.9rem;
+    font-style: italic;
+  }
+}
+
+.certifications-showcase {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.cert-card {
+  background: white;
+  border: 2px solid #a3c9db;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s;
+  
+  &:hover {
+    border-color: #2c5f7c;
+    box-shadow: 0 4px 12px rgba(44, 95, 124, 0.15);
+    transform: translateY(-3px);
+  }
+  
+  .cert-abbr {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #2c5f7c;
+    margin-bottom: 0.5rem;
+  }
+  
+  .cert-full {
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
+  
+  .cert-org {
+    font-size: 0.85rem;
+    color: #5D5D5D;
+    margin-bottom: 0.5rem;
+  }
+  
+  .cert-desc {
+    font-size: 0.85rem;
+    color: #5D5D5D;
+    font-style: italic;
+  }
+}
+
+.credential-note {
+  background: #d4e6f1;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+  color: #333333;
+  border: 1px solid #b8d4e3;
+}
+
+/* ==========================================================================
+   Employment History
+   ========================================================================== */
+
+.employment-entry {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #6fa1bd;
+  border: 1px solid #e9ecef;
+  
+  &.current-position {
+    border-left-color: #2c5f7c;
+    background: #d4e6f1;
+    border-color: #b8d4e3;
+  }
+  
+  .position-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .position-title {
+    font-weight: 600;
+    color: #2c5f7c;
+    font-size: 1.1rem;
+  }
+  
+  .period {
+    color: #5D5D5D;
+    font-weight: 500;
+  }
+  
+  .institution-location {
+    color: #333333;
+    margin-bottom: 0.5rem;
+  }
+  
+  .additional-titles {
+    color: #5D5D5D;
+    font-size: 0.95rem;
+    margin: 0.5rem 0;
+  }
+  
+  .courses {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    color: #5D5D5D;
+  }
+}
+
+/* ==========================================================================
+   Research & Publications
+   ========================================================================== */
+
+.research-summary {
+  background: linear-gradient(135deg, #dfeaf0 0%, #d4e6f1 100%);
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  border-left: 4px solid #2c5f7c;
+  border: 1px solid #b8d4e3;
+  
+  .papers-link {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: #2c5f7c;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s;
+    
+    &:hover {
+      background: #3a7ca5;
+      transform: translateX(5px);
+    }
+    
+    i {
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+.pub-metric {
+  text-align: center;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  border: 1px solid #e9ecef;
+  
+  .metric-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c5f7c;
+    display: block;
+    line-height: 1;
+  }
+  
+  .metric-label {
+    font-size: 1rem;
+    color: #333333;
+    font-weight: 600;
+    margin: 0.5rem 0 0.25rem 0;
+  }
+  
+  .metric-context {
+    font-size: 0.85rem;
+    color: #5D5D5D;
+  }
+}
+
+.publication-item {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #c0c0c0;
+  
+  .pub-year {
+    flex-shrink: 0;
+    width: 60px;
+    font-weight: bold;
+    color: #2c5f7c;
+    font-size: 1.1rem;
+  }
+  
+  .pub-content {
+    flex-grow: 1;
+  }
+  
+  .pub-title {
+    font-weight: 600;
+    color: #333333;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    
+    a {
+      color: #333333;
+      text-decoration: none;
+      
+      &:hover {
+        color: #2c5f7c;
+      }
+    }
+    
+    .fa-external-link-alt {
+      font-size: 0.8rem;
+      color: #5a7d8a;
+      margin-left: 0.5rem;
+    }
+  }
+  
+  .pub-authors {
+    font-style: italic;
+    color: #5D5D5D;
+    margin: 0.3rem 0;
+    font-size: 0.95rem;
+  }
+  
+  .pub-venue {
+    color: #333333;
+    font-size: 0.9rem;
+  }
+}
+
+/* ==========================================================================
+   Working Papers
+   ========================================================================== */
+
+.papers-note {
+  background: #d4e6f1;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #2c5f7c;
+  margin: 2rem 0;
+  border: 1px solid #b8d4e3;
+}
+
+.working-paper-preview {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  transition: all 0.3s;
+  
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border-color: #6fa1bd;
+  }
+  
+  .wp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .wp-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1e4158;
+    flex: 1;
+  }
+  
+  .wp-authors {
+    font-style: italic;
+    color: #5D5D5D;
+    margin-bottom: 0.75rem;
+  }
+  
+  .wp-target {
+    color: #5D5D5D;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+    
+    i {
+      color: #2c5f7c;
+    }
+  }
+  
+  .wp-abstract-preview {
+    color: #333333;
+    line-height: 1.6;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+  }
+  
+  .read-more {
+    color: #2c5f7c;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.95rem;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  
+  i {
+    margin-right: 0.4rem;
+  }
+  
+  &.rnr {
+    background: #d4edda;
+    color: #155724;
+    border: 2px solid #28a745;
+  }
+  
+  &.review {
+    background: #fff3cd;
+    color: #856404;
+    border: 2px solid #856404;
+  }
+  
+  &.progress {
+    background: #d1ecf1;
+    color: #0c5460;
+    border: 2px solid #17a2b8;
+  }
+  
+  &.draft {
+    background: #e2e3e5;
+    color: #383d41;
+    border: 2px solid #6c757d;
+  }
+}
+
+/* ==========================================================================
+   Honors & Service
+   ========================================================================== */
+
+.honor-item {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  transition: all 0.3s;
+  
+  &:hover {
+    background: #d4e6f1;
+  }
+  
+  &.major-honor {
+    background: #dfeaf0;
+    border-left: 4px solid #2c5f7c;
+    padding-left: 1.5rem;
+  }
+  
+  .honor-year {
+    flex-shrink: 0;
+    width: 60px;
+    font-weight: bold;
+    color: #2c5f7c;
+    font-size: 1.1rem;
+  }
+  
+  .honor-content {
+    flex-grow: 1;
+  }
+  
+  .honor-title {
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 0.25rem;
+  }
+  
+  .honor-org {
+    color: #5D5D5D;
+    font-size: 0.9rem;
+  }
+}
+
+.service-category {
+  margin: 2rem 0;
+  
+  h3 {
+    color: #2c5f7c;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #a3c9db;
+  }
+}
+
+.service-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e5e5e5;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  strong {
+    color: #1e4158;
+  }
+  
+  em {
+    color: #5D5D5D;
+  }
+}
+
+/* ==========================================================================
+   References
+   ========================================================================== */
+
+.references-note {
+  background: #d4e6f1;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #2c5f7c;
+  margin: 2rem 0;
+  font-style: italic;
+  border: 1px solid #b8d4e3;
+}
+
+.reference-item {
+  padding: 1.5rem;
+  margin: 1rem 0;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #6fa1bd;
+  border: 1px solid #e9ecef;
+  
+  .ref-name {
+    font-weight: 600;
+    color: #1e4158;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .ref-title {
+    color: #333333;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .ref-institution {
+    color: #5D5D5D;
+    font-size: 0.9rem;
+  }
+}
+
+/* ==========================================================================
+   Footer & Navigation
+   ========================================================================== */
+
+.footer-section {
+  background: #f8f9fa;
+  padding: 2rem;
+  margin-top: 3rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid #e9ecef;
+}
+
+.download-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.download-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  &.pdf {
+    background: #2c5f7c;
+    color: white;
+    
+    &:hover {
+      background: #3a7ca5;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(44, 95, 124, 0.3);
+    }
+  }
+  
+  &.papers {
+    background: #5a7d8a;
+    color: white;
+    
+    &:hover {
+      background: #476270;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(90, 125, 138, 0.3);
+    }
+  }
+}
+
+.last-updated {
+  text-align: center;
+  color: #5D5D5D;
+  font-size: 0.85rem;
+  margin-top: 2rem;
+  font-style: italic;
+}
+
+.view-all-link {
+  text-align: center;
+  margin: 2rem 0;
+  
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: #dfeaf0;
+    color: #1e4158;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.3s;
+    border: 1px solid #a3c9db;
+    
+    &:hover {
+      background: #d4e6f1;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+/* ==========================================================================
+   Table of Contents
+   ========================================================================== */
+
+#TOC {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #2c5f7c;
+  border: 1px solid #e9ecef;
+  
+  .active {
+    font-weight: bold;
+    color: #2c5f7c;
+  }
+  
+  ul {
+    list-style: none;
+    padding-left: 0;
+    
+    li {
+      margin: 0.5rem 0;
+      
+      a {
+        color: #333333;
+        text-decoration: none;
+        
+        &:hover {
+          color: #2c5f7c;
+        }
+      }
+    }
+    
+    ul {
+      padding-left: 1rem;
+      margin-top: 0.5rem;
+      
+      li {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .profile-photo {
+    float: none;
+    display: block;
+    margin: 0 auto 1.5rem auto;
+  }
+  
+  .hero-section {
+    padding: 1.5rem 1rem;
+  }
+  
+  .profile-summary {
+    font-size: 1rem;
+  }
+  
+  .quick-links {
+    grid-template-columns: 1fr;
+  }
+  
+  h1 {
+    font-size: 1.75rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  .metric-card {
+    .metric-value {
+      font-size: 2rem;
+    }
+  }
+  
+  .publication-item {
+    flex-direction: column;
+    gap: 0.5rem;
+    
+    .pub-year {
+      width: auto;
+    }
+  }
+  
+  .honor-item {
+    flex-direction: column;
+    gap: 0.5rem;
+    
+    .honor-year {
+      width: auto;
+    }
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+  .hero-section {
+    background: white;
+    color: #333333;
+    border: 2px solid #2c5f7c;
+  }
+  
+  .quick-links,
+  .download-buttons,
+  #TOC {
+    display: none;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #333333;
+  }
+  
+  .profile-photo {
+    float: right;
+    margin-left: 1rem;
+  }
+}

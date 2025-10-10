@@ -1,0 +1,581 @@
+---
+title: "Curriculum Vitae"
+author: 
+  - name: "John Paul Broussard"
+    url: "https://tinyurl.com/c3wdneyp"
+    orcid: "0000-0002-5090-9947"
+    email: "john.broussard@rutgers.edu"
+    affiliations:
+      - name: "SUNY - Empire State College"
+        department: "School of Business"
+        city: "Saratoga Springs"
+        state: "NY"
+format:
+  html:
+    theme: 
+      - cosmo
+      - custom-cv.scss
+    toc: true
+    toc-depth: 2
+    toc-title: "Navigation"
+    page-layout: article
+    grid:
+      body-width: 900px
+    include-in-header:
+      text: |
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+date: now
+date-format: "MMMM YYYY"
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(vitae)
+library(tibble)
+library(dplyr)
+library(readxl)
+library(glue)
+library(here)
+library(knitr)
+library(gt)
+library(tidyr)
+
+source(here("jpbsCVdata", "load_cv_data.r"))
+cv_data <- load_cv_data("cv_data.xlsx")
+
+format_date_range <- function(start, end) {
+  case_when(
+    is.na(start) | start == "" ~ "",
+    is.na(end) | end == "" | tolower(end) == "present" ~ paste0(start, " → Present"),
+    TRUE ~ paste0(start, " → ", end)
+  )
+}
+
+is_pdf <- knitr::is_latex_output()
+is_html <- knitr::is_html_output()
+```
+
+::: {.content-visible when-format="html"}
+
+::: {.hero-section}
+
+<img src="jaafGalaPic.jpg" class="profile-photo" alt="John Paul Broussard">
+
+## About {.unnumbered}
+
+::: {.profile-summary}
+Finance Professor and Academic Administrator with **25+ years** of proven leadership in building successful, revenue-generating programs. I specialize in transforming academic operations through strategic planning, innovative curriculum design, and stakeholder-focused management.
+
+**Core Competencies:** Program Development & Growth • Strategic Planning • Budget Management • Enrollment Strategy • Faculty Development • Accreditation Leadership • Stakeholder Relations • Data-Driven Decision Making
+:::
+
+### Quick Links {.unnumbered}
+
+::: {.quick-links}
+<a href="#administrative-leadership" class="nav-btn"><i class="fas fa-users-cog"></i> Leadership</a>
+<a href="#education-credentials" class="nav-btn"><i class="fas fa-graduation-cap"></i> Education</a>
+<a href="#research-impact" class="nav-btn"><i class="fas fa-microscope"></i> Research</a>
+<a href="papers.html" class="nav-btn"><i class="fas fa-file-alt"></i> Working Papers</a>
+:::
+
+### Contact {.unnumbered}
+
+::: {.contact-grid}
+- <i class="fas fa-envelope"></i> [john.broussard@rutgers.edu](mailto:john.broussard@rutgers.edu)
+- <i class="fas fa-globe"></i> [Personal Website](https://tinyurl.com/c3wdneyp)
+- <i class="fab fa-linkedin"></i> [LinkedIn Profile](https://tinyurl.com/5bfex8hv)
+- <i class="fab fa-orcid"></i> [ORCID: 0000-0002-5090-9947](https://orcid.org/0000-0002-5090-9947)
+:::
+
+:::
+
+:::
+
+# Administrative Leadership {#administrative-leadership}
+
+::: {.content-visible when-format="html"}
+
+## Impact Dashboard
+
+::: {.metrics-grid}
+::: {.metric-card}
+<i class="fas fa-users metric-icon"></i>
+<span class="metric-value">150</span>
+<span class="metric-label">Students Enrolled</span>
+<span class="metric-context">Graduate program enrollment</span>
+:::
+
+::: {.metric-card}
+<i class="fas fa-chart-line metric-icon"></i>
+<span class="metric-value">58%</span>
+<span class="metric-label">Enrollment Growth</span>
+<span class="metric-context">Growth over 3-year period</span>
+:::
+
+::: {.metric-card}
+<i class="fas fa-graduation-cap metric-icon"></i>
+<span class="metric-value">78%</span>
+<span class="metric-label">Graduation Rate</span>
+<span class="metric-context">25% above national average</span>
+:::
+
+::: {.metric-card}
+<i class="fas fa-dollar-sign metric-icon"></i>
+<span class="metric-value">$1.3M</span>
+<span class="metric-label">Assets Under Management</span>
+<span class="metric-context">Student-managed investment fund</span>
+:::
+:::
+
+## Key Leadership Roles & Achievements
+
+```{r}
+#| label: admin-roles
+#| output: asis
+
+admin %>%
+  filter(highlight == TRUE) %>%
+  arrange(display_order) %>%
+  rowwise() %>%
+  mutate(
+    html = paste0(
+      '<div class="admin-role">',
+      '<div class="role-header">',
+      '<strong class="role-title">', title, '</strong>',
+      '<span class="institution">', institution, '</span>',
+      '</div>',
+      '<div class="role-detail">', detail, '</div>',
+      if_else(!is.na(impact) & impact != "",
+              paste0('<div class="role-impact"><i class="fas fa-star"></i> <strong>Impact:</strong> ', impact, '</div>'),
+              ''),
+      '</div>'
+    )
+  ) %>%
+  pull(html) %>%
+  paste(collapse = '\n\n') %>%
+  cat()
+```
+
+::: {.section-highlight}
+**Leadership Philosophy:** I build programs that serve students, faculty, and institutions simultaneously—creating sustainable growth through strategic vision, operational excellence, and authentic stakeholder engagement.
+:::
+
+:::
+
+# Education & Credentials {#education-credentials}
+
+```{r}
+#| label: education-data
+
+edu_data <- tribble(
+  ~degree, ~institution, ~location, ~years, ~distinction,
+  "PhD, Finance", "Louisiana State University", "Baton Rouge, LA", "1991–1995", "Dissertation on Market Microstructure",
+  "MBA, Finance", "Millsaps College", "Jackson, MS", "1988–1991", "Graduate Research Assistant",
+  "B.S., Biochemistry", "Louisiana State University", "Baton Rouge, LA", "1981–1985", "Honors Program"
+)
+```
+
+::: {.content-visible when-format="html"}
+
+```{r}
+#| label: education-html
+#| output: asis
+
+edu_data %>%
+  rowwise() %>%
+  mutate(
+    html = paste0(
+      '<div class="education-entry">',
+      '<div class="degree-header">',
+      '<span class="degree-name">', degree, '</span>',
+      '<span class="years">', years, '</span>',
+      '</div>',
+      '<div class="institution-name">', institution, ', ', location, '</div>',
+      '<div class="distinction">', distinction, '</div>',
+      '</div>'
+    )
+  ) %>%
+  pull(html) %>%
+  paste(collapse = '\n') %>%
+  cat()
+```
+
+:::
+
+## Professional Certifications
+
+::: {.content-visible when-format="html"}
+
+::: {.certifications-showcase}
+::: {.cert-card}
+<div class="cert-abbr">CFA®</div>
+<div class="cert-full">Chartered Financial Analyst</div>
+<div class="cert-org">CFA Institute • 1997</div>
+<div class="cert-desc">Premier investment management credential</div>
+:::
+
+::: {.cert-card}
+<div class="cert-abbr">FRM®</div>
+<div class="cert-full">Financial Risk Manager</div>
+<div class="cert-org">Global Association of Risk Professionals • 1999</div>
+<div class="cert-desc">Leading risk management certification</div>
+:::
+
+::: {.cert-card}
+<div class="cert-abbr">PRM®</div>
+<div class="cert-full">Professional Risk Manager</div>
+<div class="cert-org">PRMIA • 2003</div>
+<div class="cert-desc">International risk management credential</div>
+:::
+
+::: {.cert-card}
+<div class="cert-abbr">CBA®</div>
+<div class="cert-full">Certified Business Appraiser</div>
+<div class="cert-org">Institute of Business Appraisers • 2005</div>
+<div class="cert-desc">Business valuation expertise</div>
+:::
+:::
+
+::: {.credential-note}
+These professional credentials complement my academic expertise, ensuring I remain connected to industry practice and can design programs that prepare students for real-world success.
+:::
+
+:::
+
+# Academic Appointments
+
+::: {.content-visible when-format="html"}
+
+```{r}
+#| label: employment-html
+#| output: asis
+
+employment %>%
+  filter(current == TRUE | as.numeric(substr(start_date, 1, 4)) >= 1997) %>%
+  mutate(
+    period = format_date_range(start_date, end_date),
+    location = paste0(location_city, " • ", location_state),
+    is_current = (is.na(end_date) | end_date == "" | tolower(end_date) == "present"),
+    clean_title = if_else(is.na(position_title) | position_title == "NA", 
+                          "Professor of Finance", 
+                          position_title)
+  ) %>%
+  arrange(display_order) %>%
+  rowwise() %>%
+  mutate(
+    entry_class = if_else(is_current, "employment-entry current-position", "employment-entry"),
+    additional_html = if_else(
+      !is.na(additional_titles) & additional_titles != "" & additional_titles != "NA",
+      paste0('<div class="additional-titles"><em>', additional_titles, '</em></div>'),
+      ''
+    ),
+    courses_html = if_else(
+      !is.na(courses_taught) & courses_taught != "" & courses_taught != "NA",
+      paste0('<div class="courses"><strong>Key Courses:</strong> ', courses_taught, '</div>'),
+      ''
+    ),
+    html = paste0(
+      '<div class="', entry_class, '">',
+      '<div class="position-header">',
+      '<span class="position-title">', clean_title, '</span>',
+      '<span class="period">', period, '</span>',
+      '</div>',
+      '<div class="institution-location">', institution, ' • ', location, '</div>',
+      additional_html,
+      courses_html,
+      '</div>'
+    )
+  ) %>%
+  pull(html) %>%
+  paste(collapse = '\n\n') %>%
+  cat()
+```
+
+:::
+
+# Research Impact {#research-impact}
+
+::: {.content-visible when-format="html"}
+
+## Research Profile
+
+::: {.research-summary}
+My research program spans **corporate finance, financial markets, and emerging FinTech applications**. I maintain an active pipeline of high-impact publications while leveraging research to inform curriculum development and student mentoring.
+
+**Current Focus:** Machine learning applications in finance, market microstructure, and corporate financial policy.
+
+<a href="papers.html" class="papers-link"><i class="fas fa-arrow-right"></i> View All Working Papers with Abstracts</a>
+:::
+
+## Publication Metrics
+
+::: {.metrics-grid}
+::: {.pub-metric}
+<span class="metric-value">`r nrow(publications)`</span>
+<span class="metric-label">Total Publications</span>
+<span class="metric-context">Peer-reviewed articles</span>
+:::
+
+::: {.pub-metric}
+<span class="metric-value">`r sum(publications$year >= 2013)`</span>
+<span class="metric-label">Recent Output</span>
+<span class="metric-context">Since 2013</span>
+:::
+
+::: {.pub-metric}
+<span class="metric-value">`r sum(publications$citation_count, na.rm=TRUE)`+</span>
+<span class="metric-label">Total Citations</span>
+<span class="metric-context">Google Scholar</span>
+:::
+
+::: {.pub-metric}
+<span class="metric-value">12+</span>
+<span class="metric-label">Top-Tier Journals</span>
+<span class="metric-context">JF, RFS, JFE, JCF</span>
+:::
+:::
+
+## Selected Publications
+
+```{r}
+#| label: publications-html
+#| output: asis
+
+publications %>%
+  filter(year >= 2013) %>%
+  arrange(desc(year), desc(featured)) %>%
+  rowwise() %>%
+  mutate(
+    citation_text = if_else(
+      !is.na(volume) & !is.na(pages),
+      paste0(journal, ", ", volume, "(", issue, "), ", pages),
+      journal
+    ),
+    doi_link = if_else(
+      !is.na(doi) & doi != "",
+      paste0('<a href="', doi, '" target="_blank"><i class="fas fa-external-link-alt"></i></a>'),
+      ''
+    ),
+    html = paste0(
+      '<div class="publication-item">',
+      '<div class="pub-year">', year, '</div>',
+      '<div class="pub-content">',
+      '<div class="pub-title">', title, ' ', doi_link, '</div>',
+      '<div class="pub-authors">', authors, '</div>',
+      '<div class="pub-venue"><em>', citation_text, '</em></div>',
+      '</div>',
+      '</div>'
+    )
+  ) %>%
+  pull(html) %>%
+  paste(collapse = '\n') %>%
+  cat()
+```
+
+::: {.view-all-link}
+<a href="#working-papers"><i class="fas fa-arrow-down"></i> See Working Papers & Projects in Progress</a>
+:::
+
+:::
+
+# Working Papers & Research Pipeline {#working-papers}
+
+::: {.content-visible when-format="html"}
+
+::: {.papers-note}
+**For full abstracts and downloadable versions, visit the dedicated [Working Papers page](papers.html).**
+:::
+
+```{r}
+#| label: working-papers-preview
+#| output: asis
+
+pip %>%
+  filter(show_on_website == TRUE) %>%
+  arrange(display_order) %>%
+  rowwise() %>%
+  mutate(
+    status_class = case_when(
+      grepl("Revise", status, ignore.case = TRUE) ~ "status-badge rnr",
+      grepl("Review", status, ignore.case = TRUE) ~ "status-badge review",
+      grepl("Progress", status, ignore.case = TRUE) ~ "status-badge progress",
+      TRUE ~ "status-badge draft"
+    ),
+    status_text = case_when(
+      grepl("Revise", status, ignore.case = TRUE) ~ "R&R",
+      grepl("Review", status, ignore.case = TRUE) ~ "Under Review",
+      grepl("Progress", status, ignore.case = TRUE) ~ "In Progress",
+      TRUE ~ "Draft"
+    ),
+    short_abs = if_else(
+      !is.na(abstract) & nchar(abstract) > 200,
+      paste0(substr(abstract, 1, 200), "..."),
+      coalesce(abstract, "")
+    ),
+    target_html = if_else(
+      !is.na(target_journal) & target_journal != "",
+      paste0('<div class="wp-target"><i class="fas fa-bullseye"></i> Target: <em>', target_journal, '</em></div>'),
+      ''
+    ),
+    abstract_html = if_else(
+      short_abs != "",
+      paste0('<div class="wp-abstract-preview">', short_abs, '</div>'),
+      ''
+    ),
+    paper_id = tolower(gsub(" ", "-", title)),
+    html = paste0(
+      '<div class="working-paper-preview">',
+      '<div class="wp-header">',
+      '<div class="wp-title">', title, '</div>',
+      '<span class="', status_class, '">', status_text, '</span>',
+      '</div>',
+      '<div class="wp-authors">', authors, '</div>',
+      target_html,
+      abstract_html,
+      '<a href="papers.html#', paper_id, '" class="read-more">Read full abstract →</a>',
+      '</div>'
+    )
+  ) %>%
+  pull(html) %>%
+  paste(collapse = '\n') %>%
+  cat()
+```
+
+:::
+
+# Honors, Awards & Grants
+
+::: {.content-visible when-format="html"}
+
+```{r}
+#| label: honors-html
+#| output: asis
+
+honors %>%
+  arrange(desc(year), display_order) %>%
+  rowwise() %>%
+  mutate(
+    is_major = honor_grant %in% c(
+      "Fulbright Distinguished Research Grant",
+      "Best Lecturer at Master's Level",
+      "Provost's Award for Teaching Excellence"
+    ),
+    item_class = if_else(is_major, "honor-item major-honor", "honor-item"),
+    location_html = if_else(
+      !is.na(location) & location != "",
+      paste0(" • ", location),
+      ''
+    ),
+    html = paste0(
+      '<div class="', item_class, '">',
+      '<div class="honor-year">', year, '</div>',
+      '<div class="honor-content">',
+      '<div class="honor-title">', honor_grant, '</div>',
+      '<div class="honor-org">', grantor, location_html, '</div>',
+      '</div>',
+      '</div>'
+    )
+  ) %>%
+  pull(html) %>%
+  paste(collapse = '\n') %>%
+  cat()
+```
+
+:::
+
+# Service & Professional Activities
+
+::: {.content-visible when-format="html"}
+
+```{r}
+#| label: service-html
+#| output: asis
+
+service %>%
+  filter(highlight == TRUE) %>%
+  mutate(period = format_date_range(start_date, end_date)) %>%
+  arrange(category, desc(start_date)) %>%
+  group_by(category) %>%
+  summarize(
+    section_html = paste0(
+      '<div class="service-category">',
+      '<h3>', unique(category), '</h3>',
+      paste(
+        '<div class="service-item">',
+        '<strong>', role, '</strong> • ', organization, ' • <em>', period, '</em>',
+        '</div>',
+        collapse = '\n'
+      ),
+      '</div>'
+    ),
+    .groups = 'drop'
+  ) %>%
+  pull(section_html) %>%
+  paste(collapse = '\n\n') %>%
+  cat()
+```
+
+:::
+
+# References
+
+::: {.content-visible when-format="html"}
+
+::: {.references-note}
+Complete contact information available upon request. References include deans, department chairs, and distinguished faculty colleagues who can speak to leadership, teaching, and research excellence.
+:::
+
+::: {.reference-item}
+<div class="ref-name">Bruce Weber</div>
+<div class="ref-title">Willem Kooyker Dean</div>
+<div class="ref-institution">Zicklin School of Business, Baruch College</div>
+:::
+
+::: {.reference-item}
+<div class="ref-name">Neil Pearson</div>
+<div class="ref-title">Professor of Finance</div>
+<div class="ref-institution">University of Illinois</div>
+:::
+
+::: {.reference-item}
+<div class="ref-name">Gene Pilotte</div>
+<div class="ref-title">Professor of Finance</div>
+<div class="ref-institution">Rutgers Business School</div>
+:::
+
+::: {.reference-item}
+<div class="ref-name">Paul Brockman</div>
+<div class="ref-title">Joseph R. Perella Chair in Finance</div>
+<div class="ref-institution">Lehigh University</div>
+:::
+
+::: {.reference-item}
+<div class="ref-name">Chitru Fernando</div>
+<div class="ref-title">Rainbolt Chair in Finance</div>
+<div class="ref-institution">University of Oklahoma</div>
+:::
+
+:::
+
+---
+
+::: {.footer-section}
+
+### Download Options
+
+::: {.download-buttons}
+<a href="cv.pdf" class="download-btn pdf"><i class="fas fa-file-pdf"></i> Download PDF CV</a>
+<a href="papers.html" class="download-btn papers"><i class="fas fa-file-alt"></i> View Working Papers</a>
+:::
+
+::: {.last-updated}
+*Last Updated: `r format(Sys.Date(), "%B %d, %Y")`*
+:::
+
+:::
