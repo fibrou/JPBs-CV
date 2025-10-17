@@ -1,0 +1,27 @@
+## Administrative Leadership
+
+```{r}
+#| label: admin-html
+#| output: asis
+
+# Administrative section for HTML
+if (exists("admin") && nrow(admin) > 0) {
+  cat('<div class="admin-section">\n')
+  
+  admin_filtered <- admin %>%
+    filter(!is.na(title)) %>%
+    arrange(desc(as.numeric(gsub("-.*", "", start_date))))
+  
+  for (i in 1:min(nrow(admin_filtered), 5)) {
+    cat('<div class="admin-role">\n')
+    cat('<h3>', admin_filtered$title[i], '</h3>\n')
+    cat('<p class="institution">', admin_filtered$institution[i], '</p>\n')
+    if (!is.na(admin_filtered$detail[i])) {
+      cat('<ul><li>', admin_filtered$detail[i], '</li></ul>\n')
+    }
+    cat('</div>\n')
+  }
+  
+  cat('</div>\n')
+}
+```

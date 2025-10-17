@@ -1,0 +1,25 @@
+# EDUCATION
+
+```{r EDUCATION}
+edu %>%
+  detailed_entries(
+    with = inst,
+    what = degree,
+    why = detail,
+    when = glue::glue("{startYear} --> {endYear}",.na = ""),
+    where = where
+  )
+```
+
+# PROFESSIONAL CERTIFICATIONS
+
+```{r CERTIFICATIONS}
+certifications %>%
+  detailed_entries(
+    with = certBody,
+    what = accomplishment,
+    why = detail,
+    when = year,
+    where = where
+  )
+```

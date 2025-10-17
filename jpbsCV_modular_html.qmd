@@ -1,0 +1,302 @@
+---
+title: "John Paul Broussard"
+subtitle: "Curriculum Vitae"
+format:
+  html:
+    theme: 
+      - cosmo
+    toc: true
+    toc-location: left
+    toc-title: "Navigation"
+    page-layout: article
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+#| include: false
+
+library(tibble)
+library(dplyr)
+library(readxl)
+library(glue)
+library(here)
+library(knitr)
+library(gt)
+library(tidyr)
+
+# Load all data from Excel
+excel_file <- here("jpbsCVdata", "cv_data_with_education.xlsx")
+
+# Read Administrative data
+admin <- read_excel(excel_file, sheet = "Administrative") %>%
+  filter(highlight == TRUE | is.na(highlight)) %>%
+  arrange(display_order)
+
+# Read Education data
+edu <- read_excel(excel_file, sheet = "Education") %>%
+  filter(highlight == TRUE | is.na(highlight)) %>%
+  arrange(display_order) %>%
+  mutate(
+    where = paste(location_city, location_state, sep = ", "),
+    institution = institution,
+    degree = degree,
+    startYear = as.character(start_year),
+    endYear = as.character(end_year),
+    # Combine detail columns
+    details = list(na.omit(c(
+      if(!is.na(detail_1)) detail_1 else NA,
+      if(!is.na(detail_2)) detail_2 else NA,
+      if(!is.na(detail_3)) detail_3 else NA
+    )))
+  )
+
+# Read Certifications
+certifications <- read_excel(excel_file, sheet = "Certifications") %>%
+  filter(highlight == TRUE | is.na(highlight)) %>%
+  arrange(display_order)
+
+# Read Employment data - Handle Month-Year format
+employment <- read_excel(excel_file, sheet = "Employment") %>%
+  mutate(
+    start_sort = paste0(
+      sub(".*-", "", if_else(is.na(start_date), "2000", start_date)),
+      "-",
+      case_when(
+        grepl("January", start_date) ~ "01",
+        grepl("February", start_date) ~ "02",
+        grepl("March", start_date) ~ "03",
+        grepl("April", start_date) ~ "04",
+        grepl("May", start_date) ~ "05",
+        grepl("June", start_date) ~ "06",
+        grepl("July", start_date) ~ "07",
+        grepl("August", start_date) ~ "08",
+        grepl("September", start_date) ~ "09",
+        grepl("October", start_date) ~ "10",
+        grepl("November", start_date) ~ "11",
+        grepl("December", start_date) ~ "12",
+        TRUE ~ "00"
+      )
+    )
+  ) %>%
+  arrange(desc(current), desc(start_sort))
+
+# Process Long-term employment
+ltWork <- employment %>%
+  filter(current == TRUE | (!is.na(end_date) & as.numeric(sub(".*-", "", end_date)) >= 1997)) %>%
+  mutate(
+    startMonth = if_else(!is.na(start_date), sub("-.*", "", start_date), ""),
+    startYear = if_else(!is.na(start_date), sub(".*-", "", start_date), ""),
+    endMonth = case_when(
+      is.na(end_date) | current == TRUE ~ "Present",
+      TRUE ~ sub("-.*", "", end_date)
+    ),
+    endYear = case_when(
+      is.na(end_date) | current == TRUE ~ "",
+      TRUE ~ sub(".*-", "", end_date)
+    )
+  )
+
+# Process Short-term employment
+stWork <- employment %>%
+  filter(current == FALSE & !is.na(end_date) & as.numeric(sub(".*-", "", end_date)) < 1997) %>%
+  mutate(
+    startMonth = if_else(!is.na(start_date), sub("-.*", "", start_date), ""),
+    startYear = if_else(!is.na(start_date), sub(".*-", "", start_date), ""),
+    endMonth = if_else(!is.na(end_date), sub("-.*", "", end_date), ""),
+    endYear = if_else(!is.na(end_date), sub(".*-", "", end_date), "")
+  )
+
+# Read Publications
+publications <- read_excel(excel_file, sheet = "Publications") %>%
+  arrange(desc(year))
+
+# Read Honors
+honorsGrants <- read_excel(excel_file, sheet = "Honors") %>%
+  arrange(desc(year))
+
+# Read Working Papers
+pip <- read_excel(excel_file, sheet = "WorkingPapers")
+
+# Read Other Publications
+otherPubsMonos <- read_excel(excel_file, sheet = "OtherPublications") %>%
+  arrange(desc(year))
+```
+
+::: {.callout-note icon=false}
+## Contact Information
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+<div>
+- **Email:** john.broussard@rutgers.edu  
+- **LinkedIn:** [tinyurl.com/5bfex8hv](https://tinyurl.com/5bfex8hv)  
+- **ORCID:** [0000-0002-5090-9947](https://orcid.org/0000-0002-5090-9947)
+</div>
+<div>
+- **Website:** [tinyurl.com/c3wdneyp](https://tinyurl.com/c3wdneyp)  
+- **Location:** Oklahoma City, Oklahoma, USA
+</div>
+</div>
+
+I am a Finance Professor with over 25 years of extensive domestic and international experience in online and traditional academic program management. I create academic programs and courses that monetize academic effort and yield institutional revenue enhancement and stakeholder success. I maintain real-world relevance through being a Financial Professional Designation Exam Trainer, Financial Risk Management Specialist, Financial Market Consultant, Expert on Big Data, Implementer of Natural Language Processing, Artificial Intelligence and Machine Learning applications in Finance.
+:::
+
+{{< include _administrative_html.qmd >}}
+
+{{< include _education_html.qmd >}}
+
+{{< include _employment_html.qmd >}}
+
+{{< include _publications_html.qmd >}}
+
+{{< include _honors_html.qmd >}}
+
+<style>
+/* Custom CSS for CV styling */
+.education-entry {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-left: 3px solid #990000;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.education-entry h4 {
+  color: #990000;
+  margin-bottom: 0.5rem;
+}
+
+.education-entry .years {
+  color: #666;
+  font-weight: normal;
+  font-size: 0.9em;
+}
+
+.education-entry .institution {
+  color: #666;
+  font-style: italic;
+}
+
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.cert-card {
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.cert-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.cert-card h4 {
+  color: #990000;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.cert-org {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+}
+
+.cert-year {
+  color: #999;
+  font-weight: bold;
+}
+
+.employment-entry {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-left: 3px solid #666;
+  background: #fafafa;
+  border-radius: 4px;
+}
+
+.employment-entry.current {
+  border-left-color: #990000;
+  background: #fff5f5;
+}
+
+.employment-entry h4 {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.employment-entry .position {
+  font-weight: bold;
+  color: #990000;
+  margin: 0.25rem 0;
+}
+
+.employment-entry .dates {
+  color: #666;
+  font-style: italic;
+}
+
+.employment-entry .courses {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.honor-entry {
+  display: flex;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border-left: 3px solid #990000;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+
+.honor-year {
+  flex-shrink: 0;
+  width: 60px;
+  font-weight: bold;
+  color: #990000;
+}
+
+.honor-content {
+  flex-grow: 1;
+  padding-left: 1rem;
+}
+
+.honor-content h4 {
+  margin: 0 0 0.25rem 0;
+  color: #333;
+  font-size: 1rem;
+}
+
+.honor-content .grantor {
+  color: #666;
+  font-style: italic;
+  margin: 0.25rem 0;
+}
+
+.publication-entry {
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.publication-entry:last-child {
+  border-bottom: none;
+}
+
+.gt_table {
+  margin: 1.5rem 0 !important;
+}
+</style>

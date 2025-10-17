@@ -46,6 +46,20 @@ format:
     template: awesome-cv.tex
     pdf-engine: xelatex
     keep-tex: true
+    include-in-header:
+      text: |
+        \usepackage{enumitem}
+        \setlist[itemize]{
+            topsep=0pt,
+            partopsep=0pt,
+            itemsep=0pt,
+            parsep=0pt,
+            leftmargin=2ex,
+            before=\vspace{-1mm},
+            after=\vspace{0.5mm}
+        }
+        \setlength{\parskip}{0.5mm}
+        \setlength{\parindent}{0pt}
 date: now
 date-format: "MMMM YYYY"
 execute:
@@ -79,12 +93,29 @@ pip <- cv_data$pip
 honors <- cv_data$honors
 service <- cv_data$service
 
-format_date_range <- function(start, end) {
+format_date_range <- function(start, end, for_pdf = FALSE) {
+  arrow <- if(for_pdf) " -- " else " → "
   case_when(
     is.na(start) | start == "" ~ "",
-    is.na(end) | end == "" | tolower(end) == "present" ~ paste0(start, " → Present"),
-    TRUE ~ paste0(start, " → ", end)
+    is.na(end) | end == "" | tolower(end) == "present" ~ paste0(start, arrow, "Present"),
+    TRUE ~ paste0(start, arrow, end)
   )
+}
+
+# Function to escape LaTeX special characters
+escape_latex <- function(text) {
+  if (is.na(text) || text == "") return(text)
+  text <- gsub("\\\\", "\\\\textbackslash{}", text)
+  text <- gsub("&", "\\\\&", text)
+  text <- gsub("%", "\\\\%", text)
+  text <- gsub("\\$", "\\\\$", text)
+  text <- gsub("#", "\\\\#", text)
+  text <- gsub("_", "\\\\_", text)
+  text <- gsub("\\{", "\\\\{", text)
+  text <- gsub("\\}", "\\\\}", text)
+  text <- gsub("~", "\\\\textasciitilde{}", text)
+  text <- gsub("\\^", "\\\\textasciicircum{}", text)
+  text
 }
 
 is_pdf <- knitr::is_latex_output()
@@ -240,10 +271,10 @@ admin_grouped <- admin %>%
   arrange(display_order)
 
 for (i in 1:nrow(admin_grouped)) {
-  cat("\\textbf{", admin_grouped$title[i], "}, ", admin_grouped$institution[i], "\n\n", sep = "")
+  cat("\\textbf{", escape_latex(admin_grouped$title[i]), "}, ", escape_latex(admin_grouped$institution[i]), "\n\n", sep = "")
   cat("\\begin{itemize}\n")
   for (detail in admin_grouped$details[[i]]) {
-    cat("\\item ", detail, "\n", sep = "")
+    cat("\\item ", escape_latex(detail), "\n", sep = "")
   }
   cat("\\end{itemize}\n\n")
 }
@@ -255,22 +286,41 @@ for (i in 1:nrow(admin_grouped)) {
 #| label: education-data
 #| include: false
 
-# TODO: Move this to Excel file
-edu_data <- tribble(
-  ~degree, ~institution, ~location, ~years, ~distinction,
-  "PhD, Finance", "Louisiana State University", "Baton Rouge, LA", "1991–1995", "Dissertation on Market Microstructure",
-  "MBA, Finance", "Millsaps College", "Jackson, MS", "1988–1991", "Graduate Research Assistant",
-  "B.S., Biochemistry", "Louisiana State University", "Baton Rouge, LA", "1981–1985", "Honors Program"
-)
+# Load Education from Excel file
+edu_excel <- read_excel(here("jpbsCVdata", "cv_data_with_education.xlsx"), sheet = "Education") %>%
+  filter(highlight == TRUE) %>%
+  arrange(display_order) %>%
+  mutate(
+    years = paste0(start_year, "--", end_year),
+    location = paste(location_city, location_state, sep = ", ")
+  )
 
-# TODO: Move this to Excel file
-certs <- tribble(
-  ~abbr, ~full, ~org, ~year, ~desc,
-  "CFA®", "Chartered Financial Analyst", "CFA Institute • 1997", "1997", "Premier investment management credential",
-  "FRM®", "Financial Risk Manager", "Global Association of Risk Professionals • 1999", "1999", "Leading risk management certification",
-  "PRM®", "Professional Risk Manager", "PRMIA • 2003", "2003", "International risk management credential",
-  "CBA®", "Certified Business Appraiser", "Institute of Business Appraisers • 2005", "2005", "Business valuation expertise"
-)
+# Process details manually to create proper list structure
+edu_data <- edu_excel %>%
+  rowwise() %>%
+  mutate(
+    details = list({
+      d <- c(detail_1, detail_2, detail_3, detail_4)
+      d <- d[!is.na(d) & d != ""]
+      if(length(d) > 0) d else NULL
+    })
+  ) %>%
+  ungroup() %>%
+  select(degree, institution, location, years, details)
+
+# Load Certifications from Excel file  
+certs_excel <- read_excel(here("jpbsCVdata", "cv_data_with_education.xlsx"), sheet = "Certifications") %>%
+  filter(highlight == TRUE) %>%
+  arrange(desc(year)) %>%
+  mutate(
+    abbr = gsub("\\s*\\(.*\\)", "", accomplishment),  # Extract abbreviation
+    full = accomplishment,
+    org = cert_body,
+    desc = detail
+  ) %>%
+  select(abbr, full, org, year, desc)
+
+certs <- certs_excel
 ```
 
 ```{r}
@@ -279,6 +329,16 @@ certs <- tribble(
 #| eval: !expr is_html
 
 for (i in 1:nrow(edu_data)) {
+  # Build details HTML
+  details_html <- ""
+  if (!is.null(edu_data$details[[i]]) && length(edu_data$details[[i]]) > 0) {
+    details_html <- '<ul class="education-details">\n'
+    for (detail in edu_data$details[[i]]) {
+      details_html <- paste0(details_html, '<li>', detail, '</li>\n')
+    }
+    details_html <- paste0(details_html, '</ul>\n')
+  }
+  
   cat(paste0('
 <div class="education-entry">
 <div class="degree-header">
@@ -286,12 +346,13 @@ for (i in 1:nrow(edu_data)) {
 <span class="years">', edu_data$years[i], '</span>
 </div>
 <div class="institution-name">', edu_data$institution[i], ', ', edu_data$location[i], '</div>
-<div class="distinction">', edu_data$distinction[i], '</div>
+', details_html, '
 </div>
 '))
 }
 
-cat('\n## Professional Certifications\n\n')
+cat('\n---\n\n')
+cat('\n## Professional Credentials\n\n')
 
 cat('<div class="certifications-showcase">\n')
 for (i in 1:nrow(certs)) {
@@ -299,7 +360,7 @@ for (i in 1:nrow(certs)) {
 <div class="cert-card">
 <div class="cert-abbr">', certs$abbr[i], '</div>
 <div class="cert-full">', certs$full[i], '</div>
-<div class="cert-org">', certs$org[i], '</div>
+<div class="cert-org">', certs$org[i], ' • ', certs$year[i], '</div>
 <div class="cert-desc">', certs$desc[i], '</div>
 </div>
 '))
@@ -317,17 +378,28 @@ These professional credentials complement my academic expertise, ensuring I rema
 #| eval: !expr is_pdf
 
 for (i in 1:nrow(edu_data)) {
-  cat("\\textbf{", edu_data$degree[i], "} (", edu_data$years[i], ")\n\n", sep = "")
-  cat(edu_data$institution[i], ", ", edu_data$location[i], "\n\n", sep = "")
-  cat("\\textit{", edu_data$distinction[i], "}\n\n", sep = "")
+  cat("\\textbf{", escape_latex(edu_data$degree[i]), "} (", edu_data$years[i], ")\n\n", sep = "")
+  cat(escape_latex(edu_data$institution[i]), ", ", escape_latex(edu_data$location[i]), "\n\n", sep = "")
+  
+  # Add bullet points for details
+  if (!is.null(edu_data$details[[i]]) && length(edu_data$details[[i]]) > 0) {
+    cat("\\begin{itemize}\n")
+    for (detail in edu_data$details[[i]]) {
+      cat("\\item ", escape_latex(detail), "\n", sep = "")
+    }
+    cat("\\end{itemize}\n\n")
+  }
 }
 
-cat('\\subsection{Professional Certifications}\n\n')
+# Add page break before Professional Credentials
+cat("\\newpage\n\n")
+
+cat("\\subsection{Professional Credentials}\n\n")
 
 for (i in 1:nrow(certs)) {
-  cat("\\textbf{", certs$full[i], "} (", certs$abbr[i], ") -- ", certs$year[i], "\n\n", sep = "")
-  cat(certs$org[i], "\n\n", sep = "")
-  cat("\\textit{", certs$desc[i], "}\n\n", sep = "")
+  cat("\\textbf{", escape_latex(certs$full[i]), "} -- ", certs$year[i], "\n\n", sep = "")
+  cat(escape_latex(certs$org[i]), "\n\n", sep = "")
+  cat("\\textit{", escape_latex(certs$desc[i]), "}\n\n", sep = "")
 }
 ```
 
@@ -404,7 +476,7 @@ for (i in 1:nrow(emp_grouped)) {
 emp_pdf <- employment %>%
   filter(current == TRUE | as.numeric(substr(start_date, 1, 4)) >= 1997) %>%
   mutate(
-    period = format_date_range(start_date, end_date),
+    period = format_date_range(start_date, end_date, for_pdf = TRUE),
     clean_title = if_else(is.na(position_title) | position_title == "NA", 
                           "Professor of Finance", 
                           position_title)
@@ -422,17 +494,29 @@ emp_pdf <- employment %>%
 
 for (i in 1:nrow(emp_pdf)) {
   period_display <- paste(unique(emp_pdf$periods[[i]]), collapse = ", ")
-  cat("\\textbf{", emp_pdf$clean_title[i], "} (", period_display, ")\n\n", sep = "")
-  cat(emp_pdf$institution[i], ", ", emp_pdf$location_city[i], ", ", emp_pdf$location_state[i], "\n\n", sep = "")
+  cat("\\textbf{", escape_latex(emp_pdf$clean_title[i]), "} (", period_display, ")\n\n", sep = "")
+  cat(escape_latex(emp_pdf$institution[i]), ", ", escape_latex(emp_pdf$location_city[i]), ", ", escape_latex(emp_pdf$location_state[i]), "\n\n", sep = "")
   
-  # Add additional titles if any
-  if (length(emp_pdf$additional_titles[[i]]) > 0) {
-    cat("\\textit{", paste(unique(emp_pdf$additional_titles[[i]]), collapse = " • "), "}\n\n", sep = "")
-  }
+  # Use bullets for additional information
+  has_bullets <- length(emp_pdf$additional_titles[[i]]) > 0 || length(emp_pdf$courses[[i]]) > 0
   
-  # Add courses if any
-  if (length(emp_pdf$courses[[i]]) > 0) {
-    cat("\\textbf{Key Courses:} ", paste(unique(emp_pdf$courses[[i]]), collapse = ", "), "\n\n", sep = "")
+  if (has_bullets) {
+    cat("\\begin{itemize}\n")
+    
+    # Add additional titles as bullets
+    if (length(emp_pdf$additional_titles[[i]]) > 0) {
+      for (title in unique(emp_pdf$additional_titles[[i]])) {
+        cat("\\item ", escape_latex(title), "\n", sep = "")
+      }
+    }
+    
+    # Add courses as a single bullet if any
+    if (length(emp_pdf$courses[[i]]) > 0) {
+      courses_text <- paste(unique(emp_pdf$courses[[i]]), collapse = ", ")
+      cat("\\item \\textbf{Key Courses:} ", escape_latex(courses_text), "\n", sep = "")
+    }
+    
+    cat("\\end{itemize}\n\n")
   }
 }
 ```
@@ -528,9 +612,9 @@ pubs_pdf <- publications %>%
   arrange(desc(year))
 
 for (i in 1:nrow(pubs_pdf)) {
-  cat("\\textbf{", pubs_pdf$title[i], "} (", pubs_pdf$year[i], ")\n\n", sep = "")
-  cat("\\textit{", pubs_pdf$authors[i], "}\n\n", sep = "")
-  cat(pubs_pdf$journal[i], "\n\n", sep = "")
+  cat("\\textbf{", escape_latex(pubs_pdf$title[i]), "} (", pubs_pdf$year[i], ")\n\n", sep = "")
+  cat("\\textit{", escape_latex(pubs_pdf$authors[i]), "}\n\n", sep = "")
+  cat(escape_latex(pubs_pdf$journal[i]), "\n\n", sep = "")
 }
 ```
 
@@ -601,8 +685,8 @@ cat('
 #| eval: !expr is_pdf
 
 for (i in 1:nrow(refs)) {
-  cat("\\textbf{", refs$name[i], "}\n\n", sep = "")
-  cat(refs$title[i], "\n\n", sep = "")
-  cat("\\textit{", refs$institution[i], "}\n\n", sep = "")
+  cat("\\textbf{", escape_latex(refs$name[i]), "}\n\n", sep = "")
+  cat(escape_latex(refs$title[i]), "\n\n", sep = "")
+  cat("\\textit{", escape_latex(refs$institution[i]), "}\n\n", sep = "")
 }
 ```

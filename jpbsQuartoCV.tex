@@ -13,6 +13,8 @@
 % Adapted to be an Rmarkdown template by Mitchell O'Hara-Wild
 % 23 November 2018
 %
+% Modified for tighter spacing - October 2025
+%
 % Template license:
 % CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/)
 %
@@ -25,7 +27,6 @@
 % Configure page margins with geometry
 \usepackage{geometry}
 \geometry{left=1.4cm, top=.8cm, right=1.4cm, bottom=1.8cm, footskip=.5cm}
-
 
 % Specify the location of the included fonts
 \fontdir[fonts/]
@@ -48,6 +49,15 @@
 
 % If you would like to change the social information separator from a pipe (|) to something else
 \renewcommand{\acvHeaderSocialSep}{\quad\textbar\quad}
+
+% SPACING MODIFICATIONS FOR TIGHTER LAYOUT
+\setlength{\parskip}{0.3ex}  % Reduced from default
+\setlength{\parsep}{0pt}
+\setlength{\itemsep}{0pt}
+
+% Reduce spacing in itemize environments
+\usepackage{enumitem}
+\setlist{nosep, leftmargin=*, before={\vspace{-0.5ex}}, after={\vspace{0.5ex}}}
 
 \def\endfirstpage{\newpage}
 
@@ -92,6 +102,18 @@ Machine Learning applications in Finance.}
 %------------------------------------------------------------------------------
 
 
+\usepackage{enumitem}
+\setlist[itemize]{
+    topsep=0pt,
+    partopsep=0pt,
+    itemsep=0pt,
+    parsep=0pt,
+    leftmargin=2ex,
+    before=\vspace{-1mm},
+    after=\vspace{0.5mm}
+}
+\setlength{\parskip}{0.5mm}
+\setlength{\parindent}{0pt}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -146,7 +168,6 @@ Machine Learning applications in Finance.}
 % Leave any of these blank if they are not needed
 % 2019-02-14 Chris Umphlett - add flexibility to the document name in footer, rather than have it be static Curriculum Vitae
 
-
 %-------------------------------------------------------------------------------
 %	CV/RESUME CONTENT
 %	Each section is imported separately, open each file in turn to modify content
@@ -159,7 +180,7 @@ Machine Learning applications in Finance.}
 \textbf{Director of Online MS Finance Program}, University of Oklahoma
 
 \begin{itemize}
-\item Directed High Graduation Rate (>78%) Online Degree with approximately 150 students
+\item Directed High Graduation Rate (>78\%) Online Degree with approximately 150 students
 \item Attained CFA Institute University Affiliation Program status
 \item Developed Marketing Strategy for Implementation by 3rd Party Provider
 \item Created Streamlined Admissions Process for Automatic and Accelerated Admission Decisions
@@ -205,69 +226,77 @@ University of Oklahoma
 
 Louisiana State University, Baton Rouge, LA
 
-\textit{Dissertation on Market Microstructure}
+\begin{itemize}
+\item Dissertation: Market Microstructure
+\item Research Assistant (1992-1995)
+\item Doctoral Student Symposium Speaker, Swedish School of Economics (1998)
+\end{itemize}
 
 \textbf{MBA, Finance} (1988--1991)
 
 Millsaps College, Jackson, MS
 
-\textit{Graduate Research Assistant}
+\begin{itemize}
+\item Graduate Research Assistant
+\item Financial Management Association National Honor Society
+\end{itemize}
 
 \textbf{B.S., Biochemistry} (1981--1985)
 
 Louisiana State University, Baton Rouge, LA
 
-\textit{Honors Program}
+\begin{itemize}
+\item Honors Program
+\item Focus: Biochemistry and pre-medical studies
+\end{itemize}
 
-\subsection{Professional Certifications}
+\newpage
 
-\textbf{Chartered Financial Analyst} (CFA®) -- 1997
+\subsection{Professional Credentials}
 
-CFA Institute • 1997
+\textbf{Professional Risk Manager} -- 2003
 
-\textit{Premier investment management credential}
+Professional Risk Managers' International Association
 
-\textbf{Financial Risk Manager} (FRM®) -- 1999
+\textit{Awarded PRM Designation}
 
-Global Association of Risk Professionals • 1999
+\textbf{Certified Financial Risk Manager} -- 1999
 
-\textit{Leading risk management certification}
+Global Association of Risk Professionals
 
-\textbf{Professional Risk Manager} (PRM®) -- 2003
+\textit{Awarded FRM Designation}
 
-PRMIA • 2003
+\textbf{Chartered Financial Analyst} -- 1997
 
-\textit{International risk management credential}
+CFA Institute
 
-\textbf{Certified Business Appraiser} (CBA®) -- 2005
-
-Institute of Business Appraisers • 2005
-
-\textit{Business valuation expertise}
+\textit{Awarded CFA Deisgnation, Charter \#24928}
 
 \section{Academic Appointments}\label{academic-appointments}
 
-\textbf{Professor of Finance} (August-2025 → Present)
+\textbf{Professor of Finance} (August-2025 -- Present)
 
 SUNY - Empire, Saratoga Springs, NY
 
-\textbf{Key Courses:} Associate Professor Finance, COURSES TAUGHT ---
-Financial Management, Investment Analysis, Mergers and Acquisitions
+\begin{itemize}
+\item \textbf{Key Courses:} Associate Professor Finance, COURSES TAUGHT --- Financial Management, Investment Analysis, Mergers and Acquisitions
+\end{itemize}
 
-\textbf{Professor of Finance} (January-2021 → July-2024)
+\textbf{Professor of Finance} (January-2021 -- July-2024)
 
 University of Oklahoma, Norman, OK
 
-\textbf{Key Courses:} Professor of Finance, Director, MS Finance
-Program, Assistant Director, Finance Division, COURSES TAUGHT ---
-Principles of Finance (UG; Online, F2F, Study Abroad/MS), Investments
-(MS), Risk Management (MS) and Student Investment Fund (\$1.3MM AUM)
+\begin{itemize}
+\item \textbf{Key Courses:} Professor of Finance, Director, MS Finance Program, Assistant Director, Finance Division, COURSES TAUGHT --- Principles of Finance (UG; Online, F2F, Study Abroad/MS), Investments (MS), Risk Management (MS) and Student Investment Fund (\$1.3MM AUM)
+\end{itemize}
 
-\textbf{Professor of Finance} (July-1997 → Present)
+\textbf{Professor of Finance} (July-1997 -- Present)
 
 Rutgers University, Camden, NJ
 
-\textbf{Key Courses:} Professor Emeritus (2018 - Present)
+\begin{itemize}
+\item \textbf{Key Courses:} Professor Emeritus (2018 - Present)
+\end{itemize}
 
 \section{Research Impact}\label{research-impact}
 

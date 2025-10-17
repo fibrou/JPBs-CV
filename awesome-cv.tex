@@ -13,6 +13,8 @@
 % Adapted to be an Rmarkdown template by Mitchell O'Hara-Wild
 % 23 November 2018
 %
+% Modified for tighter spacing - October 2025
+%
 % Template license:
 % CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/)
 %
@@ -29,7 +31,6 @@ $else$
 \usepackage{geometry}
 \geometry{left=1.4cm, top=.8cm, right=1.4cm, bottom=1.8cm, footskip=.5cm}
 $endif$
-
 
 % Specify the location of the included fonts
 \fontdir[fonts/]
@@ -56,6 +57,15 @@ $endif$
 
 % If you would like to change the social information separator from a pipe (|) to something else
 \renewcommand{\acvHeaderSocialSep}{\quad\textbar\quad}
+
+% SPACING MODIFICATIONS FOR TIGHTER LAYOUT
+\setlength{\parskip}{0.3ex}  % Reduced from default
+\setlength{\parsep}{0pt}
+\setlength{\itemsep}{0pt}
+
+% Reduce spacing in itemize environments
+\usepackage{enumitem}
+\setlist{nosep, leftmargin=*, before={\vspace{-0.5ex}}, after={\vspace{0.5ex}}}
 
 \def\endfirstpage{\newpage}
 
@@ -201,7 +211,6 @@ $if(show_footer)$
     {$name$$if(surname)$ $surname$$endif$~~~·~~~$if(docname)$$docname$$else$Curriculum Vitae$endif$}
   {\thepage$if(page_total)$~ of \pageref{LastPage}~$endif$}
 $endif$
-
 
 %-------------------------------------------------------------------------------
 %	CV/RESUME CONTENT

@@ -1,0 +1,10 @@
+# ADMINISTRATIVE EXPERIENCE
+
+```{r ADMINISTRATIVE}
+admin %>%
+  detailed_entries(
+    with = institution,
+    what = title,
+    why = detail
+  )
+```

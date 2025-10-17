@@ -1,0 +1,622 @@
+---
+title: "Curriculum Vitae"
+name: John Paul
+surname: Broussard
+position: "Finance Professor with Decades of Superior Administrative, Research, and Teaching Experiences"
+address: "Willis, Texas, USA"
+profilepic: jaafGalaPic.jpg
+www: tinyurl.com/c3wdneyp
+email: john.broussard@rutgers.edu
+linkedin: tinyurl.com/5bfex8hv
+orcid: 0000-0002-5090-9947
+aboutme: "I am a Finance Professor with over 25 years of extensive domestic and international experience in online and traditional academic program management. I create academic programs and courses that monetize academic effort and yield institutional revenue enhancement and stakeholder success. I maintain real-world relevance through being a Financial Professional Designation Exam Trainer, Financial Risk Management Specialist, Financial Market Consultant, Expert on Big Data, Implementer of Natural Language Processing, Artificial Intelligence and Machine Learning applications in Finance."
+author: 
+  - name: "John Paul Broussard"
+    url: "https://tinyurl.com/c3wdneyp"
+    orcid: "0000-0002-5090-9947"
+    email: "john.broussard@rutgers.edu"
+    affiliations:
+      - name: "Rutgers, The State University of New Jersey"
+        department: "School of Business - Camden"
+        city: "Camden"
+        state: "NJ"
+      - name: "SUNY - Empire State University"
+        department: "College of Business"
+        city: "Saratoga Springs"
+        state: "NY"
+      - name: "Estonian Business School"
+        department: "Finance, Accounting and Economics"
+        city: "Tallinn"
+        state: "Estonia"
+format:
+  html:
+    theme: 
+      - cosmo
+      - custom-cv.scss
+    toc: true
+    toc-depth: 2
+    toc-title: "Navigation"
+    page-layout: article
+    grid:
+      body-width: 900px
+    include-in-header:
+      text: |
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  pdf:
+    template: awesome-cv.tex
+    pdf-engine: xelatex
+    keep-tex: true
+    include-in-header:
+      text: |
+        \usepackage{enumitem}
+        \setlist[itemize]{
+            topsep=0pt,
+            partopsep=0pt,
+            itemsep=0pt,
+            parsep=0pt,
+            leftmargin=2ex,
+            before=\vspace{-3mm},
+            after=\vspace{2mm}
+        }
+        \setlength{\parskip}{2mm}
+        \setlength{\parindent}{0pt}
+date: now
+date-format: "MMMM YYYY"
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(vitae)
+library(tibble)
+library(dplyr)
+library(readxl)
+library(glue)
+library(here)
+library(knitr)
+library(gt)
+library(tidyr)
+
+source(here("jpbsCVdata", "load_cv_data.r"))
+cv_data <- load_cv_data("cv_data.xlsx")
+
+# Unpack data
+admin <- cv_data$admin
+employment <- cv_data$employment
+publications <- cv_data$publications
+pip <- cv_data$pip
+honors <- cv_data$honors
+service <- cv_data$service
+
+format_date_range <- function(start, end) {
+  case_when(
+    is.na(start) | start == "" ~ "",
+    is.na(end) | end == "" | tolower(end) == "present" ~ paste0(start, " → Present"),
+    TRUE ~ paste0(start, " → ", end)
+  )
+}
+
+is_pdf <- knitr::is_latex_output()
+is_html <- knitr::is_html_output()
+```
+
+```{r}
+#| label: hero-html
+#| output: asis
+#| eval: !expr is_html
+
+cat('
+<div class="hero-section">
+
+<img src="jaafGalaPic.jpg" class="profile-photo" alt="John Paul Broussard">
+
+## About {.unnumbered}
+
+<div class="profile-summary">
+
+Finance Professor and Academic Administrator with **25+ years** of proven leadership in building successful, revenue-generating programs. I specialize in transforming academic operations through strategic planning, innovative curriculum design, and stakeholder-focused management.
+
+**Core Competencies:** Program Development & Growth • Strategic Planning • Budget Management • Enrollment Strategy • Faculty Development • Accreditation Leadership • Stakeholder Relations • Data-Driven Decision Making
+
+</div>
+
+### Quick Links {.unnumbered}
+
+<div class="quick-links">
+
+<a href="#administrative-leadership" class="nav-btn"><i class="fas fa-users-cog"></i> Leadership</a>
+<a href="#education-credentials" class="nav-btn"><i class="fas fa-graduation-cap"></i> Education</a>
+<a href="#research-impact" class="nav-btn"><i class="fas fa-microscope"></i> Research</a>
+<a href="papers.html" class="nav-btn"><i class="fas fa-file-alt"></i> Working Papers</a>
+
+</div>
+
+### Contact {.unnumbered}
+
+<div class="contact-grid">
+
+- <i class="fas fa-envelope"></i> [john.broussard@rutgers.edu](mailto:john.broussard@rutgers.edu)
+- <i class="fas fa-globe"></i> [Personal Website](https://tinyurl.com/c3wdneyp)
+- <i class="fab fa-linkedin"></i> [LinkedIn Profile](https://tinyurl.com/5bfex8hv)
+- <i class="fab fa-orcid"></i> [ORCID: 0000-0002-5090-9947](https://orcid.org/0000-0002-5090-9947)
+
+</div>
+
+</div>
+')
+```
+
+# Administrative Leadership {#administrative-leadership}
+
+```{r}
+#| label: admin-metrics-html
+#| output: asis
+#| eval: !expr is_html
+
+# TODO: Move this to Excel file
+metrics <- tribble(
+  ~icon, ~value, ~label, ~context,
+  "users", "150", "Students Enrolled", "Graduate program enrollment",
+  "chart-line", "58%", "Enrollment Growth", "Growth over 3-year period",
+  "graduation-cap", "78%", "Graduation Rate", "25% above national average",
+  "dollar-sign", "$1.3M", "Assets Under Management", "Student-managed investment fund"
+)
+
+cat('## Impact Dashboard\n\n')
+cat('<div class="metrics-grid">\n')
+for (i in 1:nrow(metrics)) {
+  cat(paste0(
+  '<div class="metric-card">
+<i class="fas fa-', metrics$icon[i], ' metric-icon"></i>
+<span class="metric-value">', metrics$value[i], '</span>
+<span class="metric-label">', metrics$label[i], '</span>
+<span class="metric-context">', metrics$context[i], '</span>
+</div>\n'
+  ))
+}
+cat('</div>\n\n')
+
+cat('## Key Leadership Roles & Achievements\n\n')
+```
+
+```{r}
+#| label: admin-roles-html
+#| output: asis
+#| eval: !expr is_html
+
+admin_grouped <- admin %>%
+  filter(highlight == TRUE) %>%
+  arrange(display_order, institution, title) %>%
+  group_by(institution, title) %>%
+  summarise(
+    details = list(detail),
+    impact = first(impact[!is.na(impact) & impact != ""]),
+    display_order = first(display_order),
+    .groups = 'drop'
+  ) %>%
+  arrange(display_order)
+
+for (i in 1:nrow(admin_grouped)) {
+  # Build bullet list of details
+  details_html <- paste0('<ul class="role-details">\n')
+  for (detail in admin_grouped$details[[i]]) {
+    details_html <- paste0(details_html, '<li>', detail, '</li>\n')
+  }
+  details_html <- paste0(details_html, '</ul>\n')
+  
+  # Build impact section if exists
+  impact_section <- ""
+  if (!is.na(admin_grouped$impact[i]) && admin_grouped$impact[i] != "") {
+    impact_section <- paste0('<div class="role-impact"><i class="fas fa-star"></i> <strong>Impact:</strong> ', admin_grouped$impact[i], '</div>')
+  }
+  
+  cat(paste0('
+<div class="admin-role">
+<div class="role-header">
+<strong class="role-title">', admin_grouped$title[i], '</strong>
+<span class="institution">', admin_grouped$institution[i], '</span>
+</div>
+', details_html, '
+', impact_section, '
+</div>
+
+'))
+}
+
+cat('
+<div class="section-highlight">
+
+**Leadership Philosophy:** I build programs that serve students, faculty, and institutions simultaneously—creating sustainable growth through strategic vision, operational excellence, and authentic stakeholder engagement.
+
+</div>
+')
+```
+
+```{r}
+#| label: admin-pdf
+#| output: asis
+#| eval: !expr is_pdf
+
+admin_grouped <- admin %>%
+  filter(highlight == TRUE) %>%
+  arrange(display_order, institution, title) %>%
+  group_by(institution, title) %>%
+  summarise(
+    details = list(detail),
+    display_order = first(display_order),
+    .groups = 'drop'
+  ) %>%
+  arrange(display_order)
+
+for (i in 1:nrow(admin_grouped)) {
+  cat("\\textbf{", admin_grouped$title[i], "}, ", admin_grouped$institution[i], "\n\n", sep = "")
+  cat("\\begin{itemize}\n")
+  for (detail in admin_grouped$details[[i]]) {
+    cat("\\item ", detail, "\n", sep = "")
+  }
+  cat("\\end{itemize}\n\n")
+}
+```
+
+# Education & Credentials {#education-credentials}
+
+```{r}
+#| label: education-data
+#| include: false
+
+# TODO: Move this to Excel file
+edu_data <- tribble(
+  ~degree, ~institution, ~location, ~years, ~distinction,
+  "PhD, Finance", "Louisiana State University", "Baton Rouge, LA", "1991–1995", "Dissertation on Market Microstructure",
+  "MBA, Finance", "Millsaps College", "Jackson, MS", "1988–1991", "Graduate Research Assistant",
+  "B.S., Biochemistry", "Louisiana State University", "Baton Rouge, LA", "1981–1985", "Honors Program"
+)
+
+# TODO: Move this to Excel file
+certs <- tribble(
+  ~abbr, ~full, ~org, ~year, ~desc,
+  "CFA®", "Chartered Financial Analyst", "CFA Institute • 1997", "1997", "Premier investment management credential",
+  "FRM®", "Financial Risk Manager", "Global Association of Risk Professionals • 1999", "1999", "Leading risk management certification",
+  "PRM®", "Professional Risk Manager", "PRMIA • 2003", "2003", "International risk management credential",
+  "CBA®", "Certified Business Appraiser", "Institute of Business Appraisers • 2005", "2005", "Business valuation expertise"
+)
+```
+
+```{r}
+#| label: education-html
+#| output: asis
+#| eval: !expr is_html
+
+for (i in 1:nrow(edu_data)) {
+  cat(paste0('
+<div class="education-entry">
+<div class="degree-header">
+<span class="degree-name">', edu_data$degree[i], '</span>
+<span class="years">', edu_data$years[i], '</span>
+</div>
+<div class="institution-name">', edu_data$institution[i], ', ', edu_data$location[i], '</div>
+<div class="distinction">', edu_data$distinction[i], '</div>
+</div>
+'))
+}
+
+cat('\n## Professional Certifications\n\n')
+
+cat('<div class="certifications-showcase">\n')
+for (i in 1:nrow(certs)) {
+  cat(paste0('
+<div class="cert-card">
+<div class="cert-abbr">', certs$abbr[i], '</div>
+<div class="cert-full">', certs$full[i], '</div>
+<div class="cert-org">', certs$org[i], '</div>
+<div class="cert-desc">', certs$desc[i], '</div>
+</div>
+'))
+}
+cat('</div>\n\n')
+
+cat('<div class="credential-note">
+These professional credentials complement my academic expertise, ensuring I remain connected to industry practice and can design programs that prepare students for real-world success.
+</div>\n')
+```
+
+```{r}
+#| label: education-pdf
+#| output: asis
+#| eval: !expr is_pdf
+
+for (i in 1:nrow(edu_data)) {
+  cat("\\textbf{", edu_data$degree[i], "} (", edu_data$years[i], ")\n\n", sep = "")
+  cat(edu_data$institution[i], ", ", edu_data$location[i], "\n\n", sep = "")
+  cat("\\textit{", edu_data$distinction[i], "}\n\n", sep = "")
+}
+
+cat('\\subsection{Professional Certifications}\n\n')
+
+for (i in 1:nrow(certs)) {
+  cat("\\textbf{", certs$full[i], "} (", certs$abbr[i], ") -- ", certs$year[i], "\n\n", sep = "")
+  cat(certs$org[i], "\n\n", sep = "")
+  cat("\\textit{", certs$desc[i], "}\n\n", sep = "")
+}
+```
+
+# Academic Appointments
+
+```{r}
+#| label: employment-html
+#| output: asis
+#| eval: !expr is_html
+
+emp_grouped <- employment %>%
+  filter(current == TRUE | as.numeric(substr(start_date, 1, 4)) >= 1997) %>%
+  mutate(
+    period = format_date_range(start_date, end_date),
+    location = paste0(location_city, " • ", location_state),
+    is_current = (is.na(end_date) | end_date == "" | tolower(end_date) == "present"),
+    clean_title = if_else(is.na(position_title) | position_title == "NA", 
+                          "Professor of Finance", 
+                          position_title)
+  ) %>%
+  arrange(display_order, institution, clean_title) %>%
+  group_by(institution, location, clean_title) %>%
+  summarise(
+    periods = list(period),
+    additional_titles = list(additional_titles[!is.na(additional_titles) & additional_titles != "" & additional_titles != "NA"]),
+    courses = list(courses_taught[!is.na(courses_taught) & courses_taught != "" & courses_taught != "NA"]),
+    is_current = any(is_current),
+    display_order = first(display_order),
+    .groups = 'drop'
+  ) %>%
+  arrange(display_order)
+
+for (i in 1:nrow(emp_grouped)) {
+  entry_class <- if_else(emp_grouped$is_current[i], "employment-entry current-position", "employment-entry")
+  
+  # Build period display
+  period_display <- paste(unique(emp_grouped$periods[[i]]), collapse = ", ")
+  
+  # Build additional titles if any
+  additional_html <- ""
+  if (length(emp_grouped$additional_titles[[i]]) > 0) {
+    additional_html <- paste0('<div class="additional-titles"><em>', 
+                             paste(unique(emp_grouped$additional_titles[[i]]), collapse = " • "), 
+                             '</em></div>')
+  }
+  
+  # Build courses if any
+  courses_html <- ""
+  if (length(emp_grouped$courses[[i]]) > 0) {
+    courses_html <- paste0('<div class="courses"><strong>Key Courses:</strong> ', 
+                          paste(unique(emp_grouped$courses[[i]]), collapse = ", "), 
+                          '</div>')
+  }
+  
+  cat(paste0('
+<div class="', entry_class, '">
+<div class="position-header">
+<span class="position-title">', emp_grouped$clean_title[i], '</span>
+<span class="period">', period_display, '</span>
+</div>
+<div class="institution-location">', emp_grouped$institution[i], ' • ', emp_grouped$location[i], '</div>
+', additional_html, '
+', courses_html, '
+</div>
+'))
+}
+```
+
+```{r}
+#| label: employment-pdf
+#| output: asis
+#| eval: !expr is_pdf
+
+emp_pdf <- employment %>%
+  filter(current == TRUE | as.numeric(substr(start_date, 1, 4)) >= 1997) %>%
+  mutate(
+    period = format_date_range(start_date, end_date),
+    clean_title = if_else(is.na(position_title) | position_title == "NA", 
+                          "Professor of Finance", 
+                          position_title)
+  ) %>%
+  arrange(display_order, institution, clean_title) %>%
+  group_by(institution, location_city, location_state, clean_title) %>%
+  summarise(
+    periods = list(period),
+    additional_titles = list(additional_titles[!is.na(additional_titles) & additional_titles != "" & additional_titles != "NA"]),
+    courses = list(courses_taught[!is.na(courses_taught) & courses_taught != "" & courses_taught != "NA"]),
+    display_order = first(display_order),
+    .groups = 'drop'
+  ) %>%
+  arrange(display_order)
+
+for (i in 1:nrow(emp_pdf)) {
+  period_display <- paste(unique(emp_pdf$periods[[i]]), collapse = ", ")
+  cat("\\textbf{", emp_pdf$clean_title[i], "} (", period_display, ")\n\n", sep = "")
+  cat(emp_pdf$institution[i], ", ", emp_pdf$location_city[i], ", ", emp_pdf$location_state[i], "\n\n", sep = "")
+  
+  # Add additional titles if any
+  if (length(emp_pdf$additional_titles[[i]]) > 0) {
+    cat("\\textit{", paste(unique(emp_pdf$additional_titles[[i]]), collapse = " • "), "}\n\n", sep = "")
+  }
+  
+  # Add courses if any
+  if (length(emp_pdf$courses[[i]]) > 0) {
+    cat("\\textbf{Key Courses:} ", paste(unique(emp_pdf$courses[[i]]), collapse = ", "), "\n\n", sep = "")
+  }
+}
+```
+
+# Research Impact {#research-impact}
+
+```{r}
+#| label: research-html
+#| output: asis
+#| eval: !expr is_html
+
+cat('
+## Research Profile
+
+<div class="research-summary">
+
+My research program spans **corporate finance, financial markets, and emerging FinTech applications**. I maintain an active pipeline of high-impact publications while leveraging research to inform curriculum development and student mentoring.
+
+**Current Focus:** Machine learning applications in finance, market microstructure, and corporate financial policy.
+
+<a href="papers.html" class="papers-link"><i class="fas fa-arrow-right"></i> View All Working Papers with Abstracts</a>
+
+</div>
+
+## Publication Metrics
+
+')
+
+pub_metrics <- tribble(
+  ~value, ~label, ~context,
+  as.character(nrow(publications)), "Total Publications", "Peer-reviewed articles",
+  as.character(sum(publications$year >= 2013)), "Recent Output", "Since 2013",
+  "500+", "Total Citations", "Google Scholar",
+  "12+", "Top-Tier Journals", "JF, RFS, JFE, JCF"
+)
+
+cat('<div class="metrics-grid">\n')
+for (i in 1:nrow(pub_metrics)) {
+  cat(paste0('
+<div class="pub-metric">
+<span class="metric-value">', pub_metrics$value[i], '</span>
+<span class="metric-label">', pub_metrics$label[i], '</span>
+<span class="metric-context">', pub_metrics$context[i], '</span>
+</div>
+'))
+}
+cat('</div>\n\n')
+
+cat('## Selected Publications\n\n')
+```
+
+```{r}
+#| label: publications-html
+#| output: asis
+#| eval: !expr is_html
+
+pubs <- publications %>%
+  filter(year >= 2013) %>%
+  arrange(desc(year), desc(featured))
+
+for (i in 1:nrow(pubs)) {
+  citation_text <- if_else(
+    !is.na(pubs$volume[i]) && !is.na(pubs$pages[i]),
+    paste0(pubs$journal[i], ", ", pubs$volume[i], "(", pubs$issue[i], "), ", pubs$pages[i]),
+    pubs$journal[i]
+  )
+  
+  doi_link <- ""
+  if (!is.na(pubs$doi[i]) && pubs$doi[i] != "") {
+    doi_link <- paste0('<a href="', pubs$doi[i], '" target="_blank"><i class="fas fa-external-link-alt"></i></a>')
+  }
+  
+  cat(paste0('
+<div class="publication-item">
+<div class="pub-year">', pubs$year[i], '</div>
+<div class="pub-content">
+<div class="pub-title">', pubs$title[i], ' ', doi_link, '</div>
+<div class="pub-authors">', pubs$authors[i], '</div>
+<div class="pub-venue"><em>', citation_text, '</em></div>
+</div>
+</div>
+'))
+}
+```
+
+```{r}
+#| label: publications-pdf
+#| output: asis
+#| eval: !expr is_pdf
+
+pubs_pdf <- publications %>%
+  filter(year >= 2013) %>%
+  arrange(desc(year))
+
+for (i in 1:nrow(pubs_pdf)) {
+  cat("\\textbf{", pubs_pdf$title[i], "} (", pubs_pdf$year[i], ")\n\n", sep = "")
+  cat("\\textit{", pubs_pdf$authors[i], "}\n\n", sep = "")
+  cat(pubs_pdf$journal[i], "\n\n", sep = "")
+}
+```
+
+# References
+
+```{r}
+#| label: references-data
+#| include: false
+
+# TODO: Add references data to Excel
+refs <- tribble(
+  ~name, ~title, ~institution,
+  "Bruce Weber", "Willem Kooyker Dean", "Zicklin School of Business, Baruch College",
+  "Neil Pearson", "Professor of Finance", "University of Illinois",
+  "Gene Pilotte", "Professor of Finance", "Rutgers Business School",
+  "Paul Brockman", "Joseph R. Perella Chair in Finance", "Lehigh University",
+  "Chitru Fernando", "Rainbolt Chair in Finance", "University of Oklahoma"
+)
+```
+
+```{r}
+#| label: references-html
+#| output: asis
+#| eval: !expr is_html
+
+cat('
+<div class="references-note">
+Complete contact information available upon request. References include deans, department chairs, and distinguished faculty colleagues who can speak to leadership, teaching, and research excellence.
+</div>
+')
+
+for (i in 1:nrow(refs)) {
+  cat(paste0('
+<div class="reference-item">
+<div class="ref-name">', refs$name[i], '</div>
+<div class="ref-title">', refs$title[i], '</div>
+<div class="ref-institution">', refs$institution[i], '</div>
+</div>
+'))
+}
+
+cat('
+
+---
+
+<div class="footer-section">
+
+### Download Options
+
+<div class="download-buttons">
+
+<a href="jpbsQuartoCV.pdf" class="download-btn pdf"><i class="fas fa-file-pdf"></i> Download PDF CV</a>
+<a href="papers.html" class="download-btn papers"><i class="fas fa-file-alt"></i> View Working Papers</a>
+
+</div>
+
+<div class="last-updated">
+*Last Updated: ', format(Sys.Date(), "%B %d, %Y"), '*
+</div>
+
+</div>
+')
+```
+
+```{r}
+#| label: references-pdf
+#| output: asis
+#| eval: !expr is_pdf
+
+for (i in 1:nrow(refs)) {
+  cat("\\textbf{", refs$name[i], "}\n\n", sep = "")
+  cat(refs$title[i], "\n\n", sep = "")
+  cat("\\textit{", refs$institution[i], "}\n\n", sep = "")
+}
+```

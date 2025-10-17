@@ -1,0 +1,116 @@
+---
+name: John Paul
+surname: Broussard
+position: "Finance Professor with Decades of Superior Administrative, Research, and Teaching Experiences"
+address: "Oklahoma City, Oklahoma, USA"
+email: "john.broussard@rutgers.edu"
+linkedin: "tinyurl.com/5bfex8hv"
+orcid: 0000-0002-5090-9947
+date: "`r format(Sys.time(), '%B %Y')`"
+headcolor: 990000
+aboutme: "I am a Finance Professor with over 25 years of extensive domestic and international experience in online and traditional academic program management."
+docname: jpbDataDrivenCV
+output: vitae::awesomecv
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE)
+
+# Load minimal packages
+library(vitae)
+library(tibble)
+library(dplyr)
+library(readxl)
+library(glue)
+library(here)
+
+# Load data from Excel
+excel_file <- here("jpbsCVdata", "cv_data_with_education.xlsx")
+
+# Check if file exists
+if (!file.exists(excel_file)) {
+  stop("Excel file not found at: ", excel_file)
+}
+
+# Read Administrative data
+admin <- read_excel(excel_file, sheet = "Administrative") %>%
+  filter(highlight == TRUE | is.na(highlight)) %>%
+  arrange(display_order)
+
+# Read Education data - Fixed column processing
+edu <- read_excel(excel_file, sheet = "Education") %>%
+  filter(highlight == TRUE | is.na(highlight)) %>%
+  arrange(display_order) %>%
+  mutate(
+    where = paste(location_city, location_state, sep = ", "),
+    inst = institution,
+    degree = degree,
+    startYear = as.character(start_year),
+    endYear = as.character(end_year),
+    # Safely combine detail columns
+    detail = case_when(
+      !is.na(detail_1) ~ as.character(detail_1),
+      TRUE ~ ""
+    )
+  )
+
+# Read Certifications - Using correct column names
+certifications <- read_excel(excel_file, sheet = "Certifications") %>%
+  filter(highlight == TRUE | is.na(highlight)) %>%
+  arrange(display_order) %>%
+  mutate(
+    certBody = cert_body,
+    accomplishment = accomplishment,
+    year = as.character(year),
+    where = if_else(is.na(where), "", where),
+    detail = if_else(is.na(detail), "", detail)
+  )
+
+# Read minimal Employment data
+employment <- read_excel(excel_file, sheet = "Employment") %>%
+  arrange(desc(current))
+
+# Process Long-term employment (simplified)
+ltWork <- employment %>%
+  slice_head(n = 5) %>%  # Just show first 5 for testing
+  mutate(
+    institution = institution,
+    detail = position_title,
+    # Parse Month-Year format dates
+    startMonth = if_else(!is.na(start_date), 
+                        sub("-.*", "", start_date),  # Extract month part
+                        ""),
+    startYear = if_else(!is.na(start_date), 
+                       sub(".*-", "", start_date),  # Extract year part
+                       ""),
+    endMonth = case_when(
+      current == TRUE ~ "Present",
+      !is.na(end_date) ~ sub("-.*", "", end_date),
+      TRUE ~ ""
+    ),
+    endYear = case_when(
+      current == TRUE ~ "",
+      !is.na(end_date) ~ sub(".*-", "", end_date),
+      TRUE ~ ""
+    ),
+    where = paste(location_city, location_state, sep = ", ")
+  )
+```
+
+{{< include _administrative.qmd >}}
+
+{{< include _education.qmd >}}
+
+# LONG-TERM ACADEMIC APPOINTMENTS
+
+```{r LTEMPLOYMENT}
+ltWork %>%
+  detailed_entries(
+    with = institution,
+    why = detail,
+    when = glue::glue("{startMonth} {startYear} --> {endMonth} {endYear}", .na = ""),
+    where = where
+  )
+```

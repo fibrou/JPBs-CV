@@ -1,0 +1,382 @@
+---
+title: "Curriculum Vitae"
+name: John Paul
+surname: Broussard
+position: "Finance Professor with Decades of Superior Administrative, Research, and Teaching Experiences"
+address: "Oklahoma City, Oklahoma, USA"
+profilepic: "./img/jaafGalaPic.jpg"
+www: "tinyurl.com/c3wdneyp"
+email: "john.broussard@rutgers.edu"
+linkedin: "tinyurl.com/5bfex8hv"
+orcid: 0000-0002-5090-9947
+aboutme: "I am a Finance Professor with over 25 years of extensive domestic and international experience in online and traditional academic program management. I create academic programs and courses that monetize academic effort and yield institutional revenue enhancement and stakeholder success. I maintain real-world relevance through being a Financial Professional Designation Exam Trainer, Financial Risk Management Specialist, Financial Market Consultant, Expert on Big Data, Implementer of Natural Language Processing, Artificial Intelligence and Machine Learning applications in Finance."
+docname: jpbDataDrivenCV
+date: "`r format(Sys.time(), '%B %Y')`"
+headcolor: 990000
+format:
+  pdf:
+    template: awesome-cv.tex
+    keep-tex: false
+    pdf-engine: xelatex
+  html:
+    theme: cosmo
+    toc: true
+    toc-location: left
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+#| include: false
+
+# Load packages
+library(vitae)
+library(tibble)
+library(dplyr)
+library(readxl)
+library(glue)
+library(here)
+library(knitr)
+
+# Detect output format
+is_pdf <- knitr::is_latex_output()
+is_html <- knitr::is_html_output()
+
+# Load all data from Excel
+excel_file <- here("jpbsCVdata", "cv_data_with_education.xlsx")
+
+# Function to safely read Excel sheets
+read_sheet_safe <- function(file, sheet_name) {
+  tryCatch({
+    read_excel(file, sheet = sheet_name)
+  }, error = function(e) {
+    tibble() # Return empty tibble if sheet doesn't exist
+  })
+}
+
+# Read Administrative data
+admin <- read_sheet_safe(excel_file, "Administrative") %>%
+  filter(highlight == TRUE | is.na(highlight)) %>%
+  arrange(display_order)
+
+# Read Education data
+edu <- read_sheet_safe(excel_file, "Education") %>%
+  filter(highlight == TRUE | is.na(highlight)) %>%
+  arrange(display_order) %>%
+  mutate(
+    where = paste(location_city, location_state, sep = ", "),
+    inst = institution,
+    degree = degree,
+    startYear = as.character(start_year),
+    endYear = as.character(end_year),
+    # Combine detail columns
+    detail = case_when(
+      !is.na(detail_1) & !is.na(detail_2) & !is.na(detail_3) ~ 
+        paste(detail_1, detail_2, detail_3, sep = "; "),
+      !is.na(detail_1) & !is.na(detail_2) ~ 
+        paste(detail_1, detail_2, sep = "; "),
+      !is.na(detail_1) ~ detail_1,
+      TRUE ~ ""
+    )
+  )
+
+# Read Certifications
+certifications <- read_sheet_safe(excel_file, "Certifications") %>%
+  filter(highlight == TRUE | is.na(highlight)) %>%
+  arrange(display_order) %>%
+  mutate(
+    certBody = cert_body,
+    accomplishment = accomplishment,
+    year = as.character(year),
+    where = if_else(is.na(where), "", where),
+    detail = if_else(is.na(detail), "", detail)
+  )
+
+# Read Employment data
+employment <- read_sheet_safe(excel_file, "Employment") %>%
+  mutate(
+    # Create sortable date for ordering
+    start_sort = paste0(
+      sub(".*-", "", if_else(is.na(start_date), "2000", start_date)),  # Year
+      "-",
+      case_when(
+        grepl("January", start_date) ~ "01",
+        grepl("February", start_date) ~ "02",
+        grepl("March", start_date) ~ "03",
+        grepl("April", start_date) ~ "04",
+        grepl("May", start_date) ~ "05",
+        grepl("June", start_date) ~ "06",
+        grepl("July", start_date) ~ "07",
+        grepl("August", start_date) ~ "08",
+        grepl("September", start_date) ~ "09",
+        grepl("October", start_date) ~ "10",
+        grepl("November", start_date) ~ "11",
+        grepl("December", start_date) ~ "12",
+        TRUE ~ "00"
+      )
+    )
+  ) %>%
+  arrange(desc(current), desc(start_sort))
+
+# Process Long-term employment
+ltWork <- employment %>%
+  filter(current == TRUE | 
+         (!is.na(end_date) & end_date != "" & 
+          as.numeric(sub(".*-", "", end_date)) >= 1997)) %>%
+  mutate(
+    institution = institution,
+    detail = case_when(
+      !is.na(additional_titles) & additional_titles != "" & 
+      !is.na(courses_taught) & courses_taught != "" ~ 
+        paste0(position_title, "\n• ", additional_titles, 
+               "\n• COURSES TAUGHT — ", courses_taught),
+      !is.na(additional_titles) & additional_titles != "" ~ 
+        paste0(position_title, "\n• ", additional_titles),
+      !is.na(courses_taught) & courses_taught != "" ~ 
+        paste0(position_title, "\n• COURSES TAUGHT — ", courses_taught),
+      TRUE ~ position_title
+    ),
+    startMonth = if_else(!is.na(start_date) & start_date != "", 
+                        sub("-.*", "", start_date), ""),
+    startYear = if_else(!is.na(start_date) & start_date != "", 
+                       sub(".*-", "", start_date), ""),
+    endMonth = case_when(
+      is.na(end_date) | end_date == "" | current == TRUE ~ "Present",
+      TRUE ~ sub("-.*", "", end_date)
+    ),
+    endYear = case_when(
+      is.na(end_date) | end_date == "" | current == TRUE ~ "",
+      TRUE ~ sub(".*-", "", end_date)
+    ),
+    where = paste(location_city, location_state, sep = ", ")
+  )
+
+# Process Short-term employment
+stWork <- employment %>%
+  filter(current == FALSE & 
+         !is.na(end_date) & end_date != "" & 
+         as.numeric(sub(".*-", "", end_date)) < 1997) %>%
+  mutate(
+    institution = institution,
+    detail = case_when(
+      !is.na(additional_titles) & additional_titles != "" & 
+      !is.na(courses_taught) & courses_taught != "" ~ 
+        paste0(position_title, "\n• ", additional_titles, 
+               "\n• COURSES TAUGHT — ", courses_taught),
+      !is.na(additional_titles) & additional_titles != "" ~ 
+        paste0(position_title, "\n• ", additional_titles),
+      !is.na(courses_taught) & courses_taught != "" ~ 
+        paste0(position_title, "\n• COURSES TAUGHT — ", courses_taught),
+      TRUE ~ position_title
+    ),
+    startMonth = if_else(!is.na(start_date) & start_date != "", 
+                        sub("-.*", "", start_date), ""),
+    startYear = if_else(!is.na(start_date) & start_date != "", 
+                       sub(".*-", "", start_date), ""),
+    endMonth = if_else(!is.na(end_date) & end_date != "", 
+                      sub("-.*", "", end_date), ""),
+    endYear = if_else(!is.na(end_date) & end_date != "", 
+                     sub(".*-", "", end_date), ""),
+    where = paste(location_city, location_state, sep = ", ")
+  )
+
+# Read Publications
+publications <- read_sheet_safe(excel_file, "Publications") %>%
+  arrange(desc(year)) %>%
+  mutate(
+    articleTitle = title,
+    authors = authors,
+    journal = case_when(
+      !is.na(volume) & !is.na(issue) & !is.na(pages) ~ 
+        paste0(journal, ", v", volume, " n", issue, ", ", pages),
+      !is.na(volume) & !is.na(pages) ~ 
+        paste0(journal, ", v", volume, ", ", pages),
+      !is.na(volume) ~ paste0(journal, ", v", volume),
+      TRUE ~ journal
+    ),
+    year = as.character(year)
+  )
+
+# Read Honors and Grants
+honorsGrants <- read_sheet_safe(excel_file, "Honors") %>%
+  arrange(desc(year)) %>%
+  mutate(
+    honorGrant = honor_grant,
+    grantor = grantor,
+    year = as.character(year),
+    where = if_else(is.na(location), "", location),
+    detail = if_else(is.na(notes), "", notes)
+  )
+
+# Read Working Papers
+pip <- read_sheet_safe(excel_file, "WorkingPapers") %>%
+  mutate(
+    articleTitle = title,
+    authors = authors,
+    status = if_else(is.na(status), "", status)
+  )
+
+# Read Other Publications
+otherPubsMonos <- read_sheet_safe(excel_file, "OtherPublications") %>%
+  arrange(desc(year)) %>%
+  mutate(
+    title = title,
+    authors = authors,
+    outlet = if_else(is.na(outlet), "", outlet),
+    year = as.character(year)
+  )
+
+# Read Presentations
+academicPresents <- read_sheet_safe(excel_file, "Presentations") %>%
+  filter(type == "Paper" | type == "paper") %>%
+  mutate(
+    articleTitle = title,
+    authors = if_else(is.na(authors), "", authors),
+    detail = paste(conference, as.character(date), sep = ", ")
+  )
+
+pedagogyPresents <- read_sheet_safe(excel_file, "Presentations") %>%
+  filter(type == "Pedagogy" | type == "pedagogy") %>%
+  mutate(
+    title = title,
+    detail = paste(conference, as.character(date), sep = ", ")
+  )
+
+academicDiscussions <- read_sheet_safe(excel_file, "Presentations") %>%
+  filter(type == "Discussion" | type == "discussion") %>%
+  mutate(
+    articleTitle = title,
+    authors = if_else(is.na(authors), "", authors),
+    detail = paste(conference, as.character(date), sep = ", ")
+  )
+
+# Read Service data
+service_data <- read_sheet_safe(excel_file, "Service")
+
+# Filter service data by category
+editor <- service_data %>%
+  filter(category == "Editor") %>%
+  mutate(
+    role = role,
+    journal = organization,
+    begYear = if_else(!is.na(start_date), sub("-.*", "", as.character(start_date)), ""),
+    endYear = if_else(is.na(end_date), "Present", sub("-.*", "", as.character(end_date)))
+  )
+
+adHocReview <- service_data %>%
+  filter(category == "Reviewer") %>%
+  mutate(
+    outletName = organization,
+    outletType = "Academic Journal"
+  )
+
+tAndP <- service_data %>%
+  filter(category == "Tenure Review") %>%
+  mutate(
+    task = role,
+    school = organization,
+    year = if_else(!is.na(start_date), sub("-.*", "", as.character(start_date)), ""),
+    role = ""
+  )
+
+profesionalOFfices <- service_data %>%
+  filter(category == "Professional Office") %>%
+  mutate(
+    title = role,
+    group = organization,
+    begYear = if_else(!is.na(start_date), sub("-.*", "", as.character(start_date)), ""),
+    endYear = if_else(is.na(end_date), "Present", sub("-.*", "", as.character(end_date)))
+  )
+
+academicLeader <- service_data %>%
+  filter(category == "Leadership") %>%
+  mutate(
+    title = role,
+    school = organization,
+    begYear = if_else(!is.na(start_date), sub("-.*", "", as.character(start_date)), ""),
+    endYear = if_else(is.na(end_date), "Present", sub("-.*", "", as.character(end_date)))
+  )
+
+academicCommittees <- service_data %>%
+  filter(category == "Committee") %>%
+  mutate(
+    committeeName = role,
+    institution = organization,
+    begYear = if_else(!is.na(start_date), sub("-.*", "", as.character(start_date)), ""),
+    endYear = if_else(is.na(end_date), "Present", sub("-.*", "", as.character(end_date)))
+  )
+```
+
+{{< include _administrative.qmd >}}
+
+{{< include _education.qmd >}}
+
+```{r}
+#| output: asis
+if(is_pdf) {
+  cat("# LONG-TERM ACADEMIC APPOINTMENTS\n\n")
+}
+```
+
+```{r LTEMPLOYMENT, eval=is_pdf}
+ltWork %>%
+  detailed_entries(
+    with = institution,
+    why = detail,
+    when = glue::glue("{startMonth} {startYear} --> {endMonth} {endYear}", .na = ""),
+    where = where
+  )
+```
+
+```{r}
+#| output: asis
+if(is_html) {
+  cat("## Long-Term Academic Appointments\n\n")
+  for(i in 1:nrow(ltWork)) {
+    cat("<div class='appointment-entry'>\n")
+    cat("<h4>", ltWork$institution[i], "</h4>\n")
+    cat("<p class='location'>", ltWork$where[i], "</p>\n")
+    cat("<p class='dates'>", ltWork$startMonth[i], " ", ltWork$startYear[i], 
+        " → ", ltWork$endMonth[i], " ", ltWork$endYear[i], "</p>\n")
+    cat("<p>", gsub("\n", "<br>", ltWork$detail[i]), "</p>\n")
+    cat("</div>\n\n")
+  }
+}
+```
+
+```{r}
+#| output: asis
+if(is_pdf) {
+  cat("# SHORT-TERM ACADEMIC APPOINTMENTS\n\n")
+}
+```
+
+```{r STEMPLOYMENT, eval=is_pdf}
+stWork %>%
+  detailed_entries(
+    with = institution,
+    why = detail,
+    when = glue::glue("{startMonth} {startYear} --> {endMonth} {endYear}", .na = ""),
+    where = where
+  )
+```
+
+```{r}
+#| output: asis
+if(is_html) {
+  cat("## Short-Term Academic Appointments\n\n")
+  for(i in 1:nrow(stWork)) {
+    cat("<div class='appointment-entry'>\n")
+    cat("<h4>", stWork$institution[i], "</h4>\n")
+    cat("<p class='location'>", stWork$where[i], "</p>\n")
+    cat("<p class='dates'>", stWork$startMonth[i], " ", stWork$startYear[i],
+        " → ", stWork$endMonth[i], " ", stWork$endYear[i], "</p>\n")
+    cat("<p>", gsub("\n", "<br>", stWork$detail[i]), "</p>\n")
+    cat("</div>\n\n")
+  }
+}
+```
+
+<!-- Continue with remaining sections... -->

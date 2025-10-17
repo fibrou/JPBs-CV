@@ -1,0 +1,21 @@
+## Administrative Experience
+
+```{r}
+#| label: admin-pdf
+#| output: asis
+
+# Administrative section for PDF
+if (exists("admin") && nrow(admin) > 0) {
+  admin_filtered <- admin %>%
+    filter(!is.na(title)) %>%
+    arrange(desc(as.numeric(gsub("-.*", "", start_date))))
+  
+  for (i in 1:min(nrow(admin_filtered), 5)) {
+    cat("**", admin_filtered$title[i], "**\n\n", sep = "")
+    cat("*", admin_filtered$institution[i], "*\n\n", sep = "")
+    if (!is.na(admin_filtered$detail[i])) {
+      cat("- ", admin_filtered$detail[i], "\n\n", sep = "")
+    }
+  }
+}
+```

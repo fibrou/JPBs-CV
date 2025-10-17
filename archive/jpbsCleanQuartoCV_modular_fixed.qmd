@@ -1,0 +1,266 @@
+---
+name: John Paul
+surname: Broussard
+position: "Finance Professor with Decades of Superior Administrative, Research, and Teaching Experiences"
+address: "Oklahoma City, Oklahoma, USA"
+profilepic: "./img/jaafGalaPic.jpg"
+www: "tinyurl.com/c3wdneyp"
+email: "john.broussard@rutgers.edu"
+linkedin: "tinyurl.com/5bfex8hv"
+orcid: 0000-0002-5090-9947
+aboutme: "I am a Finance Professor with over 25 years of extensive domestic and international experience in online and traditional academic program management. I create academic programs and courses that monetize academic effort and yield institutional revenue enhancement and stakeholder success. I maintain real-world relevance through being a Financial Professional Designation Exam Trainer, Financial Risk Management Specialist, Financial Market Consultant, Expert on Big Data, Implementer of Natural Language Processing, Artificial Intelligence and Machine Learning applications in Finance."
+docname: jpbDataDrivenCV
+date: "`r format(Sys.time(), '%B %Y')`"
+headcolor: 990000
+output: vitae::awesomecv
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+require(vitae)
+require(tibble)
+require(dplyr)
+require(readxl)
+require(glue)
+require(here)
+
+# Load all data from Excel
+excel_file <- here("jpbsCVdata", "cv_data_with_education.xlsx")
+
+# Read Administrative data
+admin <- read_excel(excel_file, sheet = "Administrative") %>%
+  filter(highlight == TRUE | is.na(highlight)) %>%
+  arrange(display_order)
+
+# Read Education data
+edu <- read_excel(excel_file, sheet = "Education") %>%
+  filter(highlight == TRUE | is.na(highlight)) %>%
+  arrange(display_order) %>%
+  mutate(
+    where = paste(location_city, location_state, sep = ", "),
+    institution = institution,
+    degree = degree,
+    startYear = as.character(start_year),
+    endYear = as.character(end_year),
+    detail = case_when(
+      !is.na(detail_1) & !is.na(detail_2) & !is.na(detail_3) ~ 
+        paste(detail_1, detail_2, detail_3, sep = "; "),
+      !is.na(detail_1) & !is.na(detail_2) ~ 
+        paste(detail_1, detail_2, sep = "; "),
+      !is.na(detail_1) ~ detail_1,
+      TRUE ~ ""
+    )
+  )
+
+# Read Certifications
+certifications <- read_excel(excel_file, sheet = "Certifications") %>%
+  filter(highlight == TRUE | is.na(highlight)) %>%
+  arrange(display_order) %>%
+  mutate(
+    certBody = cert_body,
+    accomplishment = accomplishment,
+    year = as.character(year),
+    where = if_else(is.na(where), "", where),
+    detail = if_else(is.na(detail), "", detail)
+  )
+
+# Read Employment data
+employment <- read_excel(excel_file, sheet = "Employment") %>%
+  mutate(
+    start_sort = paste0(
+      sub(".*-", "", if_else(is.na(start_date), "2000", start_date)),
+      "-",
+      case_when(
+        grepl("January", start_date) ~ "01",
+        grepl("February", start_date) ~ "02",
+        grepl("March", start_date) ~ "03",
+        grepl("April", start_date) ~ "04",
+        grepl("May", start_date) ~ "05",
+        grepl("June", start_date) ~ "06",
+        grepl("July", start_date) ~ "07",
+        grepl("August", start_date) ~ "08",
+        grepl("September", start_date) ~ "09",
+        grepl("October", start_date) ~ "10",
+        grepl("November", start_date) ~ "11",
+        grepl("December", start_date) ~ "12",
+        TRUE ~ "00"
+      )
+    )
+  ) %>%
+  arrange(desc(current), desc(start_sort))
+
+# Process Long-term employment
+ltWork <- employment %>%
+  filter(current == TRUE | (!is.na(end_date) & as.numeric(sub(".*-", "", end_date)) >= 1997)) %>%
+  mutate(
+    institution = institution,
+    detail = case_when(
+      !is.na(additional_titles) & additional_titles != "" & 
+      !is.na(courses_taught) & courses_taught != "" ~ 
+        paste0("• ", position_title, "\n• ", additional_titles, 
+               "\n• COURSES TAUGHT — ", courses_taught),
+      !is.na(additional_titles) & additional_titles != "" ~ 
+        paste0("• ", position_title, "\n• ", additional_titles),
+      !is.na(courses_taught) & courses_taught != "" ~ 
+        paste0("• ", position_title, "\n• COURSES TAUGHT — ", courses_taught),
+      TRUE ~ position_title
+    ),
+    startMonth = if_else(!is.na(start_date), sub("-.*", "", start_date), ""),
+    startYear = if_else(!is.na(start_date), sub(".*-", "", start_date), ""),
+    endMonth = case_when(
+      is.na(end_date) | current == TRUE ~ "Present",
+      TRUE ~ sub("-.*", "", end_date)
+    ),
+    endYear = case_when(
+      is.na(end_date) | current == TRUE ~ "",
+      TRUE ~ sub(".*-", "", end_date)
+    ),
+    where = paste(location_city, location_state, sep = ", ")
+  )
+
+# Process Short-term employment
+stWork <- employment %>%
+  filter(current == FALSE & !is.na(end_date) & as.numeric(sub(".*-", "", end_date)) < 1997) %>%
+  mutate(
+    institution = institution,
+    detail = case_when(
+      !is.na(additional_titles) & additional_titles != "" & 
+      !is.na(courses_taught) & courses_taught != "" ~ 
+        paste0("• ", position_title, "\n• ", additional_titles, 
+               "\n• COURSES TAUGHT — ", courses_taught),
+      !is.na(additional_titles) & additional_titles != "" ~ 
+        paste0("• ", position_title, "\n• ", additional_titles),
+      !is.na(courses_taught) & courses_taught != "" ~ 
+        paste0("• ", position_title, "\n• COURSES TAUGHT — ", courses_taught),
+      TRUE ~ position_title
+    ),
+    startMonth = if_else(!is.na(start_date), sub("-.*", "", start_date), ""),
+    startYear = if_else(!is.na(start_date), sub(".*-", "", start_date), ""),
+    endMonth = if_else(!is.na(end_date), sub("-.*", "", end_date), ""),
+    endYear = if_else(!is.na(end_date), sub(".*-", "", end_date), ""),
+    where = paste(location_city, location_state, sep = ", ")
+  )
+
+# Read Publications
+publications <- read_excel(excel_file, sheet = "Publications") %>%
+  arrange(desc(year)) %>%
+  mutate(
+    articleTitle = title,
+    authors = authors,
+    journal = case_when(
+      !is.na(volume) & !is.na(issue) & !is.na(pages) ~ 
+        paste0(journal, ", v", volume, " n", issue, ", ", pages),
+      !is.na(volume) & !is.na(pages) ~ 
+        paste0(journal, ", v", volume, ", ", pages),
+      !is.na(volume) ~ paste0(journal, ", v", volume),
+      TRUE ~ journal
+    ),
+    year = as.character(year)
+  )
+
+# Read Honors and Grants
+honorsGrants <- read_excel(excel_file, sheet = "Honors") %>%
+  arrange(desc(year)) %>%
+  mutate(
+    honorGrant = honor_grant,
+    grantor = grantor,
+    year = as.character(year),
+    where = if_else(is.na(location), "", location),
+    detail = if_else(is.na(notes), "", notes)
+  )
+
+# Read Working Papers
+pip <- read_excel(excel_file, sheet = "WorkingPapers") %>%
+  mutate(
+    articleTitle = title,
+    authors = authors,
+    status = if_else(is.na(status), "", status)
+  )
+
+# Read Other Publications
+otherPubsMonos <- read_excel(excel_file, sheet = "OtherPublications") %>%
+  arrange(desc(year)) %>%
+  mutate(
+    title = title,
+    authors = authors,
+    outlet = if_else(is.na(outlet), "", outlet),
+    year = as.character(year)
+  )
+```
+
+{{< include _administrative.qmd >}}
+
+{{< include _education.qmd >}}
+
+# LONG-TERM ACADEMIC APPOINTMENTS
+
+```{r LTEMPLOYMENT}
+ltWork %>%
+  detailed_entries(
+    with = institution,
+    why = detail,
+    when = glue::glue("{startMonth} {startYear} --> {endMonth} {endYear}", .na = ""),
+    where = where
+  )
+```
+
+# SHORT-TERM ACADEMIC APPOINTMENTS
+
+```{r STEMPLOYMENT}
+stWork %>%
+  detailed_entries(
+    with = institution,
+    why = detail,
+    when = glue::glue("{startMonth} {startYear} --> {endMonth} {endYear}", .na = ""),
+    where = where
+  )
+```
+
+# HONORS and GRANTS
+
+```{r HONORS}
+honorsGrants %>%
+  detailed_entries(
+    with = honorGrant,
+    what = grantor,
+    why = detail,
+    when = year,
+    where = where
+  )
+```
+
+# PEER-REVIEWED PUBLICATIONS
+
+```{r PUBLICATIONS}
+publications %>%
+  detailed_entries(
+    with = articleTitle,
+    what = authors,
+    why = journal,
+    when = year
+  )
+```
+
+# PROJECTS IN PROGRESS
+
+```{r PIP}
+pip %>%
+  detailed_entries(
+    with = articleTitle,
+    what = authors,
+    why = status
+  )
+```
+
+# OTHER PUBLICATIONS AND MONOGRAPHS
+
+```{r OPM}
+otherPubsMonos %>%
+  detailed_entries(
+    with = title,
+    what = authors,
+    why = outlet,
+    when = year
+  )
+```

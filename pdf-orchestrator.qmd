@@ -1,0 +1,66 @@
+---
+title: "Curriculum Vitae"
+author: "John Paul Broussard"
+format:
+  pdf:
+    template: awesome-cv.tex
+    pdf-engine: xelatex
+    keep-tex: false
+    include-in-header:
+      text: |
+        \usepackage{enumitem}
+        \setlist[itemize]{
+            topsep=0pt,
+            partopsep=0pt,
+            itemsep=0pt,
+            parsep=0pt,
+            leftmargin=2ex,
+            before=\vspace{-1mm},
+            after=\vspace{0.5mm}
+        }
+        \setlength{\parskip}{0.5mm}
+        \setlength{\parindent}{0pt}
+date: now
+date-format: "MMMM YYYY"
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+# Load required libraries
+library(knitr)
+library(here)
+library(glue)
+library(tidyverse)
+library(readxl)
+
+# Source data and helper functions
+source(here("jpbsCVdata", "load_cv_data.r"))
+cv_data <- load_cv_data(here("jpbsCVdata", "cv_data_with_education.xlsx"))
+
+# LaTeX helper functions
+source(here("jpbsQuartoCV_pdfFiles", "latex_helpers.R"))
+
+# Set PDF flag
+is_pdf <- TRUE
+is_html <- FALSE
+```
+
+{{< include jpbsQuartoCV_pdfFiles/01_header.qmd >}}
+
+{{< include jpbsQuartoCV_pdfFiles/02_administrative.qmd >}}
+
+{{< include jpbsQuartoCV_pdfFiles/03_education.qmd >}}
+
+{{< include jpbsQuartoCV_pdfFiles/04_employment.qmd >}}
+
+{{< include jpbsQuartoCV_pdfFiles/05_research.qmd >}}
+
+{{< include jpbsQuartoCV_pdfFiles/06_service.qmd >}}
+
+{{< include jpbsQuartoCV_pdfFiles/07_references.qmd >}}

@@ -1,0 +1,37 @@
+## Administrative Experience
+
+```{r}
+#| label: admin-pdf
+#| output: asis
+
+# Filter for highlighted administrative roles
+admin_data <- cv_data$admin %>%
+  filter(highlight == TRUE) %>%
+  arrange(display_order)
+
+# Group by institution and role
+admin_grouped <- admin_data %>%
+  group_by(institution, title) %>%
+  summarise(
+    details = list(detail),
+    .groups = 'drop'
+  )
+
+# Output LaTeX formatted content
+for (i in 1:nrow(admin_grouped)) {
+  cat("\\textbf{", escape_latex(admin_grouped$title[i]), "}\n\n", sep = "")
+  cat("\\textit{", escape_latex(admin_grouped$institution[i]), "}\n\n", sep = "")
+  
+  # Add bullet points
+  cat("\\begin{itemize}\n")
+  for (detail in admin_grouped$details[[i]]) {
+    cat("\\item ", escape_latex(detail), "\n", sep = "")
+  }
+  cat("\\end{itemize}\n\n")
+  
+  # Add spacing between entries
+  if (i < nrow(admin_grouped)) {
+    cat("\\vspace{2mm}\n\n")
+  }
+}
+```
