@@ -83,7 +83,7 @@ library(gt)
 library(tidyr)
 
 source(here("jpbsCVdata", "load_cv_data.r"))
-cv_data <- load_cv_data("cv_data.xlsx")
+cv_data <- load_cv_data("jpbsCVdata/cv_data_with_education.xlsx")
 
 # Unpack data
 admin <- cv_data$admin
