@@ -48,8 +48,8 @@ library(purrr)
 # Source the data loading function
 source(here("jpbsCVdata", "load_cv_data.r"))
 
-# Load all CV data from Excel
-cv_data <- load_cv_data("cv_data_with_education.xlsx")
+# Load all CV data from Excel (now includes aboutme tab)
+cv_data <- load_cv_data("cv_data_with_aboutme.xlsx")
 
 # Unpack data for use in child documents
 admin <- cv_data$admin
@@ -58,9 +58,28 @@ education <- cv_data$education
 certifications <- cv_data$certifications
 publications <- cv_data$publications
 pip <- cv_data$pip
-honors <- cv_data$honors
 service <- cv_data$service
-references <- cv_data$references
+
+# Load aboutme data if it exists
+if ("aboutme" %in% names(cv_data)) {
+  aboutme <- cv_data$aboutme
+} else {
+  aboutme <- NULL
+}
+
+# Load honors data if it exists
+if ("honors" %in% names(cv_data)) {
+  honors <- cv_data$honors
+} else {
+  honors <- NULL
+}
+
+# References might not exist in the Excel file
+if ("references" %in% names(cv_data)) {
+  references <- cv_data$references
+} else {
+  references <- NULL
+}
 
 # Define helper functions used across modules
 format_date_range <- function(start, end, for_pdf = FALSE) {
@@ -73,7 +92,15 @@ format_date_range <- function(start, end, for_pdf = FALSE) {
 }
 
 escape_latex <- function(text) {
-  if (is.na(text) || text == "") return(text)
+  # Handle NULL, NA, and empty inputs
+  if (is.null(text) || length(text) == 0) return("")
+  if (is.na(text)) return("")
+  if (text == "") return("")
+  
+  # Convert to character to be safe
+  text <- as.character(text)
+  
+  # Escape special LaTeX characters
   text <- gsub("\\\\", "\\\\textbackslash{}", text)
   text <- gsub("&", "\\\\&", text)
   text <- gsub("%", "\\\\%", text)
@@ -109,6 +136,10 @@ show_philosophy <- TRUE
 # Academic Appointments
 
 {{< include employment_section.qmd >}}
+
+# Honors & Awards {#honors-awards}
+
+{{< include honors_section.qmd >}}
 
 # Research Impact {#research-impact}
 

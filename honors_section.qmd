@@ -1,0 +1,158 @@
+---
+# Honors Section Module
+---
+
+```{r}
+#| label: honors-setup
+#| include: false
+
+# Process honors data if it exists
+if (!exists("honors") || is.null(honors) || nrow(honors) == 0) {
+  # Create empty dataframe with expected structure
+  honors <- data.frame(
+    honor_name = character(),
+    granting_org = character(), 
+    year = integer(),
+    location = character(),
+    description = character(),
+    highlight = logical(),
+    display_order = integer()
+  )
+}
+```
+
+```{r}
+#| label: honors-html
+#| output: asis
+#| eval: !expr is_html
+
+if (exists("honors") && !is.null(honors) && nrow(honors) > 0) {
+  cat('## Honors & Awards\n\n')
+  
+  honors_display <- honors %>%
+    arrange(desc(year))
+  
+  if (nrow(honors_display) > 0) {
+    cat('<div class="honors-section">\n')
+    
+    for (i in 1:nrow(honors_display)) {
+      # Extract values using YOUR column names
+      year_val <- if(!is.na(honors_display$year[i])) as.character(honors_display$year[i]) else ""
+      honor_name <- if(!is.na(honors_display$honor_grant[i])) honors_display$honor_grant[i] else ""
+      granting_org <- if(!is.na(honors_display$grantor[i])) honors_display$grantor[i] else ""
+      location_val <- if("where" %in% names(honors_display) && !is.na(honors_display$where[i])) honors_display$where[i] else ""
+      detail_val <- if("detail" %in% names(honors_display) && !is.na(honors_display$detail[i])) honors_display$detail[i] else ""
+      
+      if (honor_name != "" || granting_org != "") {
+        cat(paste0('
+<div class="honor-item">
+<div class="honor-year">', year_val, '</div>
+<div class="honor-content">
+<div class="honor-title">', honor_name, '</div>
+<div class="honor-org">', granting_org, '</div>'))
+        
+        # Add location if available
+        if (location_val != "") {
+          cat(paste0('<div class="honor-location">', location_val, '</div>'))
+        }
+        
+        # Add detail if available
+        if (detail_val != "") {
+          cat(paste0('<div class="honor-description">', detail_val, '</div>'))
+        }
+        
+        cat('
+</div>
+</div>
+'))
+      }
+    }
+    
+    cat('</div>\n')
+  }
+}
+```
+
+```{r}
+#| label: honors-pdf
+#| output: asis
+#| eval: !expr is_pdf
+
+if (exists("honors") && !is.null(honors) && nrow(honors) > 0) {
+  # Check for YOUR actual column names from the Excel
+  required_cols <- c("honor_grant", "grantor", "year")
+  if (!all(required_cols %in% names(honors))) {
+    cat("% Honors data columns found: ", paste(names(honors), collapse = ", "), "\n")
+    cat("% Expected: honor_grant, grantor, year\n")
+  } else {
+    cat("\\section{Honors and Awards}\n\n")
+    
+    # Filter and sort
+    honors_display <- honors %>%
+      arrange(desc(year))
+    
+    if (nrow(honors_display) > 0) {
+      for (i in 1:nrow(honors_display)) {
+        # Extract values using YOUR column names
+        year_val <- if(!is.na(honors_display$year[i])) {
+          as.character(honors_display$year[i])
+        } else {
+          ""
+        }
+        
+        honor_name <- if(!is.na(honors_display$honor_grant[i])) {
+          as.character(honors_display$honor_grant[i])
+        } else {
+          ""
+        }
+        
+        granting_org <- if(!is.na(honors_display$grantor[i])) {
+          as.character(honors_display$grantor[i])
+        } else {
+          ""
+        }
+        
+        location_val <- if("where" %in% names(honors_display) && 
+                          !is.na(honors_display$where[i]) && 
+                          honors_display$where[i] != "") {
+          as.character(honors_display$where[i])
+        } else {
+          ""
+        }
+        
+        detail_val <- if("detail" %in% names(honors_display) && 
+                        !is.na(honors_display$detail[i]) && 
+                        honors_display$detail[i] != "") {
+          as.character(honors_display$detail[i])
+        } else {
+          ""
+        }
+        
+        # Output the honor
+        if (honor_name != "" || granting_org != "") {
+          # Honor name and year
+          cat("\\textbf{", escape_latex(honor_name), "}", sep = "")
+          if (location_val != "") {
+            cat(" -- ", escape_latex(location_val), sep = "")
+          }
+          cat("\n\n")
+          
+          # Granting organization
+          if (granting_org != "") {
+            cat("\\textit{", escape_latex(granting_org), "}", sep = "")
+            if (year_val != "") {
+              cat(", ", year_val, sep = "")
+            }
+            cat("\n\n")
+          }
+          
+          # Detail if available
+          if (detail_val != "") {
+            cat(escape_latex(detail_val), "\n\n")
+          }
+        }
+      }
+    }
+  }
+}
+```
