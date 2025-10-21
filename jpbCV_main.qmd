@@ -51,6 +51,10 @@ source(here("jpbsCVdata", "load_cv_data.r"))
 # Load all CV data from Excel (now includes aboutme tab)
 cv_data <- load_cv_data("cv_data_with_aboutme.xlsx")
 
+# Debug: Check what sheets were loaded
+message("Sheets loaded from Excel:")
+message(paste(names(cv_data), collapse = ", "))
+
 # Unpack data for use in child documents
 admin <- cv_data$admin
 employment <- cv_data$employment
@@ -63,15 +67,34 @@ service <- cv_data$service
 # Load aboutme data if it exists
 if ("aboutme" %in% names(cv_data)) {
   aboutme <- cv_data$aboutme
+  message("AboutMe data loaded with ", nrow(aboutme), " rows")
 } else {
   aboutme <- NULL
+  message("No AboutMe data found")
 }
 
 # Load honors data if it exists
 if ("honors" %in% names(cv_data)) {
   honors <- cv_data$honors
+  message("Honors data loaded with ", nrow(honors), " rows")
+  message("Honors columns: ", paste(names(honors), collapse = ", "))
 } else {
   honors <- NULL
+  message("No Honors data found")
+}
+
+# Load other publications data if it exists
+if ("otherpublications" %in% names(cv_data)) {
+  otherpublications <- cv_data$otherpublications
+} else {
+  otherpublications <- NULL
+}
+
+# Load working papers data if it exists
+if ("workingpapers" %in% names(cv_data)) {
+  workingpapers <- cv_data$workingpapers
+} else {
+  workingpapers <- NULL
 }
 
 # References might not exist in the Excel file
@@ -129,21 +152,31 @@ show_philosophy <- TRUE
 
 {{< include admin_section.qmd >}}
 
+# Academic Appointments
+
+{{< include employment_section.qmd >}}
+
 # Education & Credentials {#education-credentials}
 
 {{< include education_section.qmd >}}
 
-# Academic Appointments
+# Research Impact {#research-impact}
 
-{{< include employment_section.qmd >}}
+{{< include research_section.qmd >}}
+
+{{< include other_publications_section.qmd >}}
+
+{{< include working_papers_section.qmd >}}
 
 # Honors & Awards {#honors-awards}
 
 {{< include honors_section.qmd >}}
 
-# Research Impact {#research-impact}
+# Service
 
-{{< include research_section.qmd >}}
+{{< include service_section.qmd >}}
+
+`r if(knitr::is_latex_output()) "\\newpage"`
 
 # References
 

@@ -1,0 +1,133 @@
+---
+# Working Papers Section Module
+---
+
+```{r}
+#| label: wp-setup
+#| include: false
+
+# Load working papers data if it exists
+if (!exists("workingpapers") || is.null(workingpapers)) {
+  workingpapers <- NULL
+}
+```
+
+```{r}
+#| label: wp-html
+#| output: asis
+#| eval: !expr is_html
+
+if (exists("workingpapers") && !is.null(workingpapers) && nrow(workingpapers) > 0) {
+  cat('### Working Papers\n\n')
+  
+  # Get actual column names
+  col_names <- names(workingpapers)
+  
+  # Sort by year if it exists, otherwise use as-is
+  if ("year" %in% col_names) {
+    wp_display <- workingpapers %>% arrange(desc(year))
+  } else {
+    wp_display <- workingpapers
+  }
+  
+  for (i in 1:nrow(wp_display)) {
+    # Extract whatever columns exist
+    title_val <- if("title" %in% col_names && !is.na(wp_display$title[i])) {
+      wp_display$title[i]
+    } else if("article_title" %in% col_names && !is.na(wp_display$article_title[i])) {
+      wp_display$article_title[i]
+    } else ""
+    
+    authors_val <- if("authors" %in% col_names && !is.na(wp_display$authors[i])) {
+      wp_display$authors[i]
+    } else ""
+    
+    status_val <- if("status" %in% col_names && !is.na(wp_display$status[i])) {
+      wp_display$status[i]
+    } else ""
+    
+    year_val <- if("year" %in% col_names && !is.na(wp_display$year[i])) {
+      as.character(wp_display$year[i])
+    } else ""
+    
+    if (title_val != "") {
+      cat(paste0('
+<div class="publication-item">
+<div class="pub-year">', year_val, '</div>
+<div class="pub-content">
+<div class="pub-title">', title_val, '</div>'))
+      
+      if (authors_val != "") {
+        cat(paste0('<div class="pub-authors">', authors_val, '</div>'))
+      }
+      
+      if (status_val != "") {
+        cat(paste0('<div class="pub-venue"><em>', status_val, '</em></div>'))
+      }
+      
+      cat('</div>\n</div>\n')
+    }
+  }
+}
+```
+
+```{r}
+#| label: wp-pdf
+#| output: asis
+#| eval: !expr is_pdf
+
+if (exists("workingpapers") && !is.null(workingpapers) && nrow(workingpapers) > 0) {
+  cat("\\vspace{0.5cm}\\hrule\\vspace{0.3cm}\n")  # Add horizontal line
+  cat("\\subsection{Working Papers}\n\n")
+  
+  # Get actual column names
+  col_names <- names(workingpapers)
+  
+  # Sort by year if it exists
+  if ("year" %in% col_names) {
+    wp_display <- workingpapers %>% arrange(desc(year))
+  } else {
+    wp_display <- workingpapers
+  }
+  
+  for (i in 1:nrow(wp_display)) {
+    # Extract whatever columns exist
+    title_val <- if("title" %in% col_names && !is.na(wp_display$title[i])) {
+      wp_display$title[i]
+    } else if("article_title" %in% col_names && !is.na(wp_display$article_title[i])) {
+      wp_display$article_title[i]
+    } else ""
+    
+    authors_val <- if("authors" %in% col_names && !is.na(wp_display$authors[i])) {
+      wp_display$authors[i]
+    } else ""
+    
+    status_val <- if("status" %in% col_names && !is.na(wp_display$status[i])) {
+      wp_display$status[i]
+    } else ""
+    
+    year_val <- if("year" %in% col_names && !is.na(wp_display$year[i])) {
+      as.character(wp_display$year[i])
+    } else ""
+    
+    if (title_val != "") {
+      # Title
+      cat("\\textbf{", escape_latex(title_val), "}", sep = "")
+      if (year_val != "") {
+        cat(" (", year_val, ")", sep = "")
+      }
+      cat("\n\n")
+      
+      # Authors
+      if (authors_val != "") {
+        cat("\\textit{", escape_latex(authors_val), "}\n\n", sep = "")
+      }
+      
+      # Status
+      if (status_val != "") {
+        cat(escape_latex(status_val), "\n\n")
+      }
+    }
+  }
+}
+```

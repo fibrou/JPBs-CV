@@ -1,0 +1,131 @@
+---
+# Other Publications Section Module
+---
+
+```{r}
+#| label: other-pubs-setup
+#| include: false
+
+# Load other publications data if it exists
+if (!exists("otherpublications") || is.null(otherpublications)) {
+  otherpublications <- NULL
+}
+```
+
+```{r}
+#| label: other-pubs-html
+#| output: asis
+#| eval: !expr is_html
+
+if (exists("otherpublications") && !is.null(otherpublications) && nrow(otherpublications) > 0) {
+  cat('### Other Publications & Monographs\n\n')
+  
+  # Get actual column names from the data
+  col_names <- names(otherpublications)
+  
+  # Sort by year if it exists
+  if ("year" %in% col_names) {
+    otherpubs_display <- otherpublications %>% arrange(desc(year))
+  } else {
+    otherpubs_display <- otherpublications
+  }
+  
+  for (i in 1:nrow(otherpubs_display)) {
+    # Extract whatever columns exist
+    year_val <- if("year" %in% col_names && !is.na(otherpubs_display$year[i])) {
+      as.character(otherpubs_display$year[i])
+    } else ""
+    
+    title_val <- if("title" %in% col_names && !is.na(otherpubs_display$title[i])) {
+      otherpubs_display$title[i]
+    } else ""
+    
+    authors_val <- if("authors" %in% col_names && !is.na(otherpubs_display$authors[i])) {
+      otherpubs_display$authors[i]
+    } else ""
+    
+    outlet_val <- if("outlet" %in% col_names && !is.na(otherpubs_display$outlet[i])) {
+      otherpubs_display$outlet[i]
+    } else ""
+    
+    if (title_val != "") {
+      cat(paste0('
+<div class="publication-item">
+<div class="pub-year">', year_val, '</div>
+<div class="pub-content">
+<div class="pub-title">', title_val, '</div>'))
+      
+      if (authors_val != "") {
+        cat(paste0('<div class="pub-authors">', authors_val, '</div>'))
+      }
+      
+      if (outlet_val != "") {
+        cat(paste0('<div class="pub-venue"><em>', outlet_val, '</em></div>'))
+      }
+      
+      cat('</div>\n</div>\n')
+    }
+  }
+}
+```
+
+```{r}
+#| label: other-pubs-pdf
+#| output: asis
+#| eval: !expr is_pdf
+
+if (exists("otherpublications") && !is.null(otherpublications) && nrow(otherpublications) > 0) {
+  cat("\\vspace{0.5cm}\n")  # Add some vertical space
+  cat("\\hrule\n")          # Add horizontal line
+  cat("\\vspace{0.3cm}\n")  # Space after line
+  cat("\\subsection{Other Publications and Monographs}\n\n")
+  
+  # Get actual column names
+  col_names <- names(otherpublications)
+  
+  # Sort by year if it exists
+  if ("year" %in% col_names) {
+    otherpubs_display <- otherpublications %>% arrange(desc(year))
+  } else {
+    otherpubs_display <- otherpublications
+  }
+  
+  for (i in 1:nrow(otherpubs_display)) {
+    # Extract whatever columns exist
+    year_val <- if("year" %in% col_names && !is.na(otherpubs_display$year[i])) {
+      as.character(otherpubs_display$year[i])
+    } else ""
+    
+    title_val <- if("title" %in% col_names && !is.na(otherpubs_display$title[i])) {
+      otherpubs_display$title[i]
+    } else ""
+    
+    authors_val <- if("authors" %in% col_names && !is.na(otherpubs_display$authors[i])) {
+      otherpubs_display$authors[i]
+    } else ""
+    
+    outlet_val <- if("outlet" %in% col_names && !is.na(otherpubs_display$outlet[i])) {
+      otherpubs_display$outlet[i]
+    } else ""
+    
+    if (title_val != "") {
+      # Title and year
+      cat("\\textbf{", escape_latex(title_val), "}", sep = "")
+      if (year_val != "") {
+        cat(" (", year_val, ")", sep = "")
+      }
+      cat("\n\n")
+      
+      # Authors
+      if (authors_val != "") {
+        cat("\\textit{", escape_latex(authors_val), "}\n\n", sep = "")
+      }
+      
+      # Outlet
+      if (outlet_val != "") {
+        cat(escape_latex(outlet_val), "\n\n")
+      }
+    }
+  }
+}
+```

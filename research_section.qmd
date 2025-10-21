@@ -44,7 +44,7 @@ for (i in 1:nrow(pub_metrics)) {
 }
 cat('</div>\n\n')
 
-cat('## Selected Publications\n\n')
+cat('## Academic Peer Reviewed Articles\n\n')
 
 # Show recent publications
 pubs <- publications %>%
@@ -81,7 +81,7 @@ for (i in 1:min(10, nrow(pubs))) {  # Limit to 10 publications
 #| output: asis
 #| eval: !expr is_pdf
 
-cat("\\section{Selected Recent Publications}\n\n")
+cat("\\subsection{Academic Peer Reviewed Articles}\n\n")
 
 pubs_pdf <- publications %>%
   filter(year >= 2013) %>%

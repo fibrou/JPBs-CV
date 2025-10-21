@@ -86,7 +86,7 @@ load_cv_data <- function(filename) {
       )
   }
   
-  # Honors data - NEW
+  # Honors data
   if ("honors" %in% names(cv_data)) {
     cv_data$honors <- cv_data$honors %>%
       mutate(
@@ -96,15 +96,30 @@ load_cv_data <- function(filename) {
       )
   }
   
-  # AboutMe data - NEW
+  # AboutMe data
   if ("aboutme" %in% names(cv_data)) {
-    # AboutMe is usually just one row with text fields
     cv_data$aboutme <- cv_data$aboutme
+  }
+  
+  # Other Publications data
+  if ("otherpublications" %in% names(cv_data)) {
+    cv_data$otherpublications <- cv_data$otherpublications %>%
+      mutate(
+        year = if("year" %in% names(.)) as.integer(year) else NA
+      )
   }
   
   # Projects in Progress (pip) data
   if ("pip" %in% names(cv_data)) {
     cv_data$pip <- cv_data$pip
+  }
+  
+  # Working Papers data
+  if ("workingpapers" %in% names(cv_data)) {
+    cv_data$workingpapers <- cv_data$workingpapers %>%
+      mutate(
+        year = if("year" %in% names(.)) as.integer(year) else NA
+      )
   }
   
   # Service data

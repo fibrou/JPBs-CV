@@ -1,0 +1,206 @@
+---
+# Service Section Module
+---
+
+```{r}
+#| label: service-setup
+#| include: false
+
+# Load service data if it exists
+if (!exists("service") || is.null(service)) {
+  service <- NULL
+}
+```
+
+```{r}
+#| label: service-html
+#| output: asis
+#| eval: !expr is_html
+
+if (exists("service") && !is.null(service) && nrow(service) > 0) {
+  cat('## Service\n\n')
+  
+  # Get column names to work with actual data
+  col_names <- names(service)
+  
+  # Separate by service_type if the column exists
+  if ("service_type" %in% col_names) {
+    # Academic Service
+    academic_service <- service %>% 
+      filter(service_type == "Academic" | service_type == "academic")
+    
+    if (nrow(academic_service) > 0) {
+      cat('### Academic Service\n\n')
+      
+      for (i in 1:nrow(academic_service)) {
+        # Extract whatever columns exist
+        role <- if("role" %in% col_names && !is.na(academic_service$role[i])) {
+          academic_service$role[i]
+        } else if("title" %in% col_names && !is.na(academic_service$title[i])) {
+          academic_service$title[i]
+        } else ""
+        
+        org <- if("organization" %in% col_names && !is.na(academic_service$organization[i])) {
+          academic_service$organization[i]
+        } else if("institution" %in% col_names && !is.na(academic_service$institution[i])) {
+          academic_service$institution[i]
+        } else ""
+        
+        year <- if("year" %in% col_names && !is.na(academic_service$year[i])) {
+          as.character(academic_service$year[i])
+        } else if("years" %in% col_names && !is.na(academic_service$years[i])) {
+          academic_service$years[i]
+        } else ""
+        
+        if (role != "" || org != "") {
+          cat(paste0('<div class="service-item">\n'))
+          if (role != "") cat(paste0('<strong>', role, '</strong>'))
+          if (org != "") cat(paste0(', ', org))
+          if (year != "") cat(paste0(' (', year, ')'))
+          cat('\n</div>\n\n')
+        }
+      }
+    }
+    
+    # Professional Service
+    professional_service <- service %>% 
+      filter(service_type == "Professional" | service_type == "professional")
+    
+    if (nrow(professional_service) > 0) {
+      cat('### Professional Service\n\n')
+      
+      for (i in 1:nrow(professional_service)) {
+        # Extract whatever columns exist
+        role <- if("role" %in% col_names && !is.na(professional_service$role[i])) {
+          professional_service$role[i]
+        } else if("title" %in% col_names && !is.na(professional_service$title[i])) {
+          professional_service$title[i]
+        } else ""
+        
+        org <- if("organization" %in% col_names && !is.na(professional_service$organization[i])) {
+          professional_service$organization[i]
+        } else if("institution" %in% col_names && !is.na(professional_service$institution[i])) {
+          professional_service$institution[i]
+        } else ""
+        
+        year <- if("year" %in% col_names && !is.na(professional_service$year[i])) {
+          as.character(professional_service$year[i])
+        } else if("years" %in% col_names && !is.na(professional_service$years[i])) {
+          professional_service$years[i]
+        } else ""
+        
+        if (role != "" || org != "") {
+          cat(paste0('<div class="service-item">\n'))
+          if (role != "") cat(paste0('<strong>', role, '</strong>'))
+          if (org != "") cat(paste0(', ', org))
+          if (year != "") cat(paste0(' (', year, ')'))
+          cat('\n</div>\n\n')
+        }
+      }
+    }
+  } else {
+    # No service_type column, just list all service
+    for (i in 1:nrow(service)) {
+      # Similar extraction logic as above
+      cat(paste0('<div class="service-item">Service entry ', i, '</div>\n\n'))
+    }
+  }
+}
+```
+
+```{r}
+#| label: service-pdf
+#| output: asis
+#| eval: !expr is_pdf
+
+if (exists("service") && !is.null(service) && nrow(service) > 0) {
+  # Don't print section header - it's in the main document
+  
+  # Get column names
+  col_names <- names(service)
+  
+  # Separate by service_type if the column exists
+  if ("service_type" %in% col_names) {
+    # Academic Service
+    academic_service <- service %>% 
+      filter(service_type == "Academic" | service_type == "academic")
+    
+    if (nrow(academic_service) > 0) {
+      cat("\\subsection{Academic Service}\n\n")
+      
+      for (i in 1:nrow(academic_service)) {
+        # Extract columns
+        role <- if("role" %in% col_names && !is.na(academic_service$role[i])) {
+          academic_service$role[i]
+        } else if("title" %in% col_names && !is.na(academic_service$title[i])) {
+          academic_service$title[i]
+        } else ""
+        
+        org <- if("organization" %in% col_names && !is.na(academic_service$organization[i])) {
+          academic_service$organization[i]
+        } else if("institution" %in% col_names && !is.na(academic_service$institution[i])) {
+          academic_service$institution[i]
+        } else ""
+        
+        year <- if("year" %in% col_names && !is.na(academic_service$year[i])) {
+          as.character(academic_service$year[i])
+        } else if("years" %in% col_names && !is.na(academic_service$years[i])) {
+          academic_service$years[i]
+        } else ""
+        
+        if (role != "") {
+          cat("\\textbf{", escape_latex(role), "}", sep = "")
+          if (org != "") {
+            cat(", ", escape_latex(org), sep = "")
+          }
+          if (year != "") {
+            cat(" (", year, ")", sep = "")
+          }
+          cat("\n\n")
+        }
+      }
+    }
+    
+    # Professional Service
+    professional_service <- service %>% 
+      filter(service_type == "Professional" | service_type == "professional")
+    
+    if (nrow(professional_service) > 0) {
+      cat("\\vspace{0.3cm}\\hrule\\vspace{0.3cm}\n")  # Add horizontal line
+      cat("\\subsection{Professional Service}\n\n")
+      
+      for (i in 1:nrow(professional_service)) {
+        # Extract columns
+        role <- if("role" %in% col_names && !is.na(professional_service$role[i])) {
+          professional_service$role[i]
+        } else if("title" %in% col_names && !is.na(professional_service$title[i])) {
+          professional_service$title[i]
+        } else ""
+        
+        org <- if("organization" %in% col_names && !is.na(professional_service$organization[i])) {
+          professional_service$organization[i]
+        } else if("institution" %in% col_names && !is.na(professional_service$institution[i])) {
+          professional_service$institution[i]
+        } else ""
+        
+        year <- if("year" %in% col_names && !is.na(professional_service$year[i])) {
+          as.character(professional_service$year[i])
+        } else if("years" %in% col_names && !is.na(professional_service$years[i])) {
+          professional_service$years[i]
+        } else ""
+        
+        if (role != "") {
+          cat("\\textbf{", escape_latex(role), "}", sep = "")
+          if (org != "") {
+            cat(", ", escape_latex(org), sep = "")
+          }
+          if (year != "") {
+            cat(" (", year, ")", sep = "")
+          }
+          cat("\n\n")
+        }
+      }
+    }
+  }
+}
+```
