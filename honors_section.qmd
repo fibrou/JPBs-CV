@@ -27,7 +27,7 @@ if (!exists("honors") || is.null(honors) || nrow(honors) == 0) {
 #| eval: !expr is_html
 
 if (exists("honors") && !is.null(honors) && nrow(honors) > 0) {
-  cat('## Honors & Awards\n\n')
+  # Don't print section title - handled in main document
   
   honors_display <- honors %>%
     arrange(desc(year))
@@ -36,7 +36,7 @@ if (exists("honors") && !is.null(honors) && nrow(honors) > 0) {
     cat('<div class="honors-section">\n')
     
     for (i in 1:nrow(honors_display)) {
-      # Extract values using YOUR column names
+      # Extract values using YOUR column names - NO escape_latex for HTML!
       year_val <- if(!is.na(honors_display$year[i])) as.character(honors_display$year[i]) else ""
       honor_name <- if(!is.na(honors_display$honor_grant[i])) honors_display$honor_grant[i] else ""
       granting_org <- if(!is.na(honors_display$grantor[i])) honors_display$grantor[i] else ""
@@ -48,8 +48,8 @@ if (exists("honors") && !is.null(honors) && nrow(honors) > 0) {
 <div class="honor-item">
 <div class="honor-year">', year_val, '</div>
 <div class="honor-content">
-<div class="honor-title">', honor_name, '</div>
-<div class="honor-org">', granting_org, '</div>'))
+<div class="honor-title"><strong>', honor_name, '</strong></div>
+<div class="honor-org"><em>', granting_org, '</em></div>'))
         
         # Add location if available
         if (location_val != "") {
@@ -64,13 +64,14 @@ if (exists("honors") && !is.null(honors) && nrow(honors) > 0) {
         cat('
 </div>
 </div>
-'))
+')
       }
     }
     
     cat('</div>\n')
   }
 }
+```
 ```
 
 ```{r}
