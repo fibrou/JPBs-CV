@@ -1,0 +1,22 @@
+## Education
+
+```{r education, results='asis'}
+if (exists("education") && !is.null(education)) {
+  edu_data <- education %>%
+    filter(!is.na(degree)) %>%
+    arrange(display_order, desc(end_year))
+  
+  cat("\\begin{cventries}\n")
+  
+  for (i in 1:nrow(edu_data)) {
+    cat("\\cventry\n")
+    cat("{", escape_latex(edu_data$degree[i]), "}\n", sep = "")
+    cat("{", escape_latex(edu_data$institution[i]), "}\n", sep = "")
+    cat("{", escape_latex(paste(edu_data$location_city[i], edu_data$location_state[i], sep = ", ")), "}\n", sep = "")
+    cat("{", edu_data$start_year[i], "--", edu_data$end_year[i], "}\n", sep = "")
+    cat("{}\n\n")
+  }
+  
+  cat("\\end{cventries}\n")
+}
+```

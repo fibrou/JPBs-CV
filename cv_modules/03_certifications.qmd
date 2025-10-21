@@ -1,0 +1,25 @@
+## Professional Certifications
+
+```{r certifications, results='asis'}
+if (exists("certifications") && !is.null(certifications)) {
+  cert_data <- certifications %>%
+    filter(!is.na(accomplishment)) %>%
+    arrange(desc(year))
+  
+  cat("\\begin{cvhonors}\n")
+  
+  for (i in 1:nrow(cert_data)) {
+    full_cert <- cert_data$accomplishment[i]
+    abbrev <- gsub(".*\\((.*)\\).*", "\\1", full_cert)
+    if (abbrev == full_cert) abbrev <- substr(full_cert, 1, 3)
+    
+    cat("\\cvhonor")
+    cat("{", abbrev, "}", sep = "")
+    cat("{", escape_latex(cert_data$accomplishment[i]), "}", sep = "")
+    cat("{", escape_latex(cert_data$cert_body[i]), "}", sep = "")
+    cat("{", cert_data$year[i], "}\n", sep = "")
+  }
+  
+  cat("\\end{cvhonors}\n")
+}
+```

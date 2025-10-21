@@ -1,0 +1,119 @@
+---
+# Education Section Module
+---
+
+```{r}
+#| label: education-data-prep
+#| include: false
+
+# Process education data - collect detail columns if they exist
+edu_data <- education %>%
+  filter(highlight == TRUE) %>%
+  arrange(display_order) %>%
+  mutate(
+    years = paste0(start_year, "--", end_year),
+    location = paste(location_city, location_state, sep = ", ")
+  ) %>%
+  rowwise() %>%
+  mutate(
+    details = list({
+      # Collect any detail columns that exist
+      detail_cols <- c()
+      if ("detail_1" %in% names(education)) detail_cols <- c(detail_cols, detail_1)
+      if ("detail_2" %in% names(education)) detail_cols <- c(detail_cols, detail_2)
+      if ("detail_3" %in% names(education)) detail_cols <- c(detail_cols, detail_3)
+      if ("detail_4" %in% names(education)) detail_cols <- c(detail_cols, detail_4)
+      # Also check for a simple "detail" column
+      if ("detail" %in% names(education)) detail_cols <- c(detail_cols, detail)
+      # Remove NAs and empty strings
+      detail_cols[!is.na(detail_cols) & detail_cols != ""]
+    })
+  ) %>%
+  ungroup()
+
+# Process certifications data
+certs <- certifications %>%
+  filter(highlight == TRUE) %>%
+  arrange(desc(year)) %>%
+  mutate(
+    abbr = gsub("\\s*\\(.*\\)", "", accomplishment),
+    full = accomplishment,
+    org = cert_body,
+    desc = if("detail" %in% names(certifications)) detail else ""
+  )
+```
+
+```{r}
+#| label: education-html
+#| output: asis
+#| eval: !expr is_html
+
+for (i in 1:nrow(edu_data)) {
+  details_html <- ""
+  if (length(edu_data$details[[i]]) > 0) {
+    details_html <- '<ul class="education-details">\n'
+    for (detail in edu_data$details[[i]]) {
+      details_html <- paste0(details_html, '<li>', detail, '</li>\n')
+    }
+    details_html <- paste0(details_html, '</ul>\n')
+  }
+  
+  cat(paste0('
+<div class="education-entry">
+<div class="degree-header">
+<span class="degree-name">', edu_data$degree[i], '</span>
+<span class="years">', edu_data$years[i], '</span>
+</div>
+<div class="institution-name">', edu_data$institution[i], ', ', edu_data$location[i], '</div>
+', details_html, '
+</div>
+'))
+}
+
+cat('\n---\n\n')
+cat('\n## Professional Credentials\n\n')
+
+cat('<div class="certifications-showcase">\n')
+for (i in 1:nrow(certs)) {
+  cat(paste0('
+<div class="cert-card">
+<div class="cert-abbr">', certs$abbr[i], '</div>
+<div class="cert-full">', certs$full[i], '</div>
+<div class="cert-org">', certs$org[i], ' • ', certs$year[i], '</div>
+<div class="cert-desc">', certs$desc[i], '</div>
+</div>
+'))
+}
+cat('</div>\n\n')
+
+cat('<div class="credential-note">
+These professional credentials complement my academic expertise, ensuring I remain connected to industry practice and can design programs that prepare students for real-world success.
+</div>\n')
+```
+
+```{r}
+#| label: education-pdf
+#| output: asis
+#| eval: !expr is_pdf
+
+for (i in 1:nrow(edu_data)) {
+  cat("\\textbf{", escape_latex(edu_data$degree[i]), "} (", edu_data$years[i], ")\n\n", sep = "")
+  cat(escape_latex(edu_data$institution[i]), ", ", escape_latex(edu_data$location[i]), "\n\n", sep = "")
+  
+  if (length(edu_data$details[[i]]) > 0) {
+    cat("\\begin{itemize}\n")
+    for (detail in edu_data$details[[i]]) {
+      cat("\\item ", escape_latex(detail), "\n", sep = "")
+    }
+    cat("\\end{itemize}\n\n")
+  }
+}
+
+cat("\\subsection{Professional Credentials}\n\n")
+
+for (i in 1:nrow(certs)) {
+  cat("\\textbf{", escape_latex(certs$full[i]), "} -- ", certs$year[i], "\n\n", sep = "")
+  cat(escape_latex(certs$org[i]), "\n\n", sep = "")
+  cat("\\textit{", escape_latex(certs$desc[i]), "}\n\n", sep = "")
+}
+```

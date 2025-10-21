@@ -1,0 +1,56 @@
+## Administrative Experience
+```{r admin, results='asis'}
+if (exists("administrative") && !is.null(administrative)) {
+  admin_data <- administrative %>%
+    filter(!is.na(title)) %>%
+    arrange(display_order, desc(start_date))
+  
+  if (nrow(admin_data) > 0) {
+    cat("\\begin{cventries}\n")
+    
+    for (i in 1:min(nrow(admin_data), 10)) {
+      title <- escape_latex(admin_data$title[i])
+      inst <- escape_latex(admin_data$institution[i])
+      dates <- format_date_range(admin_data$start_date[i], admin_data$end_date[i])
+      
+      cat("\\cventry\n")
+      cat("{", title, "}\n", sep = "")
+      cat("{", inst, "}\n", sep = "")
+      cat("{}\n")  # Empty location field
+      cat("{", dates, "}\n", sep = "")
+      cat("{\\begin{cvitems}\n")
+      
+      # Main detail
+      if (!is.na(admin_data$detail[i]) && admin_data$detail[i] != "") {
+        detail_items <- strsplit(as.character(admin_data$detail[i]), ";")[[1]]
+        for (detail in trimws(detail_items)) {
+          if (detail != "") {
+            cat("\\item ", escape_latex(detail), "\n", sep = "")
+          }
+        }
+      }
+      
+      # Add impact if available
+      if (!is.na(admin_data$impact[i]) && admin_data$impact[i] != "") {
+        cat("\\item \\textit{Impact:} ", escape_latex(admin_data$impact[i]), "\n", sep = "")
+      }
+      
+      cat("\\end{cvitems}}\n\n")
+    }
+    cat("\\end{cventries}\n")
+  }
+} else {
+  # Fallback data
+  cat("\\begin{cventries}\n")
+  cat("\\cventry\n")
+  cat("{Director of Online MS Finance Program}\n")
+  cat("{University of Oklahoma}\n")
+  cat("{Norman, OK}\n")
+  cat("{2021-2024}\n")
+  cat("{\\begin{cvitems}\n")
+  cat("\\item Directed High Graduation Rate (>78\\%) Online Degree with approximately 150 students\n")
+  cat("\\item Attained CFA Institute University Affiliation Program status\n")
+  cat("\\end{cvitems}}\n")
+  cat("\\end{cventries}\n")
+}
+```

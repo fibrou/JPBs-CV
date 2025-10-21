@@ -1,0 +1,25 @@
+## Selected Recent Publications
+
+```{r publications, results='asis'}
+if (exists("publications") && !is.null(publications)) {
+  pubs <- publications %>%
+    filter(!is.na(title)) %>%
+    arrange(desc(year)) %>%
+    head(10)
+  
+  if (nrow(pubs) > 0) {
+    cat("\\begin{cventries}\n")
+    
+    for (i in 1:nrow(pubs)) {
+      cat("\\cventry\n")
+      cat("{", escape_latex(pubs$title[i]), "}\n", sep = "")
+      cat("{", escape_latex(pubs$journal[i]), "}\n", sep = "")
+      cat("{", escape_latex(pubs$authors[i]), "}\n", sep = "")
+      cat("{", pubs$year[i], "}\n", sep = "")
+      cat("{}\n\n")
+    }
+    
+    cat("\\end{cventries}\n")
+  }
+}
+```

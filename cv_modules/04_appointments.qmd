@@ -1,0 +1,26 @@
+## Academic Appointments
+
+```{r appointments, results='asis'}
+if (exists("employment") && !is.null(employment)) {
+  emp_data <- employment %>%
+    filter(!is.na(institution)) %>%
+    arrange(display_order, desc(start_date))
+  
+  cat("\\begin{cventries}\n")
+  
+  for (i in 1:min(nrow(emp_data), 15)) {
+    position <- if (!is.na(emp_data$position_title[i])) {
+      escape_latex(emp_data$position_title[i])
+    } else "Professor"
+    
+    cat("\\cventry\n")
+    cat("{", position, "}\n", sep = "")
+    cat("{", escape_latex(emp_data$institution[i]), "}\n", sep = "")
+    cat("{", escape_latex(paste(emp_data$location_city[i], emp_data$location_state[i], sep = ", ")), "}\n", sep = "")
+    cat("{", format_date_range(emp_data$start_date[i], emp_data$end_date[i]), "}\n", sep = "")
+    cat("{}\n\n")
+  }
+  
+  cat("\\end{cventries}\n")
+}
+```

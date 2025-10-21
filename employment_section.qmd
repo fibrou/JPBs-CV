@@ -1,0 +1,131 @@
+---
+# Employment Section Module - FIXED
+---
+
+```{r}
+#| label: employment-setup
+#| include: false
+
+# The data should already be loaded from the parent document
+```
+
+```{r}
+#| label: employment-html-display
+#| output: asis
+#| eval: !expr is_html
+
+# FIXED: Group by institution and position to truly consolidate
+employment_grouped <- employment %>%
+  filter(current == TRUE | as.numeric(substr(start_date, 1, 4)) >= 1997) %>%
+  mutate(
+    clean_position = case_when(
+      is.na(position_title) | position_title == "NA" | position_title == "" ~ "Professor of Finance",
+      TRUE ~ position_title
+    ),
+    period = format_date_range(start_date, end_date),
+    full_location = paste0(location_city, " • ", location_state),
+    is_current = (is.na(end_date) | end_date == "" | tolower(end_date) == "present")
+  ) %>%
+  group_by(institution, full_location, clean_position) %>%
+  summarise(
+    all_periods = list(unique(period)),
+    all_additional = list(unique(na.omit(additional_titles[additional_titles != "" & additional_titles != "NA"]))),
+    all_courses = list(unique(na.omit(courses_taught[courses_taught != "" & courses_taught != "NA"]))),
+    is_current = any(is_current),
+    display_order = first(display_order),
+    .groups = 'drop'
+  ) %>%
+  arrange(display_order)
+
+# Output consolidated entries
+for (i in 1:nrow(employment_grouped)) {
+  entry_class <- if_else(employment_grouped$is_current[i], 
+                         "employment-entry current-position", 
+                         "employment-entry")
+  
+  periods_text <- paste(employment_grouped$all_periods[[i]], collapse = ", ")
+  
+  cat(paste0('
+<div class="', entry_class, '">
+<div class="position-header">
+<span class="position-title">', employment_grouped$clean_position[i], '</span>
+<span class="period">', periods_text, '</span>
+</div>
+<div class="institution-location">', employment_grouped$institution[i], ' • ', employment_grouped$full_location[i], '</div>
+'))
+
+  # Add additional titles if any
+  if (length(employment_grouped$all_additional[[i]]) > 0) {
+    cat('<ul class="additional-titles">\n')
+    for (title in employment_grouped$all_additional[[i]]) {
+      cat(paste0('<li>', title, '</li>\n'))
+    }
+    cat('</ul>\n')
+  }
+  
+  # Add courses if any
+  if (length(employment_grouped$all_courses[[i]]) > 0) {
+    cat(paste0('<div class="courses"><strong>Courses Taught:</strong> ', 
+               paste(employment_grouped$all_courses[[i]], collapse = ", "), 
+               '</div>\n'))
+  }
+  
+  cat('</div>\n\n')
+}
+```
+
+```{r}
+#| label: employment-pdf-display
+#| output: asis
+#| eval: !expr is_pdf
+
+# FIXED: Group by institution and position for PDF
+employment_grouped <- employment %>%
+  filter(current == TRUE | as.numeric(substr(start_date, 1, 4)) >= 1997) %>%
+  mutate(
+    clean_position = case_when(
+      is.na(position_title) | position_title == "NA" | position_title == "" ~ "Professor of Finance",
+      TRUE ~ position_title
+    ),
+    period = format_date_range(start_date, end_date, for_pdf = TRUE)
+  ) %>%
+  group_by(institution, location_city, location_state, clean_position) %>%
+  summarise(
+    all_periods = list(unique(period)),
+    all_additional = list(unique(na.omit(additional_titles[additional_titles != "" & additional_titles != "NA"]))),
+    all_courses = list(unique(na.omit(courses_taught[courses_taught != "" & courses_taught != "NA"]))),
+    display_order = first(display_order),
+    .groups = 'drop'
+  ) %>%
+  arrange(display_order)
+
+for (i in 1:nrow(employment_grouped)) {
+  periods_text <- paste(employment_grouped$all_periods[[i]], collapse = ", ")
+  
+  cat("\\textbf{", escape_latex(employment_grouped$clean_position[i]), "} (", periods_text, ")\n\n", sep = "")
+  cat(escape_latex(employment_grouped$institution[i]), ", ", 
+      escape_latex(employment_grouped$location_city[i]), ", ", 
+      escape_latex(employment_grouped$location_state[i]), "\n\n", sep = "")
+  
+  # Combine additional titles and courses into single itemize block
+  items_to_list <- c()
+  
+  if (length(employment_grouped$all_additional[[i]]) > 0) {
+    items_to_list <- c(items_to_list, employment_grouped$all_additional[[i]])
+  }
+  
+  if (length(employment_grouped$all_courses[[i]]) > 0) {
+    courses_text <- paste("Courses Taught: ", 
+                         paste(employment_grouped$all_courses[[i]], collapse = ", "))
+    items_to_list <- c(items_to_list, courses_text)
+  }
+  
+  if (length(items_to_list) > 0) {
+    cat("\\begin{itemize}\n")
+    for (item in items_to_list) {
+      cat("\\item ", escape_latex(item), "\n", sep = "")
+    }
+    cat("\\end{itemize}\n\n")
+  }
+}
+```

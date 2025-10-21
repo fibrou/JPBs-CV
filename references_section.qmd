@@ -1,0 +1,91 @@
+---
+# References Section Module
+---
+
+```{r}
+#| label: refs-setup
+#| include: false
+
+# Check if references exists and has data, otherwise create default
+if (!exists("references") || is.null(references) || 
+    !is.data.frame(references) || nrow(references) == 0 ||
+    !all(c("name", "title", "institution") %in% names(references))) {
+  
+  # Create default references if not available from Excel
+  references <- tribble(
+    ~name, ~title, ~institution,
+    "Bruce Weber", "Willem Kooyker Dean", "Zicklin School of Business, Baruch College",
+    "Neil Pearson", "Professor of Finance", "University of Illinois",
+    "Gene Pilotte", "Professor of Finance", "Rutgers Business School",
+    "Paul Brockman", "Joseph R. Perella Chair in Finance", "Lehigh University",
+    "Chitru Fernando", "Rainbolt Chair in Finance", "University of Oklahoma"
+  )
+} else {
+  # Clean up existing references data
+  references <- references %>%
+    mutate(
+      name = if_else(is.na(name), "", as.character(name)),
+      title = if_else(is.na(title), "", as.character(title)),
+      institution = if_else(is.na(institution), "", as.character(institution))
+    )
+}
+```
+
+```{r}
+#| label: refs-html-output
+#| output: asis
+#| eval: !expr is_html
+
+cat('
+<div class="references-note">
+Complete contact information available upon request. References include deans, department chairs, and distinguished faculty colleagues who can speak to leadership, teaching, and research excellence.
+</div>
+')
+
+for (i in 1:nrow(references)) {
+  cat(paste0('
+<div class="reference-item">
+<div class="ref-name">', references$name[i], '</div>
+<div class="ref-title">', references$title[i], '</div>
+<div class="ref-institution">', references$institution[i], '</div>
+</div>
+'))
+}
+```
+
+```{r}
+#| label: refs-pdf-output
+#| output: asis
+#| eval: !expr is_pdf
+
+for (i in 1:nrow(references)) {
+  # Handle each field safely
+  name_text <- if(!is.na(references$name[i]) && references$name[i] != "") {
+    references$name[i]
+  } else {
+    ""
+  }
+  
+  title_text <- if(!is.na(references$title[i]) && references$title[i] != "") {
+    references$title[i]
+  } else {
+    ""
+  }
+  
+  inst_text <- if(!is.na(references$institution[i]) && references$institution[i] != "") {
+    references$institution[i]
+  } else {
+    ""
+  }
+  
+  if(name_text != "") {
+    cat("\\textbf{", escape_latex(name_text), "}\n\n", sep = "")
+  }
+  if(title_text != "") {
+    cat(escape_latex(title_text), "\n\n", sep = "")
+  }
+  if(inst_text != "") {
+    cat("\\textit{", escape_latex(inst_text), "}\n\n", sep = "")
+  }
+}
+```

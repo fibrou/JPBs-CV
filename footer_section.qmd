@@ -1,0 +1,39 @@
+---
+# Footer Section Module
+---
+
+```{r}
+#| label: footer-html
+#| output: asis
+#| eval: !expr is_html
+
+cat('
+
+---
+
+<div class="footer-section">
+
+### Download Options
+
+<div class="download-buttons">
+
+<a href="jpbsQuartoCV.pdf" class="download-btn pdf"><i class="fas fa-file-pdf"></i> Download PDF CV</a>
+<a href="papers.html" class="download-btn papers"><i class="fas fa-file-alt"></i> View Working Papers</a>
+
+</div>
+
+<div class="last-updated">
+*Last Updated: ', format(Sys.Date(), "%B %d, %Y"), '*
+</div>
+
+</div>
+')
+```
+
+```{r}
+#| label: footer-pdf
+#| output: asis
+#| eval: !expr is_pdf
+
+# PDF footer handled by template
+```
