@@ -1,0 +1,140 @@
+---
+title: "Working Papers"
+subtitle: "Research in Progress · John Paul Broussard"
+toc: false
+---
+
+```{r}
+#| label: papers-setup
+#| include: false
+library(DBI)
+library(RSQLite)
+library(dplyr)
+library(here)
+
+db_path <- here("cv-app-test", "cv.db")
+con <- dbConnect(RSQLite::SQLite(), db_path)
+papers <- dbReadTable(con, "papers_in_progress")
+dbDisconnect(con)
+
+# Status → badge class + label mapping
+classify_status <- function(status) {
+  s <- tolower(status)
+  if (grepl("presented|conference.*present", s)) {
+    list(class = "progress", label = "Presented")
+  } else if (grepl("submission|near submission", s) && grepl("conference", s)) {
+    list(class = "review", label = "Conference Submission")
+  } else if (grepl("journal submission|preparation for journal", s)) {
+    list(class = "rnr", label = "Near Submission")
+  } else if (grepl("in progress|being performed|in preparation", s)) {
+    list(class = "draft", label = "In Progress")
+  } else {
+    list(class = "draft", label = status)
+  }
+}
+```
+
+Inquiries regarding any of the papers below are welcome. Please contact
+[john.broussard@rutgers.edu](mailto:john.broussard@rutgers.edu).
+
+---
+
+```{r}
+#| label: papers-render
+#| output: asis
+
+if (is.null(papers) || nrow(papers) == 0) {
+  cat("*No working papers currently on file.*\n")
+} else {
+  
+  # Detect whether abstract column exists
+  has_abstract <- "abstract" %in% names(papers)
+  
+  for (i in seq_len(nrow(papers))) {
+    
+    title   <- papers$articleTitle[i]
+    authors <- papers$authors[i]
+    status  <- papers$status[i]
+    abstract_text <- if (has_abstract && !is.na(papers$abstract[i])) {
+      papers$abstract[i]
+    } else {
+      NULL
+    }
+    
+    badge <- classify_status(status)
+    
+    # Paper card
+    cat('<div class="working-paper-card">\n')
+    
+    # Header: title + badge
+    cat('<div class="wp-header">\n')
+    cat(sprintf('<div class="wp-title">%s</div>\n', title))
+    cat(sprintf('<span class="status-badge %s">%s</span>\n',
+                badge$class, badge$label))
+    cat('</div>\n')
+    
+    # Authors
+    if (!is.na(authors) && nchar(trimws(authors)) > 0) {
+      cat(sprintf('<div class="wp-authors">%s</div>\n', authors))
+    }
+    
+    # Status detail
+    if (!is.na(status) && nchar(trimws(status)) > 0) {
+      cat(sprintf('<div class="wp-target"><em>%s</em></div>\n', status))
+    }
+    
+    # Abstract
+    if (!is.null(abstract_text)) {
+      cat('<details class="wp-abstract-toggle">\n')
+      cat('<summary>Abstract</summary>\n')
+      cat(sprintf('<div class="wp-abstract-preview">%s</div>\n', abstract_text))
+      cat('</details>\n')
+    } else {
+      cat('<div class="wp-abstract-preview" style="color:#999;font-style:italic;">',
+          'Abstract coming soon.</div>\n')
+    }
+    
+    cat('</div>\n\n')
+    
+    if (i < nrow(papers)) cat('<hr style="margin:2rem 0;border-color:#e0e0e0;">\n\n')
+  }
+}
+```
+
+```{=html}
+<style>
+.working-paper-card {
+  padding: 1.5rem 0;
+}
+
+.wp-abstract-toggle {
+  margin-top: 1rem;
+}
+
+.wp-abstract-toggle summary {
+  cursor: pointer;
+  color: #900000;
+  font-weight: 600;
+  font-size: 0.95rem;
+  user-select: none;
+}
+
+.wp-abstract-toggle summary:hover {
+  text-decoration: underline;
+}
+
+.wp-abstract-toggle[open] summary {
+  margin-bottom: 0.75rem;
+}
+
+.wp-abstract-preview {
+  line-height: 1.75;
+  color: #333;
+  font-size: 0.95rem;
+  padding: 0.75rem 1rem;
+  background: #fafafa;
+  border-left: 3px solid #ddd;
+  border-radius: 0 4px 4px 0;
+}
+</style>
+```

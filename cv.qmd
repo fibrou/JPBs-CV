@@ -1,0 +1,192 @@
+---
+title: "Curriculum Vitae"
+toc: false
+---
+
+```{r}
+#| label: cv-setup
+#| include: false
+library(DBI)
+library(RSQLite)
+library(dplyr)
+library(here)
+
+db_path <- here("cv-app-test", "cv.db")
+con <- dbConnect(RSQLite::SQLite(), db_path)
+
+lt_work       <- dbReadTable(con, "lt_work")
+education     <- dbReadTable(con, "education")
+publications  <- dbReadTable(con, "publications")
+admin         <- dbReadTable(con, "admin")
+certifications <- dbReadTable(con, "certifications")
+papers        <- dbReadTable(con, "papers_in_progress")
+references    <- dbReadTable(con, "references")
+
+dbDisconnect(con)
+
+# Current academic positions: endMonth == "Present"
+# lt_work columns: institution | startMonth | startYear | endMonth | endYear | where | detail
+# Multiple detail rows per position (title, courses, etc.) — keep only the first per institution+year
+current_positions <- lt_work |>
+  dplyr::filter(endMonth == "Present") |>
+  dplyr::group_by(institution, startYear) |>
+  dplyr::slice(1) |>   # first row = the title row (not "COURSES TAUGHT ---")
+  dplyr::ungroup() |>
+  dplyr::arrange(desc(startYear))
+
+# Recent publications (10 most recent)
+recent_pubs <- publications |>
+  dplyr::filter(!is.na(year)) |>
+  dplyr::arrange(desc(year)) |>
+  dplyr::slice_head(n = 10)
+```
+
+```{=html}
+<div class="download-buttons" style="margin: 1.5rem 0 1rem 0;">
+  <a href="jpbDataDrivenCV.pdf" class="download-btn pdf" download>
+    ⬇ Download Full CV (PDF)
+  </a>
+  <a href="mailto:john.broussard@rutgers.edu" class="download-btn papers">
+    ✉ Contact
+  </a>
+</div>
+
+<div style="margin: 1rem 0 2.5rem 0;">
+  <iframe src="jpbDataDrivenCV.pdf"
+          width="100%"
+          height="950px"
+          style="border:1px solid #ddd;border-radius:6px;"
+          title="John Paul Broussard CV">
+    <p>PDF preview not supported in this browser.
+    <a href="jpbDataDrivenCV.pdf">Download the CV instead.</a></p>
+  </iframe>
+</div>
+```
+
+---
+
+## Current Positions
+
+```{r}
+#| label: cv-current
+#| output: asis
+
+if (nrow(current_positions) == 0) {
+  cat("*See PDF for full employment history.*\n")
+} else {
+  for (i in seq_len(nrow(current_positions))) {
+    pos <- current_positions[i, ]
+    
+    loc   <- if (!is.na(pos$where)      && pos$where != "")      pos$where      else ""
+    start <- if (!is.na(pos$startYear)  && pos$startYear != "")  as.character(pos$startYear) else ""
+    title <- if (!is.na(pos$detail)     && pos$detail != "")     pos$detail     else ""
+
+    cat(sprintf('**%s**  \n', pos$institution))
+    if (title != "") cat(sprintf('%s  \n', title))
+    if (loc   != "") cat(sprintf('%s', loc))
+    if (start != "") cat(sprintf(' · %s–Present', start))
+    cat('\n\n')
+  }
+}
+```
+
+---
+
+## Education
+
+```{r}
+#| label: cv-education
+#| output: asis
+
+for (i in seq_len(nrow(education))) {
+  ed <- education[i, ]
+  
+  start <- if (!is.na(ed$startYear)) as.character(ed$startYear) else ""
+  end   <- if (!is.na(ed$endYear))   as.character(ed$endYear)   else ""
+  years <- if (start != "" || end != "") paste0(start, "–", end) else ""
+  
+  cat(sprintf('**%s**  \n', ed$degree))
+  cat(sprintf('%s', ed$inst))
+  if (years != "") cat(sprintf(' · %s', years))
+  if (!is.na(ed$where) && ed$where != "") cat(sprintf(' · %s', ed$where))
+  cat('\n\n')
+}
+```
+
+---
+
+## Selected Publications
+
+Showing 10 most recent of `r nrow(publications)` total peer-reviewed publications.
+[Download full CV (PDF)](jpbDataDrivenCV.pdf) for the complete list.
+
+```{r}
+#| label: cv-pubs
+#| output: asis
+
+for (i in seq_len(nrow(recent_pubs))) {
+  pub <- recent_pubs[i, ]
+  
+  cat('<div class="publication-item">\n')
+  cat(sprintf('<div class="pub-year">%s</div>\n',
+              ifelse(!is.na(pub$year), pub$year, "")))
+  cat('<div class="pub-content">\n')
+  cat(sprintf('<div class="pub-title">%s</div>\n', pub$articleTitle))
+  
+  if (!is.na(pub$authors) && pub$authors != "") {
+    cat(sprintf('<div class="pub-authors">%s</div>\n', pub$authors))
+  }
+  if (!is.na(pub$journal) && pub$journal != "") {
+    cat(sprintf('<div class="pub-venue"><em>%s</em></div>\n', pub$journal))
+  }
+  
+  cat('</div>\n</div>\n\n')
+}
+```
+
+---
+
+## Working Papers
+
+`r nrow(papers)` paper(s) currently in progress.
+[See the working papers page](papers.qmd) for titles, co-authors, and abstracts.
+
+---
+
+## Administrative Experience
+
+```{r}
+#| label: cv-admin
+#| output: asis
+
+for (i in seq_len(nrow(admin))) {
+  a <- admin[i, ]
+  cat(sprintf('**%s**  \n', a$title))
+  cat(sprintf('*%s*\n\n', a$institution))
+  
+  if (!is.na(a$detail) && nchar(trimws(a$detail)) > 0) {
+    cat(sprintf(
+      '<div style="font-size:0.9rem;color:#555;margin:-0.5rem 0 1rem 0;">%s</div>\n\n',
+      a$detail
+    ))
+  }
+}
+```
+
+---
+
+## References
+
+Available upon request. [Contact me](mailto:john.broussard@rutgers.edu) directly.
+
+```{r}
+#| label: cv-refs
+#| output: asis
+
+for (i in seq_len(nrow(references))) {
+  ref <- references[i, ]
+  cat(sprintf('**%s**  \n', ref$name))
+  if (!is.na(ref$title))   cat(sprintf('%s  \n', ref$title))
+  if (!is.na(ref$details)) cat(sprintf('*%s*\n\n', ref$details))
+}
+```

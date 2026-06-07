@@ -1,0 +1,62 @@
+project:
+  type: website
+  output-dir: docs
+  render:
+    - index.qmd
+    - research.qmd
+    - papers.qmd
+    - cv.qmd
+
+website:
+  title: "J.P. Broussard, PhD"
+  site-url: https://fibrou.github.io/JPBs-CV/
+  description: "Finance Professor · Academic Administrator · Applied Financial Researcher"
+
+  navbar:
+    background: "#900000"
+    foreground: white
+    title: "John Paul Broussard"
+    left:
+      - text: "About"
+        href: index.qmd
+      - text: "Research"
+        menu:
+          - text: "Publications & Activity"
+            href: research.qmd
+          - text: "Working Papers"
+            href: papers.qmd
+      - text: "CV"
+        href: cv.qmd
+    right:
+      - icon: github
+        href: https://github.com/fibrou
+        aria-label: GitHub
+      - icon: linkedin
+        href: https://tinyurl.com/5bfex8hv
+        aria-label: LinkedIn
+
+  page-footer:
+    left: "© 2026 John Paul Broussard, PhD, CFA, FRM, PRM"
+    center: "Built with [Quarto](https://quarto.org) · [GitHub Pages](https://pages.github.com)"
+    right: "Willis, TX · [john.broussard@rutgers.edu](mailto:john.broussard@rutgers.edu)"
+    background: "#f5f5f5"
+    foreground: "#555555"
+
+format:
+  html:
+    theme:
+      - cosmo
+      - custom-cv.scss
+    toc: false
+    link-external-newwindow: true
+
+execute:
+  echo: false
+  warning: false
+  message: false
+
+# ── GitHub Pages deployment ────────────────────────────────────────────────
+# After first render:
+#   1. New-Item -ItemType File docs\.nojekyll   (PowerShell)
+#   2. GitHub Settings → Pages → main branch → /docs
+#   3. Every update: quarto render → git add docs/ → commit → push

@@ -1,13 +1,13 @@
 /*-- scss:defaults --*/
 
 // Subdued professional colors
-$primary: #2c5f7c;        // Professional blue
-$primary-light: #3a7ca5;  // Lighter blue
-$primary-dark: #1e4158;   // Darker blue
+$primary: #900000;        // Professional red
+$primary-light: #c0392b;  // Lighter red
+$primary-dark: #6b0000;   // Darker red
 $dark: #333333;
 $gray: #5D5D5D;
 $light-gray: #f8f9fa;
-$accent: #5a7d8a;         // Muted teal
+$accent: #c0392b;         // Muted red
 
 // Status colors
 $status-rnr: #28a745;
@@ -44,7 +44,7 @@ $link-hover-color: $primary-light;
   height: 180px;
   border-radius: 8px;
   object-fit: cover;
-  border: 3px solid #2c5f7c;
+  border: 3px solid #900000;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   margin-right: 2rem;
   margin-bottom: 1rem;
@@ -57,7 +57,7 @@ $link-hover-color: $primary-light;
   color: #333333;
   
   strong {
-    color: #2c5f7c;
+    color: #900000;
     font-weight: 600;
   }
 }
@@ -72,13 +72,13 @@ $link-hover-color: $primary-light;
 
 .nav-btn {
   background: white;
-  color: #2c5f7c;
+  color: #900000;
   padding: 1rem;
   text-align: center;
   border-radius: 8px;
   text-decoration: none;
   transition: all 0.3s;
-  border: 2px solid #2c5f7c;
+  border: 2px solid #900000;
   font-weight: 500;
   display: flex;
   flex-direction: column;
@@ -87,7 +87,7 @@ $link-hover-color: $primary-light;
 }
 
 .nav-btn:hover {
-  background: #2c5f7c;
+  background: #900000;
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
@@ -107,19 +107,19 @@ $link-hover-color: $primary-light;
   clear: both;
   
   a {
-    color: #2c5f7c;
+    color: #900000;
     text-decoration: none;
     
     &:hover {
       text-decoration: underline;
-      color: #3a7ca5;
+      color: #c0392b;
     }
   }
   
   i {
     margin-right: 0.5rem;
     width: 20px;
-    color: #2c5f7c;
+    color: #900000;
   }
 }
 
@@ -128,27 +128,27 @@ $link-hover-color: $primary-light;
    ========================================================================== */
 
 h1, h2, h3, h4 {
-  color: #2c5f7c;
+  color: #900000;
   margin-top: 2.5rem;
   margin-bottom: 1.5rem;
   font-weight: 600;
 }
 
 h1 {
-  border-bottom: 3px solid #2c5f7c;
+  border-bottom: 3px solid #900000;
   padding-bottom: 0.5rem;
   font-size: 2.2rem;
 }
 
 h2 {
-  border-bottom: 2px solid #a3c9db;
+  border-bottom: 2px solid #e8b4b4;
   padding-bottom: 0.4rem;
   font-size: 1.8rem;
 }
 
 h3 {
   font-size: 1.4rem;
-  color: #1e4158;
+  color: #6b0000;
 }
 
 /* ==========================================================================
@@ -164,7 +164,7 @@ h3 {
 
 .metric-card {
   background: white;
-  border-left: 4px solid #2c5f7c;
+  border-left: 4px solid #900000;
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.08);
@@ -179,7 +179,7 @@ h3 {
   
   .metric-icon {
     font-size: 2rem;
-    color: #2c5f7c;
+    color: #900000;
     margin-bottom: 0.5rem;
     display: block;
   }
@@ -187,7 +187,7 @@ h3 {
   .metric-value {
     font-size: 2.5rem;
     font-weight: bold;
-    color: #2c5f7c;
+    color: #900000;
     display: block;
     line-height: 1;
     margin: 0.5rem 0;
@@ -216,7 +216,7 @@ h3 {
 
 .admin-role {
   background: #f8f9fa;
-  border-left: 4px solid #2c5f7c;
+  border-left: 4px solid #900000;
   padding: 1.5rem;
   margin: 1.5rem 0;
   border-radius: 8px;
@@ -238,7 +238,7 @@ h3 {
   }
   
   .role-title {
-    color: #2c5f7c;
+    color: #900000;
     font-size: 1.2rem;
     font-weight: 600;
   }
@@ -254,7 +254,7 @@ h3 {
   }
   
   .role-impact {
-    background: #d4e6f1;
+    background: #fce8e8;
     padding: 0.75rem;
     margin-top: 1rem;
     border-radius: 4px;
@@ -266,22 +266,22 @@ h3 {
     }
     
     strong {
-      color: #1e4158;
+      color: #6b0000;
     }
   }
 }
 
 .section-highlight {
-  background: #e8f0f2;
-  border-left: 4px solid #5a7d8a;
+  background: #fdf5f5;
+  border-left: 4px solid #c0392b;
   padding: 1.5rem;
   margin: 2rem 0;
   border-radius: 8px;
   font-style: italic;
-  border: 1px solid #c5dce0;
+  border: 1px solid #f0d0d0;
   
   strong {
-    color: #5a7d8a;
+    color: #c0392b;
     font-style: normal;
   }
 }
@@ -311,7 +311,7 @@ h3 {
   }
   
   .years {
-    color: #2c5f7c;
+    color: #900000;
     font-weight: 500;
   }
   
@@ -337,14 +337,14 @@ h3 {
 
 .cert-card {
   background: white;
-  border: 2px solid #a3c9db;
+  border: 2px solid #e8b4b4;
   border-radius: 8px;
   padding: 1.5rem;
   text-align: center;
   transition: all 0.3s;
   
   &:hover {
-    border-color: #2c5f7c;
+    border-color: #900000;
     box-shadow: 0 4px 12px rgba(44, 95, 124, 0.15);
     transform: translateY(-3px);
   }
@@ -352,7 +352,7 @@ h3 {
   .cert-abbr {
     font-size: 1.8rem;
     font-weight: bold;
-    color: #2c5f7c;
+    color: #900000;
     margin-bottom: 0.5rem;
   }
   
@@ -377,13 +377,13 @@ h3 {
 }
 
 .credential-note {
-  background: #d4e6f1;
+  background: #fce8e8;
   padding: 1rem 1.5rem;
   border-radius: 8px;
   margin-top: 1.5rem;
   font-size: 0.95rem;
   color: #333333;
-  border: 1px solid #b8d4e3;
+  border: 1px solid #f0c0c0;
 }
 
 /* ==========================================================================
@@ -395,13 +395,13 @@ h3 {
   padding: 1.5rem;
   background: #f8f9fa;
   border-radius: 8px;
-  border-left: 4px solid #6fa1bd;
+  border-left: 4px solid #cc6666;
   border: 1px solid #e9ecef;
   
   &.current-position {
-    border-left-color: #2c5f7c;
-    background: #d4e6f1;
-    border-color: #b8d4e3;
+    border-left-color: #900000;
+    background: #fce8e8;
+    border-color: #f0c0c0;
   }
   
   .position-header {
@@ -415,7 +415,7 @@ h3 {
   
   .position-title {
     font-weight: 600;
-    color: #2c5f7c;
+    color: #900000;
     font-size: 1.1rem;
   }
   
@@ -447,25 +447,25 @@ h3 {
    ========================================================================== */
 
 .research-summary {
-  background: linear-gradient(135deg, #dfeaf0 0%, #d4e6f1 100%);
+  background: linear-gradient(135deg, #fdf0f0 0%, #fce8e8 100%);
   padding: 2rem;
   border-radius: 8px;
   margin: 2rem 0;
-  border-left: 4px solid #2c5f7c;
-  border: 1px solid #b8d4e3;
+  border-left: 4px solid #900000;
+  border: 1px solid #f0c0c0;
   
   .papers-link {
     display: inline-block;
     margin-top: 1rem;
     padding: 0.75rem 1.5rem;
-    background: #2c5f7c;
+    background: #900000;
     color: white;
     text-decoration: none;
     border-radius: 6px;
     transition: all 0.3s;
     
     &:hover {
-      background: #3a7ca5;
+      background: #c0392b;
       transform: translateX(5px);
     }
     
@@ -486,7 +486,7 @@ h3 {
   .metric-value {
     font-size: 2.5rem;
     font-weight: bold;
-    color: #2c5f7c;
+    color: #900000;
     display: block;
     line-height: 1;
   }
@@ -515,7 +515,7 @@ h3 {
     flex-shrink: 0;
     width: 60px;
     font-weight: bold;
-    color: #2c5f7c;
+    color: #900000;
     font-size: 1.1rem;
   }
   
@@ -535,13 +535,13 @@ h3 {
       text-decoration: none;
       
       &:hover {
-        color: #2c5f7c;
+        color: #900000;
       }
     }
     
     .fa-external-link-alt {
       font-size: 0.8rem;
-      color: #5a7d8a;
+      color: #c0392b;
       margin-left: 0.5rem;
     }
   }
@@ -564,12 +564,12 @@ h3 {
    ========================================================================== */
 
 .papers-note {
-  background: #d4e6f1;
+  background: #fce8e8;
   padding: 1.5rem;
   border-radius: 8px;
-  border-left: 4px solid #2c5f7c;
+  border-left: 4px solid #900000;
   margin: 2rem 0;
-  border: 1px solid #b8d4e3;
+  border: 1px solid #f0c0c0;
 }
 
 .working-paper-preview {
@@ -582,7 +582,7 @@ h3 {
   
   &:hover {
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    border-color: #6fa1bd;
+    border-color: #cc6666;
   }
   
   .wp-header {
@@ -597,7 +597,7 @@ h3 {
   .wp-title {
     font-size: 1.2rem;
     font-weight: 600;
-    color: #1e4158;
+    color: #6b0000;
     flex: 1;
   }
   
@@ -613,7 +613,7 @@ h3 {
     margin-bottom: 0.75rem;
     
     i {
-      color: #2c5f7c;
+      color: #900000;
     }
   }
   
@@ -625,7 +625,7 @@ h3 {
   }
   
   .read-more {
-    color: #2c5f7c;
+    color: #900000;
     font-weight: 600;
     text-decoration: none;
     font-size: 0.95rem;
@@ -686,12 +686,12 @@ h3 {
   transition: all 0.3s;
   
   &:hover {
-    background: #d4e6f1;
+    background: #fce8e8;
   }
   
   &.major-honor {
-    background: #dfeaf0;
-    border-left: 4px solid #2c5f7c;
+    background: #fdf0f0;
+    border-left: 4px solid #900000;
     padding-left: 1.5rem;
   }
   
@@ -699,7 +699,7 @@ h3 {
     flex-shrink: 0;
     width: 60px;
     font-weight: bold;
-    color: #2c5f7c;
+    color: #900000;
     font-size: 1.1rem;
   }
   
@@ -723,11 +723,11 @@ h3 {
   margin: 2rem 0;
   
   h3 {
-    color: #2c5f7c;
+    color: #900000;
     font-size: 1.2rem;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 2px solid #a3c9db;
+    border-bottom: 2px solid #e8b4b4;
   }
 }
 
@@ -740,7 +740,7 @@ h3 {
   }
   
   strong {
-    color: #1e4158;
+    color: #6b0000;
   }
   
   em {
@@ -753,13 +753,13 @@ h3 {
    ========================================================================== */
 
 .references-note {
-  background: #d4e6f1;
+  background: #fce8e8;
   padding: 1.5rem;
   border-radius: 8px;
-  border-left: 4px solid #2c5f7c;
+  border-left: 4px solid #900000;
   margin: 2rem 0;
   font-style: italic;
-  border: 1px solid #b8d4e3;
+  border: 1px solid #f0c0c0;
 }
 
 .reference-item {
@@ -767,12 +767,12 @@ h3 {
   margin: 1rem 0;
   background: #f8f9fa;
   border-radius: 8px;
-  border-left: 4px solid #6fa1bd;
+  border-left: 4px solid #cc6666;
   border: 1px solid #e9ecef;
   
   .ref-name {
     font-weight: 600;
-    color: #1e4158;
+    color: #6b0000;
     font-size: 1.1rem;
     margin-bottom: 0.25rem;
   }
@@ -821,18 +821,18 @@ h3 {
   gap: 0.5rem;
   
   &.pdf {
-    background: #2c5f7c;
+    background: #900000;
     color: white;
     
     &:hover {
-      background: #3a7ca5;
+      background: #c0392b;
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(44, 95, 124, 0.3);
     }
   }
   
   &.papers {
-    background: #5a7d8a;
+    background: #c0392b;
     color: white;
     
     &:hover {
@@ -860,16 +860,16 @@ h3 {
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1.5rem;
-    background: #dfeaf0;
-    color: #1e4158;
+    background: #fdf0f0;
+    color: #6b0000;
     text-decoration: none;
     border-radius: 6px;
     font-weight: 600;
     transition: all 0.3s;
-    border: 1px solid #a3c9db;
+    border: 1px solid #e8b4b4;
     
     &:hover {
-      background: #d4e6f1;
+      background: #fce8e8;
       transform: translateY(-2px);
     }
   }
@@ -883,12 +883,12 @@ h3 {
   background: #f8f9fa;
   padding: 1rem;
   border-radius: 8px;
-  border-left: 4px solid #2c5f7c;
+  border-left: 4px solid #900000;
   border: 1px solid #e9ecef;
   
   .active {
     font-weight: bold;
-    color: #2c5f7c;
+    color: #900000;
   }
   
   ul {
@@ -903,7 +903,7 @@ h3 {
         text-decoration: none;
         
         &:hover {
-          color: #2c5f7c;
+          color: #900000;
         }
       }
     }
@@ -983,7 +983,7 @@ h3 {
   .hero-section {
     background: white;
     color: #333333;
-    border: 2px solid #2c5f7c;
+    border: 2px solid #900000;
   }
   
   .quick-links,

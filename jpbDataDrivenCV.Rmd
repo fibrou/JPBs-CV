@@ -1,0 +1,435 @@
+---
+name: John Paul
+surname: Broussard
+position: "Finance Professor with Decades of Superior Administrative, Research, and Teaching Experiences"
+address: "Oklahoma City, Oklahoma, USA"
+profilepic: "./img/jaafGalaPic.jpg"
+www: "tinyurl.com/c3wdneyp"
+email: "john.broussard@rutgers.edu"
+linkedin: "tinyurl.com/5bfex8hv"
+orcid: 0000-0002-5090-9947
+date: "`r format(Sys.time(), '%B %Y')`"
+headcolor: 990000
+aboutme: "I am a Finance Professor with over 25 years of extensive domestic and international experience in online and traditional academic program management. I create academic programs and courses that monetize academic effort and yield institutional revenue enhancement and stakeholder success. I maintain real-world relevance through being a Financial Professional Designation Exam Trainer, Financial Risk Management Specialist, Financial Market Consultant, Expert on Big Data, Implementer of Natural Language Processing, Artificial Intelligence and Machine Learning applications in Finance."
+docname: jpbDataDrivenCV
+output: vitae::awesomecv
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE)
+
+require(xfun)
+
+packages <- c('vitae'     # The CV's LaTeX Template
+             ,'tibble'    # Data structure for tribbles
+             ,'magrittr'  # The Pipe %>%
+             ,'here'      # Relative File Paths
+             ,'readr'     # Data Loading
+             ,'glue'      # String Manipulation
+            )
+
+xfun::pkg_attach2(packages, message = FALSE)
+
+if (file.exists(here("cv_data.rds"))) {
+  cv_data <- readRDS(here("cv_data.rds"))
+  for (nm in names(cv_data)) assign(nm, cv_data[[nm]])
+  rm(cv_data)
+} else {
+  source(file = here("jpbsCVdata", "jpbsCVdata.r"))
+}
+
+```
+
+# ADMINISTRATIVE EXPERIENCE
+
+```{R ADMINISTRATIVE}
+
+admin %>%
+    detailed_entries(
+        with = institution,
+        what = title,
+        why = detail
+    )
+```
+
+# LONG-TERM ACADEMIC APPOINTMENTS
+
+```{r LTEMPLOYMENT}
+
+ltWork %>%
+  detailed_entries(
+    with = institution,
+    #what = title,
+    why = detail,
+    when = glue::glue("{startMonth} {startYear} --> {endMonth} {endYear}",.na = ""),
+    where = where
+  )
+
+```
+
+# SHORT-TERM ACADEMIC APPOINTMENTS
+
+```{r STEMPLOYMENT}
+
+stWork %>%
+  detailed_entries(
+    with = institution,
+    #what = title,
+    why = detail,
+    when = glue::glue("{startMonth} {startYear} --> {endMonth} {endYear}",.na = ""),
+    where = where
+  )
+
+```
+
+# EDUCATION
+
+```{r EDUCATION}
+
+edu %>%
+  detailed_entries(
+    with = inst,
+    what = degree,
+    why = detail,
+    when = glue::glue("{startYear} --> {endYear}",.na = ""),
+    where = where
+  )
+
+```
+
+# PROFESSIONAL CERTIFICATIONS
+
+```{r CERTIFICATIONS}
+
+certifications %>%
+  detailed_entries(
+    with = certBody,
+    what = accomplishment,
+    why = detail,
+    when = year,
+    where = where
+  )
+
+```
+
+# HONORS and GRANTS
+
+```{r HONORS}
+
+honorsGrants %>%
+  detailed_entries(
+    with = honorGrant,
+    what = grantor,
+    why = detail,
+    when = year,
+    where = where
+  )
+
+```
+
+# PEER-REVIEWED PUBLICATIONS
+
+```{r PUBLICATIONS}
+
+publications %>%
+  detailed_entries(
+    with = articleTitle,
+    what = authors,
+    why = journal,
+    when = year
+  )
+```
+
+# Projects in Progress
+
+```{r PIP}
+
+pip %>%
+  detailed_entries(
+    with = articleTitle,
+    what = authors,
+    why = status
+  )
+
+```
+
+# Other Publications and Monographs
+
+```{r OPM}
+
+otherPubsMonos %>%
+  detailed_entries(
+    with = title,
+    what = authors,
+    why = outlet,
+    when = year
+  )
+
+```
+
+# ACADEMIC CONFERENCE ACTIVITIES
+
+## Presented Papers
+
+```{r PRESENTATIONS}
+
+academicPresents %>%
+  detailed_entries(
+    with = articleTitle,
+    what = authors,
+    why = detail
+  )
+
+```
+
+------------------------------------------------------------------------
+
+## Pedagogical Presentations
+
+```{r PEDAGOGYPRSENTS}
+
+pedagogyPresents %>%
+  detailed_entries(
+    with = title,
+    where = detail
+  )
+
+```
+
+------------------------------------------------------------------------
+
+## Discussed Papers
+
+```{r DISCUSSIONS}
+
+academicDiscussions %>% 
+  detailed_entries(
+    with = articleTitle, 
+    what = authors, 
+    why = detail
+  )
+
+```
+
+------------------------------------------------------------------------
+
+## Conference Committees
+
+```{r CONFCOMM}
+
+confCommittees %>%
+  detailed_entries(
+    with = conference,
+    what = role,
+    where = details
+  )
+```
+
+------------------------------------------------------------------------
+
+## Conference Session Chair
+
+```{r CONFCHAIR}
+
+confChair %>%
+  detailed_entries(
+    with = conference,
+    where = details
+  )
+
+```
+
+# SERVICE ACTIVITIES
+
+## Profession - Editorships
+
+```{r EDITING}
+
+editor %>%
+  detailed_entries(
+    with = role,
+    what = journal,
+    when = glue::glue("{begYear} --> {endYear}",.na = "")
+  )
+
+```
+
+------------------------------------------------------------------------
+
+## Profession - Ad Hoc Reviewer
+
+```{r ADHOCREVIEW}
+
+adHocReview %>% 
+  detailed_entries(
+    what = outletName,
+    when = outletType
+  )
+
+```
+
+------------------------------------------------------------------------
+
+## Profession - Promotion/Appointment Review
+
+```{r TANDP}
+
+tAndP %>%
+  detailed_entries(
+    with = task,
+    what = school,
+    when = year,
+    why = role
+  )
+```
+
+------------------------------------------------------------------------
+
+## Profession - Association Offices Held
+
+```{r PROFOFFICES}
+profesionalOFfices %>% 
+  detailed_entries(
+    with = title,
+    what = group,
+    when = glue::glue("{begYear} --> {endYear}",.na = "")
+    
+  )
+
+```
+
+------------------------------------------------------------------------
+
+## Institutional Leadership Roles
+
+```{r LEADER}
+
+academicLeader %>%
+  detailed_entries(
+    with = title,
+    what = school,
+    when = glue::glue("{begYear} --> {endYear}",.na = "")
+  )
+
+```
+
+------------------------------------------------------------------------
+
+## Institutional Committee Participation
+
+```{r COMMITTEES}
+
+academicCommittees %>%
+  detailed_entries(
+    with = committeeName,
+    what = institution,
+    when = glue::glue("{begYear} --> {endYear}",.na = "")
+    
+  )
+
+
+```
+
+# STUDENT ACTIVITIES
+
+## Dissertation Committees
+
+```{r DISSERTATIONS}
+
+dissertationCommittees %>% 
+  detailed_entries(
+    with = student,
+    what = dissTitle,
+    why = school,
+    when = year,
+    where = role
+  )
+
+
+```
+
+------------------------------------------------------------------------
+
+## Thesis/Non-PhD Research Supervision
+
+```{r THESES}
+thesesSupervision %>% 
+  detailed_entries(
+    with = student,
+    what = thesisTitle,
+    why = school,
+    when = year,
+    where = role
+  )
+
+```
+
+------------------------------------------------------------------------
+
+## Student Mentoring
+
+```{r MENTORING}
+studentMentoring %>% 
+  detailed_entries(
+    with = activity,
+    what = school,
+    when = glue::glue("{begYear} --> {endYear}",.na = ""),
+    why = role
+    
+  )
+```
+
+# Professional Seminars and Training
+
+```{r PROFTRAINING}
+profTraining %>% 
+  detailed_entries(
+    with = activity,
+    what = group,
+    when = glue::glue("{begYear} --> {endYear}",.na = ""),
+    why = role
+  )
+
+```
+
+# Media Interviews
+
+```{r MEDIAINTS}
+mediaInterviews %>% 
+  detailed_entries(
+    with = topic,
+    what = modality,
+    why = outlet,
+    when = glue::glue("{year}",.na="")
+  )
+
+
+```
+
+# Business Experiences
+
+```{r BIZ}
+bizExperiences %>%  
+  detailed_entries(
+    with = title,
+    what = company,
+    when = glue::glue("{begYear} --> {endYear}",.na = "")
+  )
+
+```
+
+\pagebreak
+
+# REFERENCES
+
+```{r REFERENCES}
+references %>% 
+  detailed_entries(
+    with = name,
+    what = title,
+    why = details
+  )
+
+```

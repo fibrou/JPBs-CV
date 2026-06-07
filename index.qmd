@@ -1,0 +1,275 @@
+---
+title: "John Paul Broussard, PhD, CFA, FRM, PRM"
+about:
+  template: solana
+  image: jaafGalaPic.jpg
+  image-width: 9em
+  image-shape: rounded
+  links:
+    - icon: envelope-fill
+      text: "Email"
+      href: "mailto:john.broussard@rutgers.edu"
+    - text: "Google Scholar"
+      href: "https://scholar.google.com/citations?user=nc-6H5gAAAAJ"
+    - text: "ORCID"
+      href: "https://orcid.org/0000-0002-5090-9947"
+    - icon: linkedin
+      text: "LinkedIn"
+      href: "https://tinyurl.com/5bfex8hv"
+    - icon: github
+      text: "fibrou"
+      href: "https://github.com/fibrou"
+---
+
+```{r}
+#| label: index-setup
+#| include: false
+library(DBI)
+library(RSQLite)
+library(dplyr)
+library(leaflet)
+library(here)
+
+db_path <- here("cv-app-test", "cv.db")
+con <- dbConnect(RSQLite::SQLite(), db_path)
+
+pub_count   <- dbGetQuery(con, "SELECT COUNT(*) AS n FROM publications")$n
+paper_count <- dbGetQuery(con, "SELECT COUNT(*) AS n FROM papers_in_progress")$n
+diss_count  <- dbGetQuery(con, "SELECT COUNT(*) AS n FROM dissertation_committees")$n
+svc_count   <- dbGetQuery(con, "SELECT COUNT(*) AS n FROM academic_committees")$n
+
+highlights <- dbGetQuery(con, "
+  SELECT honorGrant, grantor, `where` AS location, year
+  FROM honors_grants
+  WHERE CAST(year AS INTEGER) >= 2022
+  ORDER BY CAST(year AS INTEGER) DESC
+")
+
+dbDisconnect(con)
+```
+
+## About
+
+John Paul Broussard is a Finance Professor with over 25 years of experience
+spanning academic administration, international program development, applied
+financial research, and classroom instruction.
+
+His **administrative record** includes directing and co-directing graduate
+finance programs at the University of Oklahoma — including the Online MS
+Finance Program (150+ students, graduation rate above 78%, CFA Institute
+University Affiliation) — and serving multiple terms as Finance Area Head
+at Rutgers University and the Estonian Business School. He has led
+curriculum redesign, faculty recruitment, strategic planning, and
+development office engagement at institutions across three continents.
+
+His **research** applies advanced quantitative methods to empirical finance.
+Current work employs vine copula modeling, multimodal AI and NLP, and
+network analysis to study central bank communication, endowment portfolio
+management, commodity market dependence, financial influencer effects, and
+the interaction of alternative and GAAP earnings. His work has appeared in
+*Journal of Financial Economics*, *Management Science*, *European Financial
+Management*, and 20 other peer-reviewed outlets.
+
+His **international portfolio** spans sustained academic engagement in the
+United States, Estonia, Finland, England, Switzerland, and Italy, including
+a Fulbright Distinguished Chair in Business and Economics (Hanken School,
+2016) and a Fulbright Finland Alumni Grant (2026).
+
+His **teaching** integrates professional market standards with coursework.
+As a CFA Charterholder, Certified Financial Risk Manager, and Professional
+Risk Manager — and a trainer for both designation programs for nearly two
+decades — he brings practitioner depth to every course, across in-person,
+online, and international delivery formats.
+
+---
+
+## Current Appointments
+
+**Associate Professor of Finance** · SUNY Empire State University · Saratoga Springs, NY  
+**Professor Emeritus of Finance** · Rutgers University, School of Business · Camden, NJ  
+**Visiting Professor** · Estonian Business School · Tallinn, Estonia  
+**International Lecturer** · ZHAW Banking, Finance & Real Estate · Winterthur, Switzerland
+
+---
+
+## Professional Credentials
+
+```{=html}
+<div class="certifications-showcase" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem;">
+  <div class="cert-card" style="padding: 0.85rem;">
+    <div class="cert-abbr">CFA</div>
+    <div class="cert-full">Chartered Financial Analyst</div>
+    <div class="cert-org">CFA Institute · Charter #24928</div>
+    <div class="cert-desc">Awarded 1997</div>
+  </div>
+  <div class="cert-card" style="padding: 0.85rem;">
+    <div class="cert-abbr">FRM</div>
+    <div class="cert-full">Financial Risk Manager</div>
+    <div class="cert-org">Global Association of Risk Professionals</div>
+    <div class="cert-desc">Awarded 1999</div>
+  </div>
+  <div class="cert-card" style="padding: 0.85rem;">
+    <div class="cert-abbr">PRM</div>
+    <div class="cert-full">Professional Risk Manager</div>
+    <div class="cert-org">Professional Risk Managers' International Association</div>
+    <div class="cert-desc">Awarded 2003</div>
+  </div>
+  <div class="cert-card" style="padding: 0.85rem;">
+    <div class="cert-abbr">CBA</div>
+    <div class="cert-full">Certified Business Appraiser</div>
+    <div class="cert-org">Institute of Business Appraisers</div>
+    <div class="cert-desc">Awarded 2005</div>
+  </div>
+</div>
+```
+
+---
+
+## By the Numbers
+
+```{=html}
+<div class="metrics-grid">
+  <div class="metric-card">
+    <span class="metric-value">1,109</span>
+    <span class="metric-label">Total Citations</span>
+    <span class="metric-context">Google Scholar · h-index 15</span>
+  </div>
+  <div class="metric-card">
+    <span class="metric-value">267</span>
+    <span class="metric-label">Citations Since 2021</span>
+    <span class="metric-context">h-index 7 · i10-index 6</span>
+  </div>
+  <div class="metric-card">
+    <span class="metric-value">`r pub_count`</span>
+    <span class="metric-label">Publications</span>
+    <span class="metric-context">Peer-reviewed journals</span>
+  </div>
+  <div class="metric-card">
+    <span class="metric-value">`r paper_count`</span>
+    <span class="metric-label">Working Papers</span>
+    <span class="metric-context">In progress</span>
+  </div>
+  <div class="metric-card">
+    <span class="metric-value">25+</span>
+    <span class="metric-label">Years Experience</span>
+    <span class="metric-context">Academic & professional</span>
+  </div>
+  <div class="metric-card">
+    <span class="metric-value">`r diss_count`</span>
+    <span class="metric-label">Dissertation Committees</span>
+    <span class="metric-context">Doctoral mentorship</span>
+  </div>
+  <div class="metric-card">
+    <span class="metric-value">7+</span>
+    <span class="metric-label">Countries</span>
+    <span class="metric-context">Teaching & research</span>
+  </div>
+  <div class="metric-card">
+    <span class="metric-value">`r svc_count`</span>
+    <span class="metric-label">Committee Roles</span>
+    <span class="metric-context">Academic service</span>
+  </div>
+</div>
+<p style="font-size:0.8rem;color:#888;margin-top:0.5rem;">
+Scholar metrics as of `r format(Sys.Date(), "%B %Y")` ·
+<a href="https://scholar.google.com/citations?user=nc-6H5gAAAAJ" target="_blank">View profile</a> ·
+<a href="https://orcid.org/0000-0002-5090-9947" target="_blank">ORCID</a>
+</p>
+```
+
+---
+
+## Recent Highlights
+
+```{r}
+#| label: recent-highlights
+#| output: asis
+
+if (nrow(highlights) > 0) {
+  for (i in seq_len(nrow(highlights))) {
+    h <- highlights[i, ]
+    cat(sprintf(
+      '<div class="honor-item%s">\n<div class="honor-year">%s</div>\n<div class="honor-content"><div class="honor-title">%s</div><div class="honor-org">%s · %s</div></div>\n</div>\n',
+      if (h$year >= 2025) " major-honor" else "",
+      h$year, h$honorGrant, h$grantor, h$location
+    ))
+  }
+}
+```
+
+---
+
+## Research Interests
+
+Vine copula methods (D-vine / R-vine) in portfolio management and commodity
+markets · Multimodal AI and NLP applied to central bank communication ·
+Financial influencer network effects and retail investor behavior · Earnings
+management and voluntary disclosure · Algorithmic trading and market
+microstructure · Extreme value theory and risk measurement
+
+[→ Working Papers](papers.qmd) · [→ Publications](research.qmd)
+
+---
+
+## International Footprint
+
+```{r}
+#| label: footprint-map
+#| out.width: "100%"
+
+institutions <- data.frame(
+  name = c(
+    "Rutgers University (1997–Present)",
+    "SUNY Empire State University (2025–Present)",
+    "Estonian Business School (2018–2020; 2024–Present)",
+    "ZHAW Banking & Finance (2024–Present)",
+    "University of Oklahoma (2021–2024)",
+    "Hanken School of Economics (2016–2020)",
+    "University of Vaasa (collaborations)",
+    "University of Oulu (collaborations)",
+    "Turku School of Economics (visiting 2013)",
+    "LUT University (visiting 2007)",
+    "Middlesex University (2015–2016)",
+    "Fairleigh Dickinson University (1995–1997)",
+    "Louisiana State University (1992–1995)",
+    "Millsaps College (1990–1991)",
+    "Arezzo Study Abroad Program, Italy (2022–2024)",
+    "University of New York Tirana (presentation)"
+  ),
+  lat = c(39.9483, 43.0668, 59.4370, 47.4979,
+          35.2058, 60.1699, 63.0951, 65.0121,
+          60.4518, 61.0589, 51.5893, 40.7587,
+          30.4133, 32.3498, 43.4633, 41.3275),
+  lng = c(-75.1210, -73.7863,  24.7536,  8.7280,
+          -97.4395,  24.9384,  21.6165, 25.4651,
+           22.2666,  28.1870,  -0.2292,-74.4171,
+          -91.1800, -90.1848,  11.8800, 19.8187),
+  status = c("current","current","current","current",
+             "past","past","collab","collab",
+             "visiting","visiting","past","past",
+             "past","past","program","presentation"),
+  stringsAsFactors = FALSE
+)
+
+pal <- colorFactor(
+  palette = c("#900000","#cc6666","#555555","#aaaaaa","#c0392b","#888888"),
+  domain  = c("current","past","collab","visiting","program","presentation")
+)
+
+leaflet(institutions, width = "100%", height = "360px") |>
+  addProviderTiles(providers$CartoDB.Positron) |>
+  addCircleMarkers(
+    lat = ~lat, lng = ~lng,
+    color = ~pal(status),
+    radius = ~ifelse(status == "current", 10, 7),
+    fillOpacity = 0.85,
+    stroke = TRUE, weight = 1.5,
+    popup = ~paste0("<strong>", name, "</strong>")
+  ) |>
+  addLegend(
+    position = "bottomright",
+    colors = c("#900000","#cc6666","#c0392b","#555555","#aaaaaa","#888888"),
+    labels = c("Current","Past","Program","Collaboration","Visiting","Presentation"),
+    title = "Affiliation type", opacity = 0.85
+  )
+```

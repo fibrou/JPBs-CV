@@ -1,278 +1,106 @@
 ---
 title: "Working Papers"
-subtitle: "Current Research in Progress"
-author: "John Paul Broussard"
-format:
-  html:
-    theme: 
-      - cosmo
-      - custom-cv.scss
-    toc: true
-    toc-depth: 2
-    page-layout: article
-    grid:
-      body-width: 900px
-    include-in-header:
-      text: |
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  pdf:
-    pdf-engine: xelatex
-    keep-tex: false
-date: now
-date-format: "MMMM YYYY"
-execute:
-  echo: false
-  warning: false
+subtitle: "Research in Progress · John Paul Broussard"
+toc: false
 ---
 
 ```{r}
-#| label: setup
+#| label: papers-setup
 #| include: false
-
-library(tibble)
+library(DBI)
+library(RSQLite)
 library(dplyr)
-library(readxl)
 library(here)
-library(knitr)
 
-# Load working papers data
-# You'll need to create a 'working_papers' sheet in your cv_data.xlsx file
-# with columns: title, authors, abstract, year, status, keywords
+db_path <- here("cv-app-test", "cv.db")
+con <- dbConnect(RSQLite::SQLite(), db_path)
+papers <- dbReadTable(con, "papers_in_progress")
+dbDisconnect(con)
 
-# For now, using example data structure
-working_papers <- tribble(
-  ~title, ~authors, ~abstract, ~year, ~status, ~keywords,
-  
-  "Machine Learning Applications in Portfolio Construction",
-  "John Paul Broussard and Co-Author Name",
-  "This paper examines the application of machine learning algorithms to optimize portfolio construction strategies. We utilize deep learning techniques to predict asset returns and construct portfolios that outperform traditional mean-variance optimization. Our findings suggest that neural networks can capture non-linear relationships in financial data that conventional models miss, leading to improved risk-adjusted returns across multiple market conditions.",
-  "2025",
-  "Under Review",
-  "Machine Learning, Portfolio Optimization, Deep Learning",
-  
-  "The Impact of Algorithmic Trading on Market Microstructure",
-  "John Paul Broussard, Second Author, Third Author",
-  "We investigate how the proliferation of algorithmic trading has fundamentally altered market microstructure dynamics. Using high-frequency trading data from major exchanges, we document significant changes in liquidity provision, price discovery, and volatility patterns. Our analysis reveals that while algorithmic traders improve market efficiency in normal times, they can exacerbate volatility during stress periods. These findings have important implications for market regulation and design.",
-  "2024",
-  "Working Paper",
-  "Algorithmic Trading, Market Microstructure, High-Frequency Trading",
-  
-  "Corporate Financial Policy in the Digital Age",
-  "John Paul Broussard and Collaborator Name",
-  "This study explores how digital transformation affects corporate financial decision-making. We analyze capital structure choices, dividend policy, and investment decisions for firms undergoing significant digital transformation. Using a comprehensive dataset of publicly traded companies, we find that digitalization is associated with lower leverage, higher investment in intangible assets, and a shift away from traditional dividend policies. Our results suggest that digital transformation fundamentally alters the financial landscape for corporations.",
-  "2024",
-  "In Progress",
-  "Corporate Finance, Digital Transformation, Capital Structure",
-  
-  "Risk Management with Natural Language Processing",
-  "John Paul Broussard",
-  "We develop a novel approach to risk assessment using natural language processing (NLP) techniques applied to corporate disclosures and news articles. Our methodology extracts risk-related information from textual data and constructs risk measures that predict future volatility and firm distress. The NLP-based risk metrics significantly outperform traditional accounting-based measures and provide early warning signals for financial difficulties. This research bridges the gap between computational linguistics and financial risk management.",
-  "2025",
-  "Draft",
-  "Risk Management, NLP, Text Analysis, Machine Learning"
-)
-
-is_pdf <- knitr::is_latex_output()
-is_html <- knitr::is_html_output()
-```
-
-```{r}
-#| label: hero-html
-#| output: asis
-#| eval: !expr is_html
-
-cat('
-::: {.hero-section}
-
-<img src="jaafGalaPic.jpg" class="profile-photo" alt="John Paul Broussard">
-
-## Overview {.unnumbered}
-
-This page showcases my current research pipeline, focusing on the intersection of **finance, technology, and data science**. These working papers represent ongoing projects at various stages of development, from early drafts to papers under review at top-tier journals.
-
-**Research Philosophy:** I believe in conducting research that bridges academic rigor with practical relevance, particularly in areas where emerging technologies are reshaping financial markets and corporate decision-making.
-
-<a href="jpbsQuartoCV.html" class="nav-btn"><i class="fas fa-arrow-left"></i> Back to CV</a>
-
-:::
-')
-```
-
-# Current Working Papers
-
-```{r}
-#| label: papers-display-html
-#| output: asis
-#| eval: !expr is_html
-
-for (i in 1:nrow(working_papers)) {
-  # Status badge styling
-  status_class <- case_when(
-    working_papers$status[i] == "Under Review" ~ "status-review",
-    working_papers$status[i] == "Working Paper" ~ "status-working",
-    working_papers$status[i] == "In Progress" ~ "status-progress",
-    working_papers$status[i] == "Draft" ~ "status-draft",
-    TRUE ~ "status-other"
-  )
-  
-  cat(paste0('
-<div class="paper-item">
-
-<div class="paper-header">
-<h2 class="paper-title">', working_papers$title[i], '</h2>
-<span class="status-badge ', status_class, '">', working_papers$status[i], '</span>
-</div>
-
-<div class="paper-meta">
-<div class="paper-authors"><i class="fas fa-users"></i> ', working_papers$authors[i], '</div>
-<div class="paper-year"><i class="fas fa-calendar"></i> ', working_papers$year[i], '</div>
-</div>
-
-<div class="paper-abstract">
-<h3>Abstract</h3>
-<p>', working_papers$abstract[i], '</p>
-</div>
-
-<div class="paper-keywords">
-<strong>Keywords:</strong> ', working_papers$keywords[i], '
-</div>
-
-</div>
-
-'))
+classify_status <- function(status) {
+  s <- tolower(trimws(status))
+  if (grepl("^presented|presented at", s)) {
+    list(
+      label = "Presented",
+      style = "background:#e8f4f8;color:#0c5460;border:2px solid #17a2b8;"
+    )
+  } else if (grepl("conference.*submission|conference.*present", s)) {
+    list(
+      label = "Conference Submission",
+      style = "background:#fff3cd;color:#856404;border:2px solid #856404;"
+    )
+  } else if (grepl("journal submission|preparation for journal", s)) {
+    list(
+      label = "Near Submission",
+      style = "background:#d4edda;color:#155724;border:2px solid #28a745;"
+    )
+  } else {
+    list(
+      label = "In Progress",
+      style = "background:#e2e3e5;color:#383d41;border:2px solid #6c757d;"
+    )
+  }
 }
 ```
 
-```{r}
-#| label: papers-display-pdf
-#| output: asis
-#| eval: !expr is_pdf
-
-for (i in 1:nrow(working_papers)) {
-  cat("\\section*{", working_papers$title[i], "}\n\n", sep = "")
-  cat("\\textit{", working_papers$authors[i], "} \\\\\n", sep = "")
-  cat("\\textbf{", working_papers$year[i], "} • ", working_papers$status[i], "\n\n", sep = "")
-  cat("\\subsection*{Abstract}\n\n")
-  cat(working_papers$abstract[i], "\n\n")
-  cat("\\textbf{Keywords:} ", working_papers$keywords[i], "\n\n", sep = "")
-  cat("\\vspace{1em}\n\n")
-}
-```
+Inquiries regarding any of the papers below are welcome.
+Contact [john.broussard@rutgers.edu](mailto:john.broussard@rutgers.edu).
 
 ---
 
-## Collaboration Opportunities
+```{r}
+#| label: papers-render
+#| output: asis
 
-I am actively seeking collaborators for research at the intersection of:
+has_abstract <- "abstract" %in% names(papers)
 
-- **Machine Learning & AI** in financial markets
-- **Market Microstructure** and high-frequency trading
-- **Corporate Finance** in the digital age
-- **Risk Management** using alternative data sources
-- **FinTech** applications and blockchain technology
+for (i in seq_len(nrow(papers))) {
 
-**Interested in collaboration?** Contact me at [john.broussard@rutgers.edu](mailto:john.broussard@rutgers.edu)
+  title   <- papers$articleTitle[i]
+  authors <- if (!is.na(papers$authors[i])) papers$authors[i] else ""
+  status  <- if (!is.na(papers$status[i]))  papers$status[i]  else ""
+  abstract_text <- if (has_abstract && !is.na(papers$abstract[i]) &&
+                       nchar(papers$abstract[i]) > 10) {
+    papers$abstract[i]
+  } else {
+    NULL
+  }
 
-<div class="footer-section">
+  badge <- classify_status(status)
 
-<a href="jpbsQuartoCV.html" class="download-btn"><i class="fas fa-arrow-left"></i> Return to Main CV</a>
+  cat('<div class="working-paper-card">\n')
 
-<div class="last-updated">
-*Last Updated: `r format(Sys.Date(), "%B %d, %Y")`*
-</div>
+  # Title + badge
+  cat('<div class="wp-header">\n')
+  cat(sprintf('<div class="wp-title">%s</div>\n', title))
+  cat(sprintf(
+    '<span style="display:inline-block;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.82rem;font-weight:600;white-space:nowrap;%s">%s</span>\n',
+    badge$style, badge$label
+  ))
+  cat('</div>\n')
 
-</div>
+  # Authors
+  if (nchar(authors) > 0) {
+    cat(sprintf('<div class="wp-authors">%s</div>\n', authors))
+  }
 
-<style>
-.paper-item {
-  background: #f8f9fa;
-  border-left: 4px solid #0066cc;
-  padding: 2rem;
-  margin: 2rem 0;
-  border-radius: 8px;
+  # Status detail
+  if (nchar(status) > 0) {
+    cat(sprintf('<div class="wp-target"><em>%s</em></div>\n', status))
+  }
+
+  # Abstract — always visible
+  if (!is.null(abstract_text)) {
+    cat('<div style="margin-top:1rem;">\n')
+    cat('<div style="font-weight:600;font-size:0.9rem;color:#900000;margin-bottom:0.4rem;">Abstract</div>\n')
+    cat(sprintf('<div class="wp-abstract-preview">%s</div>\n', abstract_text))
+    cat('</div>\n')
+  }
+
+  cat('</div>\n\n')
+
+  if (i < nrow(papers)) {
+    cat('<hr style="margin:2rem 0;border-color:#e0e0e0;">\n\n')
+  }
 }
-
-.paper-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.paper-title {
-  margin: 0;
-  color: #1a1a1a;
-  flex: 1;
-  min-width: 250px;
-}
-
-.status-badge {
-  padding: 0.4rem 1rem;
-  border-radius: 20px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.status-review {
-  background: #e3f2fd;
-  color: #1565c0;
-}
-
-.status-working {
-  background: #fff3e0;
-  color: #e65100;
-}
-
-.status-progress {
-  background: #f3e5f5;
-  color: #6a1b9a;
-}
-
-.status-draft {
-  background: #e8f5e9;
-  color: #2e7d32;
-}
-
-.paper-meta {
-  display: flex;
-  gap: 2rem;
-  margin-bottom: 1.5rem;
-  color: #666;
-  font-size: 0.95rem;
-}
-
-.paper-meta i {
-  margin-right: 0.5rem;
-  color: #0066cc;
-}
-
-.paper-abstract {
-  margin: 1.5rem 0;
-}
-
-.paper-abstract h3 {
-  font-size: 1.1rem;
-  color: #0066cc;
-  margin-bottom: 0.75rem;
-}
-
-.paper-abstract p {
-  line-height: 1.7;
-  color: #333;
-  text-align: justify;
-}
-
-.paper-keywords {
-  padding-top: 1rem;
-  border-top: 1px solid #ddd;
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.paper-keywords strong {
-  color: #333;
-}
-</style>
+```

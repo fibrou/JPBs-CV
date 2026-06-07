@@ -1,0 +1,181 @@
+---
+title: "Research"
+subtitle: "Publications & Scholarly Activity · John Paul Broussard"
+toc: true
+toc-depth: 2
+---
+
+```{r}
+#| label: research-setup
+#| include: false
+library(DBI)
+library(RSQLite)
+library(dplyr)
+library(ggplot2)
+library(here)
+
+db_path <- here("cv-app-test", "cv.db")
+con <- dbConnect(RSQLite::SQLite(), db_path)
+
+publications  <- dbReadTable(con, "publications") |>
+  mutate(year = as.integer(year)) |>
+  arrange(desc(year))
+
+other_pubs    <- dbReadTable(con, "other_pubs_monos") |>
+  arrange(desc(year))
+
+dbDisconnect(con)
+
+# Publication counts by year for timeline
+pub_timeline <- publications |>
+  filter(!is.na(year)) |>
+  count(year) |>
+  arrange(year)
+```
+
+## Publication Activity
+
+```{r}
+#| label: pub-timeline
+#| fig-height: 3.5
+#| fig-width: 9
+#| fig-alt: "Bar chart of peer-reviewed publications by year, 1997–2025"
+
+# Five-year running average for trend line
+pub_all_years <- data.frame(
+  year = seq(min(pub_timeline$year), max(pub_timeline$year))
+) |>
+  left_join(pub_timeline, by = "year") |>
+  mutate(n = replace(n, is.na(n), 0))
+
+ggplot(pub_all_years, aes(x = year, y = n)) +
+  geom_col(
+    fill  = "#900000",
+    alpha = 0.80,
+    width = 0.75
+  ) +
+  geom_smooth(
+    method  = "loess",
+    span    = 0.5,
+    se      = FALSE,
+    color   = "#555555",
+    linewidth = 0.8,
+    linetype = "dashed"
+  ) +
+  scale_x_continuous(
+    breaks = seq(1995, 2026, by = 5),
+    expand = c(0.02, 0)
+  ) +
+  scale_y_continuous(
+    breaks = 0:4,
+    expand = c(0, 0.1)
+  ) +
+  labs(
+    x = NULL, y = "Publications",
+    caption = paste0(
+      nrow(publications), " peer-reviewed publications · ",
+      "1,109 total citations · h-index 15 (Google Scholar)"
+    )
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor   = element_blank(),
+    axis.line.x        = element_line(color = "#cccccc"),
+    plot.caption       = element_text(color = "#777777", size = 9),
+    plot.caption.position = "plot"
+  )
+```
+
+---
+
+## Peer-Reviewed Publications
+
+```{r}
+#| label: pub-list
+#| output: asis
+
+for (i in seq_len(nrow(publications))) {
+  pub <- publications[i, ]
+
+  # Build DOI / link badge
+  link_html <- ""
+  if (!is.null(pub$doi) && !is.na(pub$doi) && nchar(pub$doi) > 3) {
+    link_html <- sprintf(
+      ' <a href="https://doi.org/%s" target="_blank" style="font-size:0.8rem;color:#900000;font-weight:600;">DOI →</a>',
+      pub$doi
+    )
+  } else if (!is.null(pub$link_url) && !is.na(pub$link_url) && nchar(pub$link_url) > 5) {
+    link_html <- sprintf(
+      ' <a href="%s" target="_blank" style="font-size:0.8rem;color:#900000;font-weight:600;">Link →</a>',
+      pub$link_url
+    )
+  }
+
+  # Citation count badge
+  cite_html <- ""
+  if (!is.null(pub$citations) && !is.na(pub$citations) && pub$citations > 0) {
+    cite_html <- sprintf(
+      '<span style="font-size:0.78rem;background:#fce8e8;color:#900000;padding:2px 7px;border-radius:10px;margin-left:6px;">%d citations</span>',
+      as.integer(pub$citations)
+    )
+  }
+
+  # Journal display
+  journal_display <- if (!is.null(pub$journal_name) && !is.na(pub$journal_name) &&
+                         nchar(pub$journal_name) > 2) {
+    jn <- pub$journal_name
+    if (!is.null(pub$vol_issue_pages) && !is.na(pub$vol_issue_pages) &&
+        nchar(pub$vol_issue_pages) > 1) {
+      paste0(jn, ", ", pub$vol_issue_pages)
+    } else {
+      jn
+    }
+  } else {
+    pub$journal
+  }
+
+  cat('<div class="publication-item">\n')
+  cat(sprintf('<div class="pub-year">%s</div>\n',
+              ifelse(!is.na(pub$year), pub$year, "")))
+  cat('<div class="pub-content">\n')
+  cat(sprintf('<div class="pub-title">%s%s%s</div>\n',
+              pub$articleTitle, link_html, cite_html))
+  cat(sprintf('<div class="pub-authors">%s</div>\n', pub$authors))
+  cat(sprintf('<div class="pub-venue"><em>%s</em></div>\n', journal_display))
+  cat('</div>\n</div>\n\n')
+}
+```
+
+---
+
+## Other Publications & Book Chapters
+
+```{r}
+#| label: other-pubs
+#| output: asis
+
+for (i in seq_len(nrow(other_pubs))) {
+  op <- other_pubs[i, ]
+  
+  cat('<div class="publication-item">\n')
+  cat(sprintf('<div class="pub-year">%s</div>\n',
+              ifelse(!is.na(op$year), op$year, "")))
+  cat('<div class="pub-content">\n')
+  cat(sprintf('<div class="pub-title">%s</div>\n', op$title))
+  if (!is.na(op$authors) && nchar(op$authors) > 0) {
+    cat(sprintf('<div class="pub-authors">%s</div>\n', op$authors))
+  }
+  cat(sprintf('<div class="pub-venue"><em>%s</em></div>\n', op$outlet))
+  cat('</div>\n</div>\n\n')
+}
+```
+
+---
+
+## Working Papers
+
+Five papers currently in progress across financial modeling, behavioral
+finance, and empirical accounting.
+
+[→ See full working papers page with abstracts](papers.qmd)

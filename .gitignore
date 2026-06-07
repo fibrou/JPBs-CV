@@ -25,3 +25,5 @@ _output/*.tex
 *.temp
 _private/
 credentials.R
+
+**/*.quarto_ipynb

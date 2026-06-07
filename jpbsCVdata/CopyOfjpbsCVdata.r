@@ -41,7 +41,7 @@ ltWork <- tribble(
     "COURSES TAUGHT --- Intro and Intermediate Corporate Finance at Grad/UG Levels at both Tallinn and Helsinki Branches; 
     Grad Only Levels: Data Analysis, Introduction to R, Financial Statement Analysis", 
     "Estonian Business School", "September", 2018, "December", 2020, "Tallinn, Estonia", "Visiting Professor (2018)",
-    "Hanken School of Economics", "September", 2016, "July", 2020, "Helsinki, Finland", "Visiting Professor (2018-2020)",
+    "Hanken School of Economics", "September", 2016, "July", 2020, "Helsinki, Finland", "Visting Professor (2018-2020)",
     "Hanken School of Economics", "September", 2016, "July", 2020, "Helsinki, Finland", 
     "COURSES TAUGHT --- Introduction to Market Analytics Using R - fully asynchronous online",
     "Hanken School of Economics", "September", 2016, "July", 2020, "Helsinki, Finland", 
@@ -63,8 +63,8 @@ ltWork <- tribble(
     "Middlesex University", "January", 2015, "December", 2016, "London, England", "Visiting Research Professor",
     "Fairleigh Dickinson University", "September", 1995, "June", 1997, "Madison, NJ", "Assistant Professor",
     "Fairleigh Dickinson University", "September", 1995, "June", 1997, "Madison, NJ", "COURSES TAUGHT --- Capital Market Theory, Investments, Portfolio Management, Corporate Seminar, Co-Op Mentor",
-    "Louisiana State University", "September", 1992, "August", 1995, "Baton Rouge, LA", "Instructor (1994 - 1995)",
-    "Louisiana State University", "September", 1992, "August", 1995, "Baton Rouge, LA", "Research Assistant (1992 - 1995)",
+    "Lousiana State University", "September", 1992, "August", 1995, "Baton Rouge, LA", "Instructor (1994 - 1995)",
+    "Lousiana State University", "September", 1992, "August", 1995, "Baton Rouge, LA", "Research Assistant (1992 - 1995)",
     "Millsaps College", "September", 1990, "May", 1991, "Jackson, MS", "Research Assistant"
     
 )
@@ -80,18 +80,18 @@ stWork <- tribble(
 
 edu <- tribble(
     ~inst, ~degree, ~startYear, ~endYear, ~where, ~detail,
-    "Louisiana State University","PhD., Finance",1991,1995,"Baton Rouge, LA",NA,
+    "Lousiana State University","PhD., Finance",1991,1995,"Baton Rouge, LA",NA,
     "Millsaps College","MBA, Finance",1988,1991,"Jackson, MS",NA,
-    "Louisiana State University","B.S., Biochemistry",1981,1985,"Baton Rouge, LA",NA
+    "Lousiana State University","B.S., Biochemistry",1981,1985,"Baton Rouge, LA",NA
 )
 
 
 certifications <- tribble(
     ~certBody, ~accomplishment, ~year, ~where, ~detail,
-    "Institute of Business Appraisers","Certified Business Appraiser",2005,"","Passed Exam",
+    "Insitute of Business Appraisers","Certified Business Appraiser",2005,"","Passed Exam",
     "Professional Risk Managers' International Association","Professional Risk Manager (PRM)",2003,"","Awarded PRM Designation",
     "Global Association of Risk Professionals","Certified Financial Risk Manager (FRM)",1999,"","Awarded FRM Designation",
-    "CFA Institute","Chartered Financial Analyst (CFA)",1997,"","Awarded CFA Designation, Charter #24928"
+    "CFA Institute","Chartered Financial Analyst (CFA)",1997,"","Awarded CFA Deisgnation, Charter #24928"
 )
 
 
@@ -125,7 +125,7 @@ honorsGrants <- tribble(
     "Research Grant Recipient","Foundation for Finnish Capital Market Research","Helsinki, Finland",1995,NA,
     "FMA Doctoral Student Seminar Representative", "Financial Management Association","St. Louis, MO",1994,NA,
     "Travel Grant Recipient","Deutsche Vereinigung fur Finanzanalyse und Anlageberatung","Frankfurt, Germany",1994,NA,
-    "Financial Management Association National Honor Society","Millsaps College","Jackson, MS",1991,NA
+    "Financial Mangement Association National Honor Society","Millsaps College","Jackson, MS",1991,NA
 )
 
 
@@ -159,7 +159,7 @@ publications <- tribble(
     "with G. Geoffrey Booth and Elizabeth Booth",
     "Business and Economic Research, v4 n2, 308-322. Available at https://doi.org/10.5296/ber.v4i2.6643",
     "2014",
-    "Intraday Periodicity in Algorithmic Trading",
+    "Intraday Periododicity in Algorithmic Trading",
     "with Andrei Nikiforov",
     "Journal of International Financial Markets, Institutions, and Money, v30, 196-204. Available at http://dx.doi.org/10.1016/j.intfin.2014.03.001",
     "2014",
@@ -176,11 +176,11 @@ publications <- tribble(
     "Journal of Consumer Affairs, v42 n2, 206-222. Available at https://doi.org/10.111/j.1745-66-6.2008.00105.x",
     "2008",
     "The Role of Growth in Long Term Investment Returns",
-    "with Walter Neely and Dave Michayluk",
+    "with Walter Neely and David Michayluk",
     "Journal of Applied Business Research, v21 n1, 93-104. Available at https://doi.org/10.19030/jabr.v21i1.1503",
     "2005",
     "CEO Incentives, Cash Flow, and Investment",
-    "with Gene Pilotte and Sheree Buchenroth",
+    "with Gene Pilotte and Sherrie Buchenroth",
     "Financial Management, v33 n2, 51-70. Available at https://www.jstor.org/stable/3666158",
     "2004",
     "The Role of REITs in Asset Allocation",
@@ -197,7 +197,7 @@ publications <- tribble(
     "2000",
     "Reply to Note on Earnings and Stock Returns: Evidence from Germany",
     "with G. Geoffrey Booth and Otto Loistl",
-    "The European Accounting Review, v8 n3, 656-658. Available at https://doi.org/10.1080/096381899335943",
+    "The European Accounting Review, v8 n3, 656-568. Available at https://doi.org/10.1080/096381899335943",
     "1999",
     "Big Players and the Russian Ruble: Explaining Volatility Dynamics",
     "with Roger Koppl",
@@ -236,7 +236,7 @@ pip <- tribble(
     "Vines in Endowment Portfolio Management",
     "with G. Geoffrey Booth and Vesa Puttonen",
     "Analysis Currently Performed",
-    "FinFluencer Network Effects: A Detailed Analysis",
+    "FinFluencer Network Effets: A Detailed Analysis",
     "with Max LittleJohn",
     "Conference Presentation Submission",
     #"Strategic Discussion and Finance Performance",
@@ -244,7 +244,7 @@ pip <- tribble(
     #"Analysis Currently Performed",
     "Earnings Management as a Function of Alternative Earnings",
     "with Tatiana Garanina and Mikko Ranta",
-    "Preparation for Journal Submission"
+    "Prepration for Journal Submission"
     #wip,Mutual Alternatives to Hedge Funds: Market Neutral and Long / Short Funds,,with Walter Neely and Vesa Puttonen,,,,,,
     #wip,Multivariate Extreme Characteristics of Soft and Hard Commodities,,with Torun Fretheim,,,,,,
     #wip,What's in a Company Name? Sentiment or Familiarity?,,with Timo Korkamaki,,,,,,
@@ -254,7 +254,7 @@ pip <- tribble(
 otherPubsMonos <- tribble(
     ~title, ~outlet, ~year, ~authors, 
     "The Sortino Ratio and the Generalized Pareto Distribution: An Application to Asset Allocation",
-    "Wiley Handbook of Financial Engineering and Econometrics: Extreme Value Theory and its Application to Finance and Insurance: Chapter edited by Francois Longin, Wiley Publishing",
+    "Wiley Handbook of Financial Engineering and Econometrics: Extreme Value Theory and its Applicaiton to Finance and Insurance: Chapter edited by Francois Longin, Wiley Publishing",
     2016,
     "with G. Geoffrey Booth",
     "The Competition of Systems for the Market for Listings",
@@ -265,7 +265,7 @@ otherPubsMonos <- tribble(
     "The Japanese Finance: Corporate Finance and Capital Markets in Changing Japan: 
     International Finance Review, v4, edited by J. H. Choe and T. Hiraki, Elsevier Science",
     2003,
-    "with Ken Kim and Piman Limpaphayom",
+    "with Ken Kim and Piman Lipaphayom",
     "Using SAS in Financial  and Accounting Research", 
     "Books By Users: SAS Press",
     2002,
@@ -276,7 +276,7 @@ otherPubsMonos <- tribble(
     2002,
     "with Peter Koveos and Allan Young",
     "The Index of Economic Freedom and Economic Growth in Transition Economies", 
-    "Globalization and Economic Growth, A Critical Evaluation: edited by T. Georgakopoulos, C. Paraskevopoulos and J. Smith in, APF Press Toronto, Canada. Reprinted in Zagreb International Reviews of Economics and Business.",
+    "Globalization and Economic Growth, A Critical Evaluation: edited by . T. Georgakopoulos, C. Paraskevopoulos and J. Smith in, APF Press Toronto, Canada. Reprinted in Zagreb Internatioanl Reviews of Economics and Business.",
     2001,
     "with Peter Koveos and Allan Young",
     "Governance, Economic and Financial Factors Affecting Success for Transition Economies",
@@ -288,7 +288,7 @@ otherPubsMonos <- tribble(
     "Porssikriisien Todennakoisyys Kasvanut (Probability of Crises and Extreme Events)",
     "Talouselama (Finnish Economic Life)",
     1995,
-    "with G. Geoffrey Booth, Teppo Martikainen and Vesa Puttonen",
+    "with G. Geoffrey Booth, Teppo Martikainens and Vesa Puttonen",
     "German Stock Returns and the Information Content of DVFA Earnings",
     "Deutsche Vereinigung fur Finanzanalyse",
     1994,
@@ -302,10 +302,10 @@ academicPresents <- tribble(
     "with Andrei Nikiforov",
     "3f Conference, Vilnius, August 2025",
     "Algorithmic Trading and Market Quality",
-    "with Sergey Osmekhin and Andrei Nikiforov",
+    "with Sergey Osmekhin and Andrei Nikifororov",
     "JAAF Conference, Helsinki, June 2023",
     "Modeling Flash Crash Behavior in a Stock Market using Multivariate Hawkes Processes",
-    "with Bill Shi and G. Geoffrey Booth",
+    "with Fing Shi and G. Geoffrey Booth",
     "Paris Financial Management Conference, 2019; University of Latvia and Stockholm Business School, 2020",
     "Time-variation of Dual-Class Premia",
     "with Mika Vaihekoski",
@@ -313,20 +313,20 @@ academicPresents <- tribble(
     "Measuring and Modeling Market Risk for Life Insurance Company Assets: An Application of Extreme Value Statistics",
     "with G. Geoffrey Booth and Ryan Timmer",
     "LaBaulle, 2016; Turku and Vaasa Universities, 2016",
-    "Intraday Periodicity in Algorithmic Trading",
+    "Intraday Periododicity in Algorithmic Trading",
     "with Andrei Nikiforov",
     "Multinational Finance Society Conference; Prague, 2014",
     "The Sortino Ratio and the Generalized Pareto Distribution: An Application to Asset Allocation",
     "with G. Geoffrey Booth",
-    "Rutgers Statistics and Risk Management Practitioner Seminar; New Brunswick, NJ, 2014",
+    "Rutgers Statistics and Risk Managment Practitioner Seminar; New Brunswick, NJ, 2014",
     "Style Migration In Europe",
     "with Vesa Puttonen and Jussi Mikkonen",
     "FMA European Conference; Luxembourg, 2013",
     "Is There Price Discovery in Equity Options",
     "with Neil Pearson and Dmitriy Muravyev",
     "Utah Winter Finance Conference, Texas A&M, University of Illinois, University of Notre Dame, 
-    Hong Kong University of Science and Technology, City University of Hong Kong, Hong Kong University, 
-    Chinese University of Hong Kong University Seminars - 2011",
+    Hong Kong University of Science and Technology, City University of Hong Kong, Hong Kong University, C
+    hinese University fo Hong Kong University Seminars - 2011",
     "Profitability of Pairs Trading Strategy in Finland",
     "with Mika Vaihekoski",
     "Portuguese Finance Network, 2010",
@@ -338,19 +338,19 @@ academicPresents <- tribble(
     "European Applied Business Research Conference, An Enterprise Odyssey: Economics and Business in the new Millennium, 2002",
     "The Relationship between Economic Freedom and Transitionary Economic Growth",
     "with Peter Koveos and Allan Young",
-    "Academy of International Business/Southeast Asia and Australia Conference, 2002",
+    "Academy of International Business/Southeast Asia and Austrailia Confernece, 2002",
     "Governance, Factors and Economic Transition: Some Additional Evidence",
     "with Peter Koveos and Allan Young",
     "4th International Conference on Enterprises in Transition; Faculty of Economics, University of Split, 2001",
     "The Relationship Between Economic Freedom and Economic Growth in Asia",
     "with Peter Koveos and Allan Young",
-    "Academy of International Business/Southeast Asia and Australia Conference, 2002",    
+    "Academay of International Business/Southeast Asia and Austrailia Conference, 2002,2002",    
     "A Transaction-Level Investigation of the Day-of-the-Week Trading Patterns",
     "with S. G. Badrinath and S. Chakravarty",
     "Financial Management Association Meeting, Orlando, 1999; 
     26th Annual European Finance Association Meeting, Helsinki, Finland, 2000",
     "Bank Stock Returns, Interest Rate Changes and the Regulatory Environment: New Insights from Japan",
-    "with Ken Kim and Piman Limpaphayom",
+    "with Ken Kim and Piman Limaphayom",
     "Midwest Finance Association Meeting, 1999; Southwest Finance Association Meeting, 1999; 
     2nd Annual Washington Area Finance Association Meeting, 1998; 
     5th Annual Conference of the Multinational Finance Society, Helsinki, 1998",
@@ -359,11 +359,11 @@ academicPresents <- tribble(
     "EFMA-FMA European Conference, 1998",
     "REIT Returns, Probability of Large Losses, and Asset Allocation",
     "with G. Geoffrey Booth",
-    "15th Annual Meeting of the French Finance Association; 5th Annual Conference of the Multinational Finance Society-Helsinki, 1999",
+    "15th Annual Meeting of the French Finance Association; 5th Annual Confernce of the Multinational Finance Society-Helsinki, 1999",
     "Taxonomy of Central and Eastern European and Former USSR Transition Economies",
     "with Allan Young and Roger Koppl",
     "5th Annual Conference of the Multinational Finance Society, 1998",
-    "Interest Rates and Bank Stock Returns: A Comparison between Japanese and U.S. Banks",
+    "Interest Rates and Bank Stock Returns: A Comparison between Japanase and U.S. Banks",
     "with Ken Kim and Piman Limpaphayom",
     "Annual Southern Finance Association Meeting, 1997",
     "Setting NYSE Circuit Breaker Triggers",
@@ -381,7 +381,7 @@ academicPresents <- tribble(
     "Financial Management Association Meeting, 1996",
     "Growth of Reasonable Price (GARP): Another Look at the Book-to-Market and Earnings-to-Price Puzzle
     with a Special Emphasis on Growth",
-    "with Dave Michayluk and Walter Neely",
+    "with David Michayluk and Walter Neely",
     "Annual Southwestern Finance Association Meeting; Financial Management Association Meeting, 1996",
     "The Behavior of Extreme Values in German Stock Index Futures: 
     An Application to Intradaily Margin Setting",
@@ -401,7 +401,7 @@ academicPresents <- tribble(
     "with Julie Dahlquist",
     "Southern Finance Association Annual Meeting, 1993", 
     "The Stock Market Reaction to Green Information",
-    "with Bill Brister",
+    "wtih Bill Brister",
     "18th Annual Midsouth Academy of Economics and Finance Meeting, 1991"
 )
 
@@ -435,21 +435,21 @@ academicDiscussions <- tribble(
     "7th Annual Conference of the Multinational Finance Society, Helsinki, Finland, 2000",
     "Nontradable Goods, Nonseperable Utility, and Global Portfolio Diversification",
     "by R. Balvers and J. Bergstrand",
-    "6th Annual Conference of the Multinational Finance Society, Thessaloniki, Greece, 1999",
-    "Bayesian Network Models of Portfolio Risk and Return",
+    "6th Annual Conference of the Multinational Finance Society, Thesolloniki, Greece, 1999",
+    "Bayesian Network Models of Porfolio Risk and Return",
     "by C.Shenoy",
     "Midwest Finance Association Meeting, Chicago, IL, 1999",
     "The Effects of Inclusion in and Removal from the S&P 500 on Stock Price and Trading Volume",
     "by C. Boyer",
     "FMA Annual Meeting, Chicago, IL, 1998",
-    "Estimation of Global Systematic Risk for Securities Listed in Multiple Markets: 
+    "Estimation of Global Systematic Risk for Securities Listed in Multiple Marktes: 
     Theoretical Development and Empirical Comparisons",
     "by M. deBoyrie, G. Ghai, S. Hamid, A. Prakash",
     "FMA Annual Meeting, Chicago, IL, 1998",
     "Information and Volatility: Evidence from Emerging Markets",
     "by N. Guner and Z. Onder",
-    "5th Annual Conference of the Multinational Finance Society, Washington, DC, 1998",
-    "The Tradeoff between Skewness and Variance of Return in a Three Moment Capital Asset Pricing Model",
+    "5th Annual Conference of the Multinational Finance Society, Washingington, DC, 1998",
+    "The Tradeoff between Skewness and Variance of Return in a Three Moment Captial Asset Pricing Model",
     "by M. Racine",
     "5th Annual Conference of the Multinational Finance Society, 1998",
     "The Development and Performance of Stock Markets in Central Europe",
@@ -460,7 +460,7 @@ academicDiscussions <- tribble(
     "14th International Conference in Finance, Grenoble, France, 1997",
     "Evaluating the Probability of an Extreme Price Movement: Different Approaches",
     "by. K. Chang and F. Longin",
-    "14th International Conference in Finance, Grenoble, France, 1997",
+    "14th International Confernce in Finance, Grenoble, France, 1997",
     "How Efficient are European Stock Markets? Evidence from an Error Correction Model",
     "by. A. Ghosh",
     "Eastern Finance Association Meeting, 1996",
@@ -475,11 +475,11 @@ academicDiscussions <- tribble(
     "Financial Management Association Annual Meeting, NY, NY, 1995",
     "Duration of a Cross-Currency Swap Contract and Exchange Rate Risk Management",
     "by. D. K. Malhotra",
-    "2nd Annual Conference of Multinational Finance Issues, Philadelphia, PA, 1995",
+    "2nd Annual Confernce of Multinational Finance Issues, Philadelphia, PA, 1995",
     "Trading Volume and the Production of Information",
     "by H. M. Shefrin et. al.",
     "Financial Management Association Annual Meeting, St. Louis, MO, 1994",
-    "Using the Municipal/Treasury Bond Yield Ratio to Predict Investment Opportunities in Municipal Bonds",
+    "Using the Municipal/Treasury Bond Yield Ration to Predict Investment Opportunities in Municipal Bonds",
     "by D. J. Crocket et. al.",
     "18th Annual Midsouth Academy of Economics and Finance Meeting, Monroe, LA, 1991" 
 )
@@ -493,8 +493,8 @@ confCommittees <- tribble(
     "Committee Member",
     "Eastern Finance Association, 2022",
     "Digital Transformation in Financial Sector, IEEE TEMS",
-    "Scientific Committee",
-    "Kaunas and Remote, 2021",
+    "Scientific Committe",
+    "Kaunus and Remote, 2021",
     "Extreme Events in Finance",
     "Co-Organizer",
     "Paris, 2014",
@@ -526,7 +526,7 @@ confChair <- tribble(
     "European Markets",
     "26th Annual European Finance Association Meeting, 1999",
     "Statistical Modeling of Asset Returns",
-    "5th Annual Conference of the Multinational Finance Society, 1998",
+    "5th Annual Confernce of the Multinational Finance Society, 1998",
     "Financial System Development: A View from Eastern European Economies in Transition",
     "4th Annual Multinational Finance Society Conference, 1997",
     "Nonlinearity in Exchange Rates",
@@ -690,8 +690,8 @@ dissertationCommittees <- tribble(
     "University of Turku", "2018",
     "Committee Co-Chair",
     "Vinay Patel",
-    "Price Discovery in U.S. and Australian Stock and Options Markets",
-    "University of Technology-Sydney", "2015",
+    "Price Discover in U.S. and Austrailian Stock and Options Markets",
+    "Universtity of Tehcnology-Sydney", "2015",
     "External Reviewer",
     "Ryan Timmer",
     "Measuring and Modeling Market Risk for Life Insurance Company Assets: An Application of Extreme Value Statistics",
@@ -743,7 +743,7 @@ thesesSupervision <- tribble(
     "Rutgers University","2013",
     "Co-Supervisor with M. Palis, Computer Science Department",
     "Missy Piccione", 
-    "A Regulatory Response by the Securities and Exchange Commission to the Terrorist Attacks on America: Did the Registrant Repurchase Really Make a Difference?",
+    "A Regulatory Response by the Securities and Exchange Commission to the Terroist Attacks on America: Did the Registrant Repurchase Really Make a Difference?",
     "Rutgers University","2003",
     "Supervisor",
     "Caren Pocino",
@@ -764,7 +764,7 @@ studentMentoring <- tribble(
     ~role, ~activity, ~begYear, ~endYear, ~school,
     "Faculty Mentor", "Investment Club", "2023", "2024", "University of Oklahoma",
     "Faculty Mentor", "Houston Stock Pitch Competition","2022","2022", "University of Oklahoma",
-    "Primary Contact Person", "CFA Institute University Affiliation Program","2021","Present","University of Oklahoma",
+    "Primary Contact Person", "CFA Institute University Affliation Program","2021","Present","University of Oklahoma",
     "CFA Institute CFA Scholarship Designate","CFA Examination Program", "2021","Present","University of Oklahoma",
     "Faculty Mentor","CFA Institute Global Research Challenge","2019","2020","Estonian Business School",
     "Faculty Mentor","CFA Institute Global Research Challenge","2016","2017","Hanken School of Economics",
@@ -783,7 +783,7 @@ profTraining <- tribble(
     "Instructor","CFA Exam Preparation","Schweser Study Program",2001,2018,
     "Author and Instructor", "Various Financial Training Offerings","7city, CIFT, Cengage ",2007,2009,
     "Instructor","Financial Journalists Media Seminar","Financial Analysts of Philadelphia (CFA Philadelphia)",2002,2002,
-    "Instructor","Value vs. Growth in Portfolio Management","Conventum Mutual Fund Seminar",2001,2001,
+    "Instructor","Value vs. Growth in Portfolio Managment","Conventum Mutual Fund Seminar",2001,2001,
     "Instructor","CFA Exam Preparation","Stalla Seminars",2000,2001,
     "Instructor","Growth and Investments","Portfolio Academy of Finnish Financial Analysts, LTT Research",1999,1999,
     "Instructor","CFA Exam Preparation","Post-Graduate University Program IRAM-DVFA",1999,2000,
@@ -794,10 +794,10 @@ profTraining <- tribble(
 
 mediaInterviews <- tribble(
     ~modality, ~topic, ~outlet, ~year,
-    "TV Appearance","Consumer Report 401(k) Contribution","myFoxPhilly-Philadelphia Fox Affiliate",2009,
+    "TV Appearance","Consumer Report 401(k) Contribution","myFoxPhilly-Philadelpia Fox Affiliate",2009,
     "TV Appearance","In Focus' program - 2008 Financial Crisis: 30 minute one-on-one interview/discussion","myPhl17",2008,
     "TV Appearance","Stock Market Discussion","NBC10 - Philadelphia NBC Affiliate",NA,
-    "TV Appearance","Stock Market Discussion","WB17 - Philadelphia Warner Brothers Affiliate",NA,
+    "TV Appearance","Stock Market Discussion","WB17 - Philadlephia Warner Brothers Affiliate",NA,
     "TV Appearance","Stock Market Discussion","6ABC - WABC Philadelphia ABC Affiliate",NA,
     "Radio","Stock Market Discussion","KYW-AM 1060",NA,
     "Radio","Stock Market Discussion","WOBM - Morning Radio at the New Jersey Shore",NA,
@@ -806,7 +806,7 @@ mediaInterviews <- tribble(
     "Print","Stock Market Discussion","The Philadelphia Inquirer",NA,
     "Print","Stock Market Discussion","AM Best",NA,
     "Online Interview","Stock Market Discussion","YAHOO! Finance",NA,
-    "Online Interview","Stock Market Discussion","6ABC.com, Philadelphia ABC Affiliate website",NA,
+    "Online Interview","Stock Market Discussion","6ABC.com, Philadelphia ABC Affilitate website",NA,
     "Online Interview","Stock Market Discussion","NYTimes.com, New York Times Newspaper website",NA
 )
 
@@ -818,7 +818,7 @@ bizExperiences <- tribble(
     "Chief Modeling Officer","MutualDecision.com","2007","2009",
     "Senior Consultant","The Center for Forensic Economic Studies","2004","2006",
     "Forensic Economist","Tinari Economics","1997","2003",
-    "Consultant","Financial Risk Consulting Group","2001","2003",
+    "Consultant","Financial Risk Consutling Group","2001","2003",
     "Financial Analyst","National Planning Corporation","1991","1992",
     "Laboratory Manager","Environmental Protection Systems","1986","1990",
     "Environmental Chemist","Toxicon Laboratories","1985","1986"
