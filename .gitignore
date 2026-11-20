@@ -30,11 +30,13 @@ credentials.R
 
 # Built site and render by-products
 _site/
+/site_libs/
 *.rds
 jpbDataDrivenCV.tex
 
 # Built site and render by-products
 _site/
+/site_libs/
 *.rds
 jpbDataDrivenCV.tex
 
