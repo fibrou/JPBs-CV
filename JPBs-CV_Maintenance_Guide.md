@@ -82,13 +82,17 @@ quickest fix is installing TinyTeX in R (`tinytex::install_tinytex()`),
 which fetches missing packages on its own.
 
 **Git says `index.lock` exists.** Nextcloud syncs this folder, including
-git's internal files, and has brought back an old lock file before.
+git's internal files, and once kept bringing back an old lock file.
 `publish.sh` clears a stale lock automatically. By hand:
 `rm .git/index.lock`, but only when no git command is running.
 
-**Files you deleted come back.** The Nextcloud server refuses deletions in
-this folder and downloads the files again. Move unwanted files into
-`../archived-cv-files/` instead, or delete them on the server first.
+**Files you deleted or moved come back.** In November 2026 the Nextcloud
+server had a stale permission record for this folder that refused every
+removal. A server rescan of `00-personal/vita` fixed it. If it happens again,
+the same rescan should fix it (`occ files:scan --path=fibrou/files/<folder>`
+on the server).
+
+Old CV material is kept in `../../vita-archive/`, outside this folder.
 
 **Two machines.** The laptop and the desktop both sync this folder. Commit
 and publish from one machine at a time, and let Nextcloud finish syncing
