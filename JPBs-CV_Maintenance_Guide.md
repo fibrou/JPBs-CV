@@ -1,8 +1,8 @@
 # JPBs-CV: Maintenance Guide
 
-Site: https://fibrou.github.io/JPBs-CV/
-Project folder: `~/jpbs-filing-cabinet/00-personal/vita/JPBs-CV`
-Data: `cv-app-test/cv.db`, a SQLite database that holds every entry on the CV
+- Site: https://fibrou.github.io/JPBs-CV/
+- Project folder: `~/jpbs-filing-cabinet/00-personal/vita/JPBs-CV`
+- Data: `cv-app-test/cv.db`, a SQLite database that holds every entry on the CV
 
 ## How it fits together
 
