@@ -114,12 +114,6 @@ online, and international delivery formats.
     <div class="cert-org">Professional Risk Managers' International Association</div>
     <div class="cert-desc">Awarded 2003</div>
   </div>
-  <div class="cert-card" style="padding: 0.85rem;">
-    <div class="cert-abbr">CBA</div>
-    <div class="cert-full">Certified Business Appraiser</div>
-    <div class="cert-org">Institute of Business Appraisers</div>
-    <div class="cert-desc">Awarded 2005</div>
-  </div>
 </div>
 ```
 

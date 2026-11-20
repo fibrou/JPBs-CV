@@ -1,7 +1,7 @@
 # JPBs-CV Website — Maintenance Guide
 
 **Site URL:** https://fibrou.github.io/JPBs-CV/  
-**Project folder:** `C:\Users\bfcgl\Dropbox\Vita\jpbQuartoWebStuff\JPBs-CV`  
+**Project folder:** `C:\Users\bfcgl\Dropbox\00-personal\vita\JPBs-CV`  
 **Data source:** `cv-app-test/cv.db` (SQLite — single source of truth for everything)
 
 ---

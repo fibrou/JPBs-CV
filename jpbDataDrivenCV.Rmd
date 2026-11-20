@@ -2,7 +2,7 @@
 name: John Paul
 surname: Broussard
 position: "Finance Professor with Decades of Superior Administrative, Research, and Teaching Experiences"
-address: "Oklahoma City, Oklahoma, USA"
+address: "Willis, TX, USA"
 profilepic: "./img/jaafGalaPic.jpg"
 www: "tinyurl.com/c3wdneyp"
 email: "john.broussard@rutgers.edu"
