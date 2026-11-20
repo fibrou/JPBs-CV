@@ -7,8 +7,8 @@ project:
     - papers.qmd
     - cv.qmd
   resources:
-    - jpbDataDrivenCV.pdf
-    - jaafGalaPic.jpg
+    - /jpbDataDrivenCV.pdf
+    - /jaafGalaPic.jpg
 
 website:
   title: "J.P. Broussard, PhD"
