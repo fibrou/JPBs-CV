@@ -1,5 +1,5 @@
 # data_from_db.R
-# Drop-in replacement for jpbsCVdata.r
+# Loads every CV table from cv.db for the PDF CV (jpbDataDrivenCV.Rmd).
 # Lives at: cv-app-test/scripts/data_from_db.R
 # Reads all 27 CV tables from cv-app-test/cv.db and assigns them to the
 # exact same variable names that jpbDataDrivenCV.Rmd expects.
@@ -9,7 +9,7 @@ library(RSQLite)
 library(here)
 
 con <- dbConnect(SQLite(), here("cv-app-test", "cv.db"))
-on.exit(dbDisconnect(con), add = TRUE)
+# The caller disconnects `con` when done.
 
 # ── Employment & Appointments ──────────────────────────────────────────────────
 admin          <- dbReadTable(con, "admin")

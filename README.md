@@ -1,26 +1,8 @@
-# Dr. John Paul Broussard - Academic CV
+# JPBs-CV
 
-Professional academic CV system built with Quarto and R.
+Source for John Paul Broussard's academic website and PDF CV,
+published at https://fibrou.github.io/JPBs-CV/.
 
-## Quick Start
-
-```r
-source("render_cv.R")
-main("both")
-```
-
-## Outputs
-
-- PDF: `_output/jpb_cv.pdf`
-- HTML: `_output/jpb_cv.html`
-- Website: `website/`
-
-## Documentation
-
-See `docs/` folder for complete guides.
-
-## Last Updated
-
-`r format(Sys.Date(), "%B %Y")`
-
----
+All content lives in `cv-app-test/cv.db`. Edit it with the Shiny app
+(`shiny::runApp("app.R")`), then run `./publish.sh` to rebuild the PDF and
+the site and publish both. See `JPBs-CV_Maintenance_Guide.md` for details.

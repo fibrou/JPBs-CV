@@ -13,6 +13,7 @@ library(RSQLite)
 library(dplyr)
 library(ggplot2)
 library(here)
+scholar <- yaml::read_yaml(here("scholar_metrics.yml"))
 
 db_path <- here("cv-app-test", "cv.db")
 con <- dbConnect(RSQLite::SQLite(), db_path)
@@ -74,7 +75,7 @@ ggplot(pub_all_years, aes(x = year, y = n)) +
     x = NULL, y = "Publications",
     caption = paste0(
       nrow(publications), " peer-reviewed publications · ",
-      "1,109 total citations · h-index 15 (Google Scholar)"
+      scholar$citations_total, " total citations · h-index ", scholar$h_index, " (Google Scholar)"
     )
   ) +
   theme_minimal(base_size = 12) +
@@ -91,13 +92,13 @@ ggplot(pub_all_years, aes(x = year, y = n)) +
 <div style="display:flex;gap:1.5rem;margin:0.25rem 0 1.75rem 0;padding:0.7rem 1.2rem;background:#fafafa;border-radius:6px;border:1px solid #eee;font-size:0.88rem;align-items:center;flex-wrap:wrap;">
   <span style="color:#777;font-weight:500;">Google Scholar</span>
   <span style="color:#ccc;">·</span>
-  <span><strong style="color:#900000;">1,109</strong> <span style="color:#555;">total citations</span></span>
+  <span><strong style="color:#900000;">`r scholar$citations_total`</strong> <span style="color:#555;">total citations</span></span>
   <span style="color:#ccc;">·</span>
-  <span><strong style="color:#900000;">267</strong> <span style="color:#555;">since 2021</span></span>
+  <span><strong style="color:#900000;">`r scholar$citations_since`</strong> <span style="color:#555;">since `r scholar$since_year`</span></span>
   <span style="color:#ccc;">·</span>
-  <span><strong style="color:#900000;">h-index 15</strong> <span style="color:#999;">(7 since 2021)</span></span>
+  <span><strong style="color:#900000;">h-index `r scholar$h_index`</strong> <span style="color:#999;">(`r scholar$h_index_since` since `r scholar$since_year`)</span></span>
   <span style="color:#ccc;">·</span>
-  <span><strong style="color:#900000;">i10-index 16</strong> <span style="color:#999;">(6 since 2021)</span></span>
+  <span><strong style="color:#900000;">i10-index `r scholar$i10_index`</strong> <span style="color:#999;">(`r scholar$i10_index_since` since `r scholar$since_year`)</span></span>
   <span style="color:#ccc;">·</span>
   <a href="https://scholar.google.com/citations?user=nc-6H5gAAAAJ" target="_blank" style="color:#900000;font-weight:600;">View full profile →</a>
 </div>

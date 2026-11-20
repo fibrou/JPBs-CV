@@ -29,6 +29,7 @@ library(RSQLite)
 library(dplyr)
 library(leaflet)
 library(here)
+scholar <- yaml::read_yaml(here("scholar_metrics.yml"))
 
 db_path <- here("cv-app-test", "cv.db")
 con <- dbConnect(RSQLite::SQLite(), db_path)
@@ -124,14 +125,14 @@ online, and international delivery formats.
 ```{=html}
 <div class="metrics-grid">
   <div class="metric-card">
-    <span class="metric-value">1,109</span>
+    <span class="metric-value">`r scholar$citations_total`</span>
     <span class="metric-label">Total Citations</span>
-    <span class="metric-context">Google Scholar · h-index 15</span>
+    <span class="metric-context">Google Scholar · h-index `r scholar$h_index`</span>
   </div>
   <div class="metric-card">
-    <span class="metric-value">267</span>
-    <span class="metric-label">Citations Since 2021</span>
-    <span class="metric-context">h-index 7 · i10-index 6</span>
+    <span class="metric-value">`r scholar$citations_since`</span>
+    <span class="metric-label">Citations Since `r scholar$since_year`</span>
+    <span class="metric-context">h-index `r scholar$h_index_since` · i10-index `r scholar$i10_index_since`</span>
   </div>
   <div class="metric-card">
     <span class="metric-value">`r pub_count`</span>

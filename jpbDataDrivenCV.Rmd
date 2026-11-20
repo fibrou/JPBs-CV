@@ -32,13 +32,10 @@ packages <- c('vitae'     # The CV's LaTeX Template
 
 xfun::pkg_attach2(packages, message = FALSE)
 
-if (file.exists(here("cv_data.rds"))) {
-  cv_data <- readRDS(here("cv_data.rds"))
-  for (nm in names(cv_data)) assign(nm, cv_data[[nm]])
-  rm(cv_data)
-} else {
-  source(file = here("jpbsCVdata", "jpbsCVdata.r"))
-}
+# All CV content comes straight from the database, the same source the
+# website reads, so the PDF and the site can never disagree.
+source(here("cv-app-test", "scripts", "data_from_db.R"))
+DBI::dbDisconnect(con)
 
 ```
 

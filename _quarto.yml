@@ -1,6 +1,6 @@
 project:
   type: website
-  output-dir: docs
+  output-dir: _site
   render:
     - index.qmd
     - research.qmd
@@ -58,8 +58,7 @@ execute:
   warning: false
   message: false
 
-# ── GitHub Pages deployment ────────────────────────────────────────────────
-# After first render:
-#   1. New-Item -ItemType File docs\.nojekyll   (PowerShell)
-#   2. GitHub Settings → Pages → main branch → /docs
-#   3. Every update: quarto render → git add docs/ → commit → push
+# ── Publishing ─────────────────────────────────────────────────────────────
+# Run ./publish.sh. It renders the PDF and this site from cv-app-test/cv.db,
+# commits your source changes, and runs `quarto publish gh-pages`, which
+# pushes the built site to the gh-pages branch that GitHub Pages serves.

@@ -1,0 +1,11 @@
+# Google Scholar numbers shown on the About and Research pages.
+# Google Scholar has no API, so copy these from your Scholar profile
+# a few times a year. Both pages read this file; edit it only here.
+updated: "June 2026"
+since_year: 2021
+citations_total: "1,109"
+citations_since: "267"
+h_index: 15
+h_index_since: 7
+i10_index: 16
+i10_index_since: 6

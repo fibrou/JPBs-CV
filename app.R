@@ -451,54 +451,8 @@ server <- function(input, output, session) {
 
     withProgress(message = "Rendering CV...", value = 0, {
 
-      # Step 1: export all 27 tables to a single RDS file ─────────────────────
-      setProgress(0.1, detail = "Exporting database...")
-
-      export_result <- tryCatch({
-        con <- get_con()
-        on.exit(dbDisconnect(con), add = TRUE)
-
-        tbl_map <- list(
-          admin                  = "admin",
-          ltWork                 = "lt_work",
-          stWork                 = "st_work",
-          edu                    = "education",
-          certifications         = "certifications",
-          honorsGrants           = "honors_grants",
-          publications           = "publications",
-          pip                    = "papers_in_progress",
-          otherPubsMonos         = "other_pubs_monos",
-          academicPresents       = "academic_presentations",
-          pedagogyPresents       = "pedagogy_presentations",
-          academicDiscussions    = "academic_discussions",
-          confCommittees         = "conf_committees",
-          confChair              = "conf_chair",
-          editor                 = "editor",
-          adHocReview            = "ad_hoc_review",
-          tAndP                  = "t_and_p",
-          profesionalOFfices     = "professional_offices",
-          academicLeader         = "academic_leadership",
-          academicCommittees     = "academic_committees",
-          dissertationCommittees = "dissertation_committees",
-          thesesSupervision      = "theses_supervision",
-          studentMentoring       = "student_mentoring",
-          profTraining           = "prof_training",
-          mediaInterviews        = "media_interviews",
-          bizExperiences         = "biz_experiences",
-          references             = "references"
-        )
-
-        cv_data <- lapply(tbl_map, function(tbl) dbReadTable(con, tbl))
-        saveRDS(cv_data, here("cv_data.rds"))
-        "ok"
-      }, error = function(e) conditionMessage(e))
-
-      if (!identical(export_result, "ok")) {
-        rv_status(paste("Export failed:", export_result))
-        return()
-      }
-
-      # Step 2: render in a clean subprocess ───────────────────────────────────
+      # The Rmd reads cv.db directly, so rendering is all that is needed.
+      # Render in a clean subprocess ───────────────────────────────────
       setProgress(0.2, detail = "Knitting document...")
       rv_status("Rendering — please wait (30–60 s)...")
 

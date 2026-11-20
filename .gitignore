@@ -27,3 +27,31 @@ _private/
 credentials.R
 
 **/*.quarto_ipynb
+
+# Built site and render by-products
+_site/
+*.rds
+jpbDataDrivenCV.tex
+
+# Built site and render by-products
+_site/
+*.rds
+jpbDataDrivenCV.tex
+
+# Old files from earlier CV experiments. They were removed from the project
+# on 2026-11-20 (git history keeps them), but the Nextcloud server refuses
+# deletions in this folder, so the copies on disk keep coming back. Git
+# ignores them until they are removed on the server; then these lines can go.
+/beforeModules/
+/jpbsCVdata/
+/cv_data/
+/cv_modules/
+/jpbsQuartoCV_htmlFiles/
+/jpbsQuartoCV_pdfFiles/
+/assets/
+/cv_assets/
+/docs/
+/migrate_*.R
+/cv-app-test/app.R
+/cv-app-test/README.md
+/cv-app-test/scripts/seed_db.R
